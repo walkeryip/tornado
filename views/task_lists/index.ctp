@@ -14,11 +14,7 @@ There are no tasks in this list
 <th></th>
 <th></th>
 </tr>
-<?php foreach ($lists as $list): ?>
-<tr id="list-<?php echo $list['TaskList']['id'];?>"> 
-<?php echo $this->element('list', array('list' => $list)); ?>
-</tr>
-<?php endforeach; ?>
+<?php echo $this->element('lists', array('lists' => $lists)); ?>
 
 </table> 
 <?php endif; ?>

@@ -1,6 +1,4 @@
-<td colspan=9>
 <?php echo $form->create('TaskList');?> 
-<fieldset> 
 <legend>Edit List</legend>
 <?php
 echo $form->input('name');
@@ -25,4 +23,3 @@ echo $form->input('description');
 </fieldset>
 <?php echo $ajax->submit('Submit', array('url'=> '/task_lists/edit/' . $listId, 'update' => 'list-' . $listId)); ?>
 <?php echo $form->end();?>
-</td>

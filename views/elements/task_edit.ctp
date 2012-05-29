@@ -1,4 +1,4 @@
-<td colspan=9>
+
 <?php echo $form->create('Task');?> 
 <fieldset> 
 <legend>Edit Task</legend>
@@ -27,4 +27,3 @@ echo $form->input('priority');
 </fieldset>
 <?php echo $ajax->submit('Submit', array('url'=> '/tasks/edit/' . $taskId, 'update' => 'task-' . $taskId)); ?>
 <?php echo $form->end();?>
-</td>

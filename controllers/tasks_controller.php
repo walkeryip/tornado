@@ -4,11 +4,14 @@
 class TasksController extends AppController {
 	var $name = 'Tasks';
 	var $helpers = array('Html', 'Form', 'Ajax');
+	var $scaffold;
 
 	function index($id = null){
-		$this->data = $this->Task->find('all', array('recursive' => 1));
+		$tasksDone = $this->Task->find('all', array('conditions' => array('Task.checked' => 1)));
+		$tasks = $this->Task->find('all', array('recursive' => 1, 'conditions' => array('Task.checked' => 0)));
 
-		$this->set('tasks', $this->data);
+		$this->set('tasksDone', $tasksDone);
+		$this->set('tasks', $tasks);
 	}
 
 	function add(){

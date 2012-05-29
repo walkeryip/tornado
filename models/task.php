@@ -11,7 +11,8 @@ class Task extends AppModel {
 
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
-		'Context' => array('className' => 'Context')); 
+		'Context' => array('className' => 'Context'),
+		'List' => array('className' => 'TaskList')); 
 }
 
 ?>

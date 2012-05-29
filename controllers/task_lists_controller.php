@@ -3,6 +3,7 @@
 class TaskListsController extends AppController {
 	var $name = 'TaskLists';
 	var $helpers = array('Html', 'Form', 'Ajax');
+	var $scaffold;
 
 	function index($id = null){
 		$this->data = $this->TaskList->find('all', array('recursive' => 1));
@@ -19,11 +20,26 @@ class TaskListsController extends AppController {
 	}
 
 	function view($id = null){
-		$this->data = $this->TaskList->find('first', 
+		$this->TaskList->id = $id;
+		$list = $this->TaskList->find('first', 
 			array('recursive' => 1,
 				  'conditions' => array('TaskList.id' => $id)));
 		
-		$this->set('list', $this->data);
+		$lists = $this->TaskList->find('all',
+			array('recursive' => 1,
+				  'conditions' => array('TaskList.parent_id' => $id)));
+
+		$this->loadModel('Task');
+		$this->Task->Behaviors->attach('Containable');
+		$this->Task->bindModel(array('hasOne' => array('TaskListsTasks')));
+		$tasks = $this->Task->find('all', array(
+					'fields' => array('Task.*'),
+					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
+					'conditions' => array('TaskListsTasks.task_list_id' => $id)));
+
+		$this->set('list', $list);
+		$this->set('lists', $lists);
+		$this->set('tasks', $tasks);
 	}
 
 	function edit($id = null){

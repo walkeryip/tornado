@@ -7,9 +7,9 @@ class Tag extends AppModel {
 	var $name = 'Tag';
 	//var $hasAndBelongsToMany = array('Task' => array('className'=>'Task'));
 
-	var $hasAndBelongsToMany = array(
+	/*var $hasAndBelongsToMany = array(
 		'TaskList' => array('className'=>'TaskList'),
-		'Task' => array('className'=>'Task')); 
+		'Task' => array('className'=>'Task')); */
 }
 
 ?>

@@ -32,6 +32,10 @@
  */
 class AppController extends Controller {
 
+	/**
+     * Return a comma separated string based on the names of $data.
+	 * $data could be for example a list of contexts or tags.
+     **/
 	function getLabels($data){
 		$labels = array();
 		$result = array();
@@ -47,6 +51,9 @@ class AppController extends Controller {
 		return $result;
 	}
 
+	/**
+     * 
+     **/
 	function createLabels($model, $data){
 		$labels = explode(',', $data);
 		$modelName = $model->name;
