@@ -45,5 +45,5 @@
 				array('update' => 'task-' . $taskId)); ?>
 </p> 
 <p>
-<?php echo $html->link('Delete', array('action'=>'delete', $taskId, null)); ?>
+<?php echo $html->link('Delete', array('controller'=>'tasks', 'action'=>'delete', $taskId, null)); ?>
 </p>

@@ -30,5 +30,5 @@
 				array('update' => 'list-' . $list['TaskList']['id'])); ?>
 </p> 
 <p>
-<?php echo $html->link('Delete', array('action'=>'delete', $list['TaskList']['id'], null)); ?>
+<?php echo $html->link('Delete', array('controller'=>'task_lists', 'action'=>'delete', $list['TaskList']['id'], null)); ?>
 </p>

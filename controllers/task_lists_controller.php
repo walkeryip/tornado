@@ -6,7 +6,8 @@ class TaskListsController extends AppController {
 	var $scaffold;
 
 	function index($id = null){
-		$this->data = $this->TaskList->find('all', array('recursive' => 1));
+		$this->data = $this->TaskList->find('all', array('recursive' => 1, 'conditions' => array(
+							'TaskList.parent_id' => 0)));
 
 		$this->set('lists', $this->data);
 	}
@@ -17,6 +18,26 @@ class TaskListsController extends AppController {
 				  'conditions' => array('TaskList.parent_id' => 'null')));
 		
 		$this->set('lists', $this->data);
+	}
+
+	function add($id = null){
+		if (!empty($this->data)){
+			$this->createLabels($this->TaskList->Tag, $this->data['TaskList']['tags']);
+			$this->createLabels($this->TaskList->Context, $this->data['TaskList']['contexts']);
+
+			$this->data['TaskList']['id'] = null;
+			$this->data['TaskList']['parent_id'] = $id;
+			$this->TaskList->create();
+			if ($this->TaskList->save($this->data)){
+				$this->data = $this->TaskList->find('all',
+						array('recursive' => 1,
+				  		'conditions' => array('TaskList.parent_id' => $id)));
+				$this->set('lists', $this->data);
+				$this->render('/elements/lists', 'ajax');
+			} else {
+				$this->Session->setFlash("Failed to save list. Please try again");
+			}
+		}
 	}
 
 	function view($id = null){
@@ -35,11 +56,21 @@ class TaskListsController extends AppController {
 		$tasks = $this->Task->find('all', array(
 					'fields' => array('Task.*'),
 					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
-					'conditions' => array('TaskListsTasks.task_list_id' => $id)));
+					'conditions' => array(
+						'Task.checked' => false,
+						'TaskListsTasks.task_list_id' => $id)));
+
+		$tasksDone = $this->Task->find('all', array(
+					'fields' => array('Task.*'),
+					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
+					'conditions' => array(
+						'Task.checked' => true,
+						'TaskListsTasks.task_list_id' => $id)));
 
 		$this->set('list', $list);
 		$this->set('lists', $lists);
 		$this->set('tasks', $tasks);
+		$this->set('tasksDone', $tasksDone);
 	}
 
 	function edit($id = null){
