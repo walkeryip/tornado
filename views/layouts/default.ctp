@@ -41,9 +41,10 @@
 			<h1><?php echo $this->Html->link(__('masTODOnt', true), 'http://cakephp.org'); ?></h1>
 		</div>
 		<div id="content">
+			<?php echo $this->Html->link('Lists', '/task_lists/'); ?>
 			<?php echo $this->Html->link('Tasks', '/tasks/'); ?>
 			<?php echo $this->Html->link('Contexts', '/contexts/'); ?>
-			<?php echo $this->Html->link('Labels', '/labels/'); ?>
+			<?php echo $this->Html->link('Tags', '/tags/'); ?>
 			<?php echo $this->Html->link('ToDo', '/todo/'); ?>
 			<?php echo $this->Html->link('Lists', '/lists/'); ?>
 			<?php echo $this->Html->link('Stuff', '/stuff/'); ?>

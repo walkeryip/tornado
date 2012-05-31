@@ -16,23 +16,17 @@ class TasksController extends AppController {
 
 	function add($id){
 		if (!empty($this->data)){
-			$this->createLabels($this->Task->Tag, $this->data['Task']['tags']);
-			$this->createLabels($this->Task->Context, $this->data['Task']['contexts']);
+			$this->Task->addTags($this->data['Task']['tags']); 
+			$this->Task->addContexts($this->data['Task']['contexts']);
 
-			$this->data['List']['List'][0] = $id; 
+			// Attach to parent
+			$this->data['TaskList']['TaskList'][0] = $id;
 
 			$this->Task->create();
 			if ($this->Task->save($this->data)){
-
-				$this->Task->Behaviors->attach('Containable');
-				$this->Task->bindModel(array('hasOne' => array('TaskListsTasks')));
-				$this->data = $this->Task->find('all', array(
-					'fields' => array('Task.*'),
-					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
-					'conditions' => array(
-						'Task.checked' => false,
-						'TaskListsTasks.task_list_id' => $id)));
-
+				$conditions = array('Task.checked' => false, 'TaskListsTasks.task_list_id' => $id);
+				$this->data = $this->Task->getTasksByListId($id, $conditions); 
+					
 				$this->set('tasks', $this->data);
 				$this->render('/elements/tasks', 'ajax');
 			} else {
@@ -40,26 +34,6 @@ class TasksController extends AppController {
 			}
 		}
 	}
-
-/*function add($id = null){
-		if (!empty($this->data)){
-			$this->createLabels($this->TaskList->Tag, $this->data['TaskList']['tags']);
-			$this->createLabels($this->TaskList->Context, $this->data['TaskList']['contexts']);
-
-			$this->data['TaskList']['id'] = null;
-			$this->data['TaskList']['parent_id'] = $id;
-			$this->TaskList->create();
-			if ($this->TaskList->save($this->data)){
-				$this->data = $this->TaskList->find('all',
-						array('recursive' => 1,
-				  		'conditions' => array('TaskList.parent_id' => $id)));
-				$this->set('lists', $this->data);
-				$this->render('/elements/lists', 'ajax');
-			} else {
-				$this->Session->setFlash("Failed to save list. Please try again");
-			}
-		}
-	}*/
 
 	function edit($id = null){
 		if (!$id){
@@ -70,14 +44,14 @@ class TasksController extends AppController {
 		if (empty($this->data)){
 			$this->data = $this->Task->find(array('id' => $id));
 				
-			$this->data['Task']['tags'] = $this->getLabels($this->data['Tag']);
-			$this->data['Task']['contexts'] = $this->getLabels($this->data['Context']);
+			$this->data['Task']['tags'] = $this->Task->getLabels($this->data['Tag']);
+			$this->data['Task']['contexts'] = $this->Task->getLabels($this->data['Context']);
 
 			$this->set('taskId', $id);
 			$this->render('/elements/task_edit', 'ajax');	
 		} else {
-			$this->createLabels($this->Task->Tag, $this->data['Task']['tags']);
-			$this->createLabels($this->Task->Context, $this->data['Task']['contexts']);
+			$this->Task->addTags($this->data['Task']['tags']); 
+			$this->Task->addContexts($this->data['Task']['contexts']);
 
 			if ($this->Task->save($this->data)){
 				$this->data = $this->Task->find(array('id' => $id));
@@ -87,10 +61,10 @@ class TasksController extends AppController {
 		}
 	}	
 
-	function check($id = null){
+	function setChecked($id, $checked){
 		if ($id){
 			$this->Task->id = $id;
-			$this->data['Task']['checked'] = 1;
+			$this->data['Task']['checked'] = $checked;
 
 			if ($this->Task->save($this->data)){
 				$this->data = $this->Task->find(array('id' => $id));
@@ -100,17 +74,12 @@ class TasksController extends AppController {
 		}
 	}
 
-	function uncheck($id = null){
-		if ($id){
-			$this->Task->id = $id;
-			$this->data['Task']['checked'] = 0;
+	function check($id = null){
+		$this->setChecked($id, 1);
+	}
 
-			if ($this->Task->save($this->data)){
-				$this->data = $this->Task->find(array('id' => $id));
-				$this->set('task', $this->data);
-				$this->render('/elements/task', 'ajax');
-			}
-		}
+	function uncheck($id = null){
+		$this->setChecked($id, 0);
 	}
 
 	function delete($id = null){

@@ -2,9 +2,11 @@
 
 class TagsController extends AppController {
 	var $name = 'Tags';
-	var $helpers = array('Html', 'Form', 'Ajax');
+	var $helpers = array('Html', 'Form');
 
-	var $scaffold;
+	function index($id = null){
+		$this->set('tags', $this->Tag->find('all'));
+	}
 }
 
 ?>

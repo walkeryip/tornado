@@ -22,7 +22,7 @@
 </p>
 <p>
 <?php
-	echo $html->link($list['Parent']['name'], array('controller'=>'task_list', 'action'=>'view', $list['Parent']['id'])); //$list['Parent']['name'];
+	echo $html->link($list['Parent']['name'], array('controller'=>'task_lists', 'action'=>'view', $list['Parent']['id'])); //$list['Parent']['name'];
 ?>
 </p>
 <p>

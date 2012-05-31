@@ -9,18 +9,22 @@ echo $form->input('priority');
 </fieldset>
 <fieldset>
 <legend>Tags</legend>
-<?php echo $form->input('Task.tags', array(
+<?php 
+	echo $form->input('Task.tags', array(
 				'type' => 'textarea',
 				'label' => __('Tags', true),
-				'after' => __('Separate each tag with a ","', true)));
+				'after' => __('Separate each tag with a ","', true),
+				'value' => implode_model(", ", $tags, "name")));
 ?>
 </fieldset>
 <fieldset>
 <legend>Contexts</legend>
-<?php echo $form->input('Task.contexts', array(
+<?php 
+	echo $form->input('Task.contexts', array(
 				'type' => 'textarea',
 				'label' => __('Contexts', true),
-				'after' => __('Separate each context with a ","', true)));
+				'after' => __('Separate each context with a ","', true),
+				'value' => implode_model(", ", $contexts, "name")));
 ?>
 </fieldset>
 <?php echo $ajax->submit('Submit', array('url'=> '/tasks/add/' . $list['id'], 'update' => 'tasks')); ?>

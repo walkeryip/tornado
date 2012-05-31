@@ -2,8 +2,6 @@
 <p><?php echo $list['TaskList']['description'] ?></p>
 <i><?php echo $list['TaskList']['created'] ?></i>
 
-<?php echo $html->link("Add sub list", array('action'=>'add', $list['Parent']['id'], null)); ?>
-
 <!--<pre><code><?php print_r($tasks); ?></code></pre>-->
 <h3>Parent</h3>
 <?php echo $html->link($list['Parent']['name'], array('action'=>'view', $list['Parent']['id'], null)); ?>
@@ -25,10 +23,10 @@
 
 <h3>Add task</h3>
 <div id="add-task">
-<?php echo $this->element('add_task', array('list' => $list['TaskList'])); ?>
+<?php echo $this->element('add_task', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
 </div>
 
 <h3>Add list</h3>
 <div id="add-list">
-<?php echo $this->element('add_list', array('list' => $list['TaskList'])); ?>
+<?php echo $this->element('add_list', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
 </div>

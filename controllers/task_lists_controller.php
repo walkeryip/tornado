@@ -6,32 +6,29 @@ class TaskListsController extends AppController {
 	var $scaffold;
 
 	function index($id = null){
-		$this->data = $this->TaskList->find('all', array('recursive' => 1, 'conditions' => array(
-							'TaskList.parent_id' => 0)));
+		$this->data = $this->TaskList->getTaskListsByParentId(null);
 
 		$this->set('lists', $this->data);
 	}
 
 	function todo(){
-		$this->data = $this->TaskList->find('all', 
-			array('recursive' => 1,
-				  'conditions' => array('TaskList.parent_id' => 'null')));
+		$this->data = $this->TaskList->getTaskListsByParentId(null);
 		
 		$this->set('lists', $this->data);
 	}
 
 	function add($id = null){
 		if (!empty($this->data)){
-			$this->createLabels($this->TaskList->Tag, $this->data['TaskList']['tags']);
-			$this->createLabels($this->TaskList->Context, $this->data['TaskList']['contexts']);
 
-			$this->data['TaskList']['id'] = null;
-			$this->data['TaskList']['parent_id'] = $id;
+			$this->TaskList->addTags($this->data['TaskList']['tags']); 
+			$this->TaskList->addContexts($this->data['TaskList']['contexts']);
+			$this->TaskList->id = null;
+			$this->TaskList->parent_id = $id;
+
 			$this->TaskList->create();
 			if ($this->TaskList->save($this->data)){
-				$this->data = $this->TaskList->find('all',
-						array('recursive' => 1,
-				  		'conditions' => array('TaskList.parent_id' => $id)));
+				$this->data = $this->TaskList->getTaskListsByParentId($id);
+
 				$this->set('lists', $this->data);
 				$this->render('/elements/lists', 'ajax');
 			} else {
@@ -42,30 +39,12 @@ class TaskListsController extends AppController {
 
 	function view($id = null){
 		$this->TaskList->id = $id;
-		$list = $this->TaskList->find('first', 
-			array('recursive' => 1,
-				  'conditions' => array('TaskList.id' => $id)));
-		
-		$lists = $this->TaskList->find('all',
-			array('recursive' => 1,
-				  'conditions' => array('TaskList.parent_id' => $id)));
 
-		$this->loadModel('Task');
-		$this->Task->Behaviors->attach('Containable');
-		$this->Task->bindModel(array('hasOne' => array('TaskListsTasks')));
-		$tasks = $this->Task->find('all', array(
-					'fields' => array('Task.*'),
-					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
-					'conditions' => array(
-						'Task.checked' => false,
-						'TaskListsTasks.task_list_id' => $id)));
-
-		$tasksDone = $this->Task->find('all', array(
-					'fields' => array('Task.*'),
-					'contain' => array('Tag', 'Context', 'TaskListsTasks'),
-					'conditions' => array(
-						'Task.checked' => true,
-						'TaskListsTasks.task_list_id' => $id)));
+		$conditions = array('TaskList.id' => $id);
+		$list = $this->TaskList->getTaskListById($id);
+		$lists = $this->TaskList->getTaskListsByParentId($id);
+		$tasks = $this->TaskList->Task->getTasksByListId($id, false);
+		$tasksDone = $this->TaskList->Task->getTasksByListId($id, true);
 
 		$this->set('list', $list);
 		$this->set('lists', $lists);
@@ -80,21 +59,19 @@ class TaskListsController extends AppController {
 		}
 
 		if (empty($this->data)){
-			$this->data = $this->TaskList->find(array('TaskList.id' => $id));
+			$this->data = $this->TaskList->getTaskListById($id);
 				
-			//$this->setTags($id);
-			$this->data['TaskList']['tags'] = $this->getLabels($this->data['Tag']);
-			$this->data['TaskList']['contexts'] = $this->getLabels($this->data['Context']);
-			//$this->setContexts($id);
+			$this->data['TaskList']['tags'] = $this->TaskList->getLabels($this->data['Tag']);
+			$this->data['TaskList']['contexts'] = $this->TaskList->getLabels($this->data['Context']);
 
 			$this->set('listId', $id);
 			$this->render('/elements/list_edit', 'ajax');	
 		} else {
-			$this->createLabels($this->TaskList->Tag, $this->data['TaskList']['tags']);
-			$this->createLabels($this->TaskList->Context, $this->data['TaskList']['contexts']);
+			$this->TaskList->addTags($this->data['TaskList']['tags']); 
+			$this->TaskList->addContexts($this->data['TaskList']['contexts']);
 
 			if ($this->TaskList->save($this->data)){
-				$this->data = $this->TaskList->find(array('TaskList.id' => $id));
+				$this->data = $this->TaskList->getTaskListById($id);
 				$this->set('list', $this->data);
 				$this->render('/elements/list', 'ajax');
 			}

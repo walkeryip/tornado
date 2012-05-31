@@ -48,3 +48,15 @@
  * Inflector::rules('plural', array('rules' => array(), 'irregular' => array(), 'uninflected' => array()));
  *
  */
+
+function implode_model($glue, $array, $key){
+	$values = array();
+	$pos = 0;
+
+	foreach ($array as $element){
+		$values[$pos] = $element[$key];
+		$pos++;
+	}
+
+	return implode($glue, $values);
+}

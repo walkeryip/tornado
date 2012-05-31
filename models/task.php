@@ -12,7 +12,46 @@ class Task extends AppModel {
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
 		'Context' => array('className' => 'Context'),
-		'List' => array('className' => 'TaskList')); 
+		'TaskList' => array('className' => 'TaskList')); 
+
+	public function getTasks($id, $conditions, $contain, $bind){
+		$this->Behaviors->attach('Containable');
+		$this->bindModel(array('hasOne' => $bind));
+		$data = $this->find('all', array(
+			'fields' => array('Task.*'),
+			'contain' => $contain,
+			'conditions' => $conditions));
+
+		return $data;
+	}
+
+	public function getTasksByListId($id, $checked){
+		$conditions = array('Task.checked' => $checked, 'TaskListsTasks.task_list_id' => $id);
+		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TaskListsTasks'), array('TaskListsTasks'));
+	}
+
+	public function getTasksByContextId($id, $checked){
+		$conditions = array('Task.checked' => $checked, 'ContextsTasks.context_id' => $id);
+		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'ContextsTasks'), array('ContextsTasks'));
+	}
+
+	public function addTags($tags){
+		$this->createLabels($this->Tag, $tags);
+	}
+
+	public function addContexts($contexts){
+		$this->createLabels($this->Context, $contexts);
+	}
+
+	public function getTagsString(){
+		return $this->getLabels($this->Tag);
+	}
+
+	public function getContextsString(){
+		return $this->getLabels($this->Context);
+	}
+
 }
 
 ?>
+
