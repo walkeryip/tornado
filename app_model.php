@@ -30,6 +30,9 @@
  * @package       cake
  * @subpackage    cake.app
  */
+
+
+// Tags code from http://mrphp.com.au/code/working-habtm-form-data-cakephp
 class AppModel extends Model {
 	/**
      * Return a comma separated string based on the names of $data.

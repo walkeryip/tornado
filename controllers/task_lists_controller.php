@@ -19,13 +19,15 @@ class TaskListsController extends AppController {
 
 	function add($id = null){
 		if (!empty($this->data)){
+			$this->TaskList->create();
 
 			$this->TaskList->addTags($this->data['TaskList']['tags']); 
 			$this->TaskList->addContexts($this->data['TaskList']['contexts']);
+			
 			$this->TaskList->id = null;
-			$this->TaskList->parent_id = $id;
 
-			$this->TaskList->create();
+			$this->data['TaskList']['parent_id'] = $id;	
+			
 			if ($this->TaskList->save($this->data)){
 				$this->data = $this->TaskList->getTaskListsByParentId($id);
 

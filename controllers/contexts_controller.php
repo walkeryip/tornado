@@ -1,6 +1,5 @@
 <?php
 
-// Tags code from http://mrphp.com.au/code/working-habtm-form-data-cakephp
 class ContextsController extends AppController {
 	var $name = 'Contexts';
 	var $helpers = array('Html', 'Form', 'Ajax');

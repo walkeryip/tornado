@@ -5,11 +5,15 @@
  */
 class Tag extends AppModel {
 	var $name = 'Tag';
-	//var $hasAndBelongsToMany = array('Task' => array('className'=>'Task'));
+	
+	var $hasAndBelongsToMany = array(
+		'Task' => array('className' => 'Task'),
+		'TaskList' => array('className' => 'TaskList')); 
 
-	/*var $hasAndBelongsToMany = array(
-		'TaskList' => array('className'=>'TaskList'),
-		'Task' => array('className'=>'Task')); */
+	public function getTagById($id){
+		$conditions = array('Tag.id' => $id);
+		return $this->find('first', array('conditions' => $conditions));
+	}
 }
 
 ?>

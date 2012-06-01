@@ -1,5 +1,5 @@
-<h2><?php echo $context['Context']['name'] ?></h2> 
-<i><?php echo $context['Context']['created'] ?></i>
+<h2><?php echo $tag['Tag']['name'] ?></h2> 
+<i><?php echo $tag['Tag']['created'] ?></i>
 
 <h3>Lists</h3>
 <div id="lists">

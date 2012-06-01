@@ -35,6 +35,11 @@ class Task extends AppModel {
 		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'ContextsTasks'), array('ContextsTasks'));
 	}
 
+	public function getTasksByTagId($id, $checked){
+		$conditions = array('Task.checked' => $checked, 'TagsTasks.tag_id' => $id);
+		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TagsTasks'), array('TagsTasks'));
+	}
+
 	public function addTags($tags){
 		$this->createLabels($this->Tag, $tags);
 	}

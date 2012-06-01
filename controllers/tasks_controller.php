@@ -24,8 +24,7 @@ class TasksController extends AppController {
 
 			$this->Task->create();
 			if ($this->Task->save($this->data)){
-				$conditions = array('Task.checked' => false, 'TaskListsTasks.task_list_id' => $id);
-				$this->data = $this->Task->getTasksByListId($id, $conditions); 
+				$this->data = $this->Task->getTasksByListId($id, false); 
 					
 				$this->set('tasks', $this->data);
 				$this->render('/elements/tasks', 'ajax');

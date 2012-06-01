@@ -1,66 +1,55 @@
-<?php
-/**
- *
- * PHP versions 4 and 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2010, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       cake
- * @subpackage    cake.cake.console.libs.templates.skel.views.layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php __('CakePHP: the rapid development php framework:'); ?>
+		<?php __('t[x]rnado ::'); ?>
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('cake.generic');
+		echo $this->Html->css('normalize');
+		echo $this->Html->css('common');
 
 		echo $scripts_for_layout;
 	?>
-<script type="text/javascript" src="/masTODOnt/js/prototype.js"></script>
-<script type="text/javascript" src="/masTODOnt/js/scriptaculous.js?load=effects"></script>
+<script type="text/javascript" src="/tornado/js/lib/prototype.js"></script>
+<script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>
+<script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.1.4.2.min.js"></script>
+
+<script>
+     jQuery.noConflict();
+   	 var jq = jQuery;
+</script>
+
+<script type="text/javascript" src="/tornado/js/common.js"></script>
 </head>
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $this->Html->link(__('masTODOnt', true), 'http://cakephp.org'); ?></h1>
+			<h1><?php echo $this->Html->link(__('t[x]rnado', true), '/'); ?></h1>
 		</div>
 		<div id="content">
-			<?php echo $this->Html->link('Lists', '/task_lists/'); ?>
-			<?php echo $this->Html->link('Tasks', '/tasks/'); ?>
-			<?php echo $this->Html->link('Contexts', '/contexts/'); ?>
-			<?php echo $this->Html->link('Tags', '/tags/'); ?>
-			<?php echo $this->Html->link('ToDo', '/todo/'); ?>
-			<?php echo $this->Html->link('Lists', '/lists/'); ?>
-			<?php echo $this->Html->link('Stuff', '/stuff/'); ?>
-			<?php echo $this->Html->link('Settings', '/settings/'); ?>
-			<?php echo $this->Session->flash(); ?>
-
+			<div id="menu">
+				<ul>
+					<li><?php echo $this->Html->link('Todo', '/task_lists/'); ?></li>
+					<li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
+					<li><?php echo $this->Html->link('Agenda', '/tasks/agenda/'); ?></li>
+					<li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
+					<li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
+					<li><?php echo $this->Html->link('Lists', '/task_lists/lists/'); ?></li>
+					<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
+					<li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
+				</ul>
+			</div>
+			<div id="flash">
+				<?php echo $this->Session->flash(); ?>
+			</div>
 			<?php echo $content_for_layout; ?>
-
 		</div>
 		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt'=> __('CakePHP: the rapid development php framework', true), 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false)
-				);
-			?>
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>

@@ -32,6 +32,11 @@ class TaskList extends AppModel {
 		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'ContextsTaskLists', 'Parent'), array('ContextsTaskLists'));
 	}
 
+	public function getTaskListsByTagId($id){
+		$conditions = array('TagsTaskLists.tag_id' => $id);
+		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'TagsTaskLists', 'Parent'), array('TagsTaskLists'));
+	}
+
 	public function getTaskListById($id){
 		$conditions = array('TaskList.id' => $id);
 		return $this->find('first', array('recursive' => 1, 'conditions' => $conditions));

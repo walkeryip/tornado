@@ -31,5 +31,31 @@
  * @subpackage    cake.app
  */
 class AppController extends Controller {
+	function createLabels($model, $data){
+		$labels = explode(',', $data);
+		$modelName = $model->name;
+		$result = array();
 
+		foreach ($labels as $_label){
+			$_label = strtolower(trim($_label));
+
+			if ($_label){
+				$model->recursive = -1;
+				$label = $model->findByName($_label);
+
+				if (!$label){
+					$model->create();
+					$label = $model->save(array('name' => $_label));
+					$label[$modelName]['id'] = $model->id;
+				}
+
+				if ($label){
+					$labelId = $label[$modelName]['id'];
+					$this->data[$modelName][$modelName][$labelId] = $labelId;
+				} else {
+					$this->Session->setFlash("Could not save ' . $modelName . ' with name " . $label);
+				}
+			}
+		}
+	}
 }
