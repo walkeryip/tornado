@@ -1,6 +1,10 @@
 <h2><?php echo $list['TaskList']['name'] ?></h2> 
 <p><?php echo $list['TaskList']['description'] ?></p>
-<i><?php echo $list['TaskList']['created'] ?></i>
+<i><?php echo $list['TaskList']['created'] ?></i><br />
+
+<?php echo $html->link('Delete list', array('controller'=>'task_lists', 'action'=>'delete', $list['TaskList']['id'], null)); ?>
+<?php echo $this->element('add_task', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
+<?php echo $this->element('add_list', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
 
 <h3>Parent</h3>
 <p>
@@ -19,9 +23,6 @@
 
 <h3>Done tasks</h3>
 <div id="tasks-done">
-	<?php echo $this->element('tasks', array('tasks' => $tasksDone)); ?>
+	<?php //echo $this->element('tasks', array('tasks' => $tasksDone)); ?>
 </div>
-
-<?php echo $this->element('add_task', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
-<?php echo $this->element('add_list', array('list' => $list['TaskList'], 'tags' => $list['Tag'], 'contexts' => $list['Context'])); ?>
 

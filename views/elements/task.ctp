@@ -53,7 +53,7 @@
 						array('update' => 'task-' . $taskId)); ?>
 		</p> 
 		<p>
-		<?php echo $html->link('Delete', array('controller'=>'tasks', 'action'=>'delete', $taskId, null)); ?>
+		<?php echo "<a class=\"delete\" href=\"#\" onclick=\"deleteTask(" . $taskId . ",'" . $task['Task']['name'] . "'); return false;\">Delete</a>"; ?>
 		</p>
 	</div>
 </div>

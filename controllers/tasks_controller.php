@@ -4,6 +4,7 @@
 class TasksController extends AppController {
 	var $name = 'Tasks';
 	var $helpers = array('Html', 'Form', 'Ajax');
+    var $components = array('RequestHandler'); 
 	var $scaffold;
 
 	function index($id = null){
@@ -12,6 +13,17 @@ class TasksController extends AppController {
 
 		$this->set('tasksDone', $tasksDone);
 		$this->set('tasks', $tasks);
+	}
+
+	function view($id){
+		if ($this->RequestHandler->isAjax()){
+			$this->data = $this->Task->getTaskById($id);
+
+        	$this->set('data', $this->data);
+        	$this->render('/general/json', 'ajax');
+		} else {
+
+		}
 	}
 
 	function add($id){
@@ -35,27 +47,41 @@ class TasksController extends AppController {
 	}
 
 	function edit($id = null){
-		if (!$id){
-			$this->Session->setFlash("Invalid task");
-			$this->redirect(array('action' => 'index'), null, true);
-		}
+		if (!$this->RequestHandler->isAjax()){
+				$this->Task->addTags($this->data['Task']['tags']); 
+				$this->Task->addContexts($this->data['Task']['contexts']);
 
-		if (empty($this->data)){
-			$this->data = $this->Task->find(array('id' => $id));
-				
-			$this->data['Task']['tags'] = $this->Task->getLabels($this->data['Tag']);
-			$this->data['Task']['contexts'] = $this->Task->getLabels($this->data['Context']);
-
-			$this->set('taskId', $id);
-			$this->render('/elements/task_edit', 'ajax');	
+				if ($this->Task->save($this->data)){
+					$this->data = $this->Task->find(array('id' => $id));
+					$this->set('data', $this->data);
+				} else {
+        			$this->set('data', false);
+				}
+	
+	   			$this->render('/general/json', 'ajax');
 		} else {
-			$this->Task->addTags($this->data['Task']['tags']); 
-			$this->Task->addContexts($this->data['Task']['contexts']);
+			if (!$id){
+				$this->Session->setFlash("Invalid task");
+				$this->redirect(array('action' => 'index'), null, true);
+			}
 
-			if ($this->Task->save($this->data)){
+			if (empty($this->data)){
 				$this->data = $this->Task->find(array('id' => $id));
-				$this->set('task', $this->data);
-				$this->render('/elements/task', 'ajax');
+				
+				$this->data['Task']['tags'] = $this->Task->getLabels($this->data['Tag']);
+				$this->data['Task']['contexts'] = $this->Task->getLabels($this->data['Context']);
+
+				$this->set('taskId', $id);
+				$this->render('/elements/task_edit', 'ajax');	
+			} else {
+				$this->Task->addTags($this->data['Task']['tags']); 
+				$this->Task->addContexts($this->data['Task']['contexts']);
+
+				if ($this->Task->save($this->data)){
+					$this->data = $this->Task->find(array('id' => $id));
+					$this->set('task', $this->data);
+					$this->render('/elements/task', 'ajax');
+				}
 			}
 		}
 	}	
@@ -82,14 +108,24 @@ class TasksController extends AppController {
 	}
 
 	function delete($id = null){
-		if (!$id){
-			$this->Session->setFlash("Invalid task");
-			$this->redirect(array('action' => 'index'), null, true);
-		}
+		if ($this->RequestHandler->isAjax()){
+			$status = false;
+			if ($this->Task->delete($id)){
+				$status = true;
+			} 
 
-		if ($this->Task->delete($id)){
-			$this->Session->setFlash("The task has been deleted!");
-			$this->redirect(array('action' => 'index'), null, true);
+        	$this->set('data', $status);
+        	$this->render('/general/json', 'ajax');
+		} else {
+			if (!$id){
+				$this->Session->setFlash("Invalid task");
+				$this->redirect($this->referer());
+			}
+
+			if ($this->Task->delete($id)){
+				$this->Session->setFlash("The task has been deleted!");
+				$this->redirect($this->referer());
+			}
 		}
 	}
 }

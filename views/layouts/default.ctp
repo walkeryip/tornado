@@ -31,19 +31,19 @@
 		<div id="header">
 			<h1><?php echo $this->Html->link(__('t[x]rnado', true), '/'); ?></h1>
 		</div>
+		<div id="menu">
+			<ul>
+				<li><?php echo $this->Html->link('Todo', '/task_lists/'); ?></li>
+				<li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
+				<li><?php echo $this->Html->link('Agenda', '/tasks/agenda/'); ?></li>
+				<li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
+				<li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
+				<li><?php echo $this->Html->link('Lists', '/task_lists/lists/'); ?></li>
+				<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
+				<li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
+			</ul>
+		</div>
 		<div id="content">
-			<div id="menu">
-				<ul>
-					<li><?php echo $this->Html->link('Todo', '/task_lists/'); ?></li>
-					<li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
-					<li><?php echo $this->Html->link('Agenda', '/tasks/agenda/'); ?></li>
-					<li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
-					<li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
-					<li><?php echo $this->Html->link('Lists', '/task_lists/lists/'); ?></li>
-					<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
-					<li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
-				</ul>
-			</div>
 			<div id="flash">
 				<?php echo $this->Session->flash(); ?>
 			</div>
@@ -53,5 +53,10 @@
 		</div>
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
+	<div id="message-confirm-box" style="display: none">
+		<p class="message"></p>
+		<button class="yes">Yes</button>
+		<button class="no">No</button>
+	</div>
 </body>
 </html>

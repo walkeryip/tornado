@@ -30,6 +30,11 @@ class Task extends AppModel {
 		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TaskListsTasks'), array('TaskListsTasks'));
 	}
 
+	public function getTasksByListIdTest($id){
+		$conditions = array('TaskListsTasks.task_list_id' => $id);
+		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TaskListsTasks'), array('TaskListsTasks'));
+	}
+
 	public function getTasksByContextId($id, $checked){
 		$conditions = array('Task.checked' => $checked, 'ContextsTasks.context_id' => $id);
 		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'ContextsTasks'), array('ContextsTasks'));
@@ -38,6 +43,10 @@ class Task extends AppModel {
 	public function getTasksByTagId($id, $checked){
 		$conditions = array('Task.checked' => $checked, 'TagsTasks.tag_id' => $id);
 		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TagsTasks'), array('TagsTasks'));
+	}
+
+	public function getTaskById($id){
+		return $this->find('first', array('conditions' => array('Task.id' => $id)));
 	}
 
 	public function addTags($tags){
