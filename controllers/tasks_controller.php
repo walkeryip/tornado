@@ -47,7 +47,7 @@ class TasksController extends AppController {
 	}
 
 	function edit($id = null){
-		if (!$this->RequestHandler->isAjax()){
+		if ($this->RequestHandler->isAjax()){
 				$this->Task->addTags($this->data['Task']['tags']); 
 				$this->Task->addContexts($this->data['Task']['contexts']);
 
@@ -55,7 +55,7 @@ class TasksController extends AppController {
 					$this->data = $this->Task->find(array('id' => $id));
 					$this->set('data', $this->data);
 				} else {
-        			$this->set('data', false);
+        			$this->set('data', "false");
 				}
 	
 	   			$this->render('/general/json', 'ajax');
@@ -86,15 +86,27 @@ class TasksController extends AppController {
 		}
 	}	
 
-	function setChecked($id, $checked){
+	function setChecked($id, $checked){	
 		if ($id){
 			$this->Task->id = $id;
 			$this->data['Task']['checked'] = $checked;
 
-			if ($this->Task->save($this->data)){
-				$this->data = $this->Task->find(array('id' => $id));
-				$this->set('task', $this->data);
-				$this->render('/elements/task', 'ajax');
+			if ($this->RequestHandler->isAjax()){
+		
+				if ($this->Task->save($this->data)){
+					$this->data = $this->Task->find(array('id' => $id));
+					$this->set('data', $this->data);
+					$this->render('/general/json", "ajax');
+				} else {
+					$this->set('data', false);
+					$this->render('/general/json", "ajax');
+				}
+			} else {
+				if ($this->Task->save($this->data)){
+					$this->data = $this->Task->find(array('id' => $id));
+					$this->set('task', $this->data);
+					$this->render('/elements/task', 'ajax');
+				}
 			}
 		}
 	}

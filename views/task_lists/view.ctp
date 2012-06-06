@@ -16,13 +16,20 @@
 	<?php echo $this->element('lists', array('lists' => $lists)); ?>
 </div>
 
+<div style="float: left">
 <h3>Tasks</h3>
 <div id="tasks">
-	<?php echo $this->element('tasks', array('tasks' => $tasks)); ?>
+	<?php //echo $this->element('tasks', array('tasks' => $tasks)); ?>
 </div>
 
 <h3>Done tasks</h3>
 <div id="tasks-done">
 	<?php //echo $this->element('tasks', array('tasks' => $tasksDone)); ?>
 </div>
-
+</div>
+<div style="float: left">
+<h3>C Tasks</h3>
+<div id="context-tasks">
+	<?php //echo $this->element('tasks', array('tasks' => $tasks)); ?>
+</div>
+</div>

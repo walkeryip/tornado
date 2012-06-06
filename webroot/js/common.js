@@ -1,22 +1,57 @@
-var List = Class.create();
+var ViewManager = Class.create();
+ViewManager.prototype = {
+	initialize: function() {
+		this.views = new Array();
+	},
+	
+	addView: function(view) {
+		this.views.push(view);
+		view.load();
+	},
 
-List.prototype = {
+	itemChanged: function(item) {
+		this.views.each(function(view){
+			view.itemChanged(item);
+		});
+	},
+
+	itemDeleted: function(item) {
+		this.views.each(function(view){
+			view.itemDeleted(item);
+		});
+	}
+};
+
+var Item = Class.create();
+Item.prototype = {
+	
+};
+
+var Task = Class.create(Item, {
+
+});
+
+var List = Class.create(Item, {
+
+});
+
+var View = Class.create();
+View.prototype = {
 	initialize: function (id, name) {
 		this.id = id;
 		this.name = name;
 
-		this.tasks = new Array();
-		this.labels = new Array();
-		this.contexts = new Array();
+		this.taskElements = new Hash();
+		this.labelElements = new Hash();
+		this.contextElements = new Hash();
 
-		this.container = jq("#tasks-done");
 	},
 
 	populate: function (data) {
 		var contexts = data.Context;
 		var tags = data.Tag;
 		var parent = data.Parent;
-		this.populateTasks(data.Task);
+		this.populateTaskElements(data.Task);
 		
 		var list = data.TaskList;
 		this.created = data.created;
@@ -25,45 +60,131 @@ List.prototype = {
 		this.name = data.name;
 	},
 
-	populateTasks: function (tasks) {
-		var list = this;
+	populateTaskElements: function(tasksData) {
+		var self = this;
 
-		tasks.each(function(task) {
-			list.tasks.push(new Task(task));
+		tasksData.each(function(taskData) {
+			var task = Tornado.tasks.get(taskData.Task.id);
+
+			if (!task) {
+				task = new Task(taskData);
+				Tornado.tasks.set(task.id, task);			
+			}
+			
+			self.taskElements.set(task.id, new TaskElement(task));
 		});
 	},
 
+	// Abstract function
+	display: function () {},
+
 	load: function () {
-		var list = this;
+		var view = this;
 
 		jq.ajax({
 		  	cache: false,
 			dataType: 'json',
-		  	url: "/tornado/task_lists/view/" + this.id
+		  	url: this.getAjaxUrl()
 		}).done(function (data) {
 			if (data){
-				list.populate(data);
-				list.display(list.container);
-				list.loaded = true;
+				view.populate(data);
+				view.display();
+				view.loaded = true;
 			}
 		});
 	},
 
-	display: function () {
-		var list = this;
+	// Abstract function 
+	getAjaxUrl: function() {},
 
-		list.tasks.each(function(task) {
-			task.display(list.container);
-		});
+	itemChanged: function(item) {
+		var foundItem = this.taskElements.get(item.id);
+
+		if (foundItem){
+			this.display(foundItem);
+		}
+	},
+
+	itemDeleted: function(item) {
+		var foundItem = this.taskElements.get(item.id);
+
+		if (foundItem){
+			foundItem.remove();
+			this.taskElements.unset(item.id);
+		}
 	}
 };
 
-var Task = Class.create();
+var ListView = Class.create(View, {
+	initialize: function($super, id, name){
+		$super(id, name);
 
-Task.prototype = {
+		jq("#tasks").append("<ul class=\"tasks\"></ul>");
+		this.tasksContainer = jq("#tasks > ul");
+		this.tasksContainer.id = "tasks";
+		jq("#tasks-done").append("<ul class=\"tasks\"></ul>");
+		this.tasksDoneContainer = jq("#tasks-done > ul");
+		this.tasksDoneContainer.id = "tasks-done";
+	},
+
+	getAjaxUrl: function() {
+		return "/tornado/task_lists/view/" + this.id;
+	},
+
+	displayElement: function(element) {
+		if (element.task.checked === "1"){
+			element.display(this.tasksDoneContainer);
+		} else {
+			element.display(this.tasksContainer);
+		}
+	},
+
+	display: function(item) {
+		var self = this;
+
+		if (item){
+			self.displayElement(item);
+		} else {
+			self.taskElements.each(function(data) {
+				var taskElement = data.value;
+				self.displayElement(taskElement);
+			});
+		}
+	}
+});
+
+var ContextView = Class.create(View, {	
+	initialize: function($super, id, name){
+		$super(id, name);
+
+		jq("#context-tasks").append("<ul class=\"tasks\"></ul>");
+		this.tasksContainer = jq("#context-tasks > ul");
+		this.tasksContainer.id = "context-tasks";
+	},
+
+	getAjaxUrl: function() {
+		return "/tornado/contexts/view/" + this.id;
+	},
+
+	display: function () {
+		var self = this;
+
+		self.taskElements.each(function(data) {
+			var taskElement = data.value;
+			if (taskElement.task.checked === "0"){
+				taskElement.display(self.tasksContainer);
+			} 
+		});
+	},
+});
+
+var Item = Class.create();
+Item.prototype = {};
+
+var Task = Class.create(Item, {
 	initialize: function (data) {
 		this.populate(data);
-		this.elements = new Array();
+		this.elements = new Hash();
 	},
 
 	populate: function (data) {
@@ -83,25 +204,7 @@ Task.prototype = {
 		this.todo = task.todo;
 	},
 
-	load: function () {
-		var task = this;
-
-		jq.ajax({
-		  	cache: false,
-			dataType: 'json',
-		  	url: "/tornado/tasks/view/" + this.id
-		}).done(function (data) {
-			if (data){
-				task.populate(data);
-				task.display();
-				task.loaded = true;
-			} else {
-				task.loaded = false;
-			}
-		});
-	},
-
-	delete: function () {
+	delete: function(callback) {
 		var task = this;
 
 		jq.ajax({
@@ -110,48 +213,63 @@ Task.prototype = {
 			url: "/tornado/tasks/delete/" + this.id
 		}).done(function (data) {
 			if (data){
-				task.remove();
+				callback();				
+				//task.remove();
 			}
 		});
 	},
 
-	save: function () {
+	// TODO: Add contexts and tags also
+	save: function(callback) {
 		var self = this;
 
 		jq.ajax({
+			type: "post",
 			cache: false,
 			dataType: 'json',
 			url: "/tornado/tasks/edit/" + self.id,
-			data: {"data[task][name]": self.name,
-				   "data[task][created]": self.created,
-				   "data[task][id]": self.id,
-				   "data[task][description]": self.description,
-				   "data[task][deadline]": self.deadline,
-				   "data[task][priority]": self.priority,
-				   "data[task][tags]": Tag.tagsToString(self.tags),
-				   "data[task][contexts]": Context.contextsToString(self.contexts)}
-		}).done(function (data) {
-			if (data){
-				self.load(data);
-				self.display
+			data: {"data[Task][name]": self.name,
+				   "data[Task][created]": self.created,
+				   "data[Task][id]": self.id,
+				   "data[Task][description]": self.description,
+				   "data[Task][deadline]": self.deadline,
+				   "data[Task][priority]": self.priority,
+				   "data[Task][tags]": "a, b, c, dator",
+				   "data[Task][contexts]": "a1, b2,b3, dator"}
+		}).done(function (result) {
+			if (result){
+				self.populate(result);
+				callback();
+				//self.display(container);
 			}
 		});
+	}
+});
+
+var ItemElement = Class.create();
+ItemElement.prototype = {
+	remove: function() {
+		this.element.remove();
+	}
+};
+
+var TaskElement = Class.create(ItemElement, {
+	initialize: function(task){
+		this.task = task;			
+		this.element = jq("<li></li>");
 	},
 
 	display: function (container) {
 		var self = this;
-		var element = this.elements[container];
-
-		if (element){
-			element.html(jq("<li></li>"));
-		} else {
-			element = jq("<li></li>");
-			this.elements[container] = element;
-		}
 
 		var taskContainer = jq("<div class=\"task\"></div>");
-		var checkbox = jq("<input type=\"checkbox\" />");
-		var task = jq("<a href=\"/tornado/tasks/view/" + this.id + "\">" + this.name + "</a>");
+		var checkboxString = "<input type=\"checkbox\" ";
+		if(this.task.checked === "1"){
+			checkboxString += "checked=\"yes\"";
+		}
+		checkboxString += " />";
+		var checkbox = jq(checkboxString);
+		var task = jq("<a href=\"/tornado/tasks/view/" + this.task.id + "\">" + this.task.name + "</a>");
 
 		// Info
 		var info = jq("<a href=\"#\" class=\"info-button expandable-div-button\" \">I</a>");
@@ -162,7 +280,7 @@ Task.prototype = {
 		});
 		
 		var infoBox = jq("<div class=\"info expandable-div\" style=\"display: none; \"></div>");
-		infoBox.append("<p>" + this.created + "</p>");
+		infoBox.append("<p>" + this.task.created + "</p>");
 		infoBox.append("<p>tags</p>");
 		infoBox.append("<p>contexts</p>");
 		infoBox.append("<p>parent</p>");
@@ -185,7 +303,10 @@ Task.prototype = {
 		});		
 
 		deleteButton.click(function() {
-			self.delete();
+			self.task.delete(function () {
+				Tornado.viewManager.itemDeleted(self.task);
+				Tornado.tasks.unset(self.task.id);
+			});
 			return false;
 		});
 
@@ -198,52 +319,51 @@ Task.prototype = {
 		taskContainer.append(actions);
 		taskContainer.append(actionsBox);
 
+		var existingElement = container.find(this.element);
 
-		this.elements[container] = element;
-
-		var elementObject = container.find(element);
-
-		if (elementObject.length > 0){
-			element.html(taskContainer);
-		} else {
-			element.append(taskContainer);
-			container.append(element);
+		if (existingElement.length == 1){
+			existingElement.html(taskContainer);
+		} else {	
+			this.element.html(taskContainer);
+			container.append(this.element);
 		}
-/*		this.element = jq("#test-" + this.id);
-		this.element.click(function (){
-			task.delete();		
-		});*/
 	},
 
 	edit: function(container) {
 		var self = this;
-		var element = this.elements[container];
 		
 		var taskContainer = jq("<div class=\"task edit\"></div>");
 		var checkbox = jq("<input type=\"checkbox\" />");
 		var input = Array();
-		input.name = jq("<input type=\"text\" value=\"" + this.name + "\" name=\"name\" />");
+		input.name = jq("<input type=\"text\" value=\"" + this.task.name + "\" name=\"name\" />");
 
 		var saveButton = jq("<button>Save</button>");
 		saveButton.click(function() {
-			self.name = jq(input.name).val();
-			self.save();
+			self.task.name = jq(input.name).val();
+
+			self.task.save(function() {
+				//self.display(container);
+				Tornado.viewManager.itemChanged(self.task);
+			});
+		});
+
+		var cancelButton = jq("<button>Cancel</button>");
+		cancelButton.click(function() {
 			self.display(container);
 		});
 
 		taskContainer.append(jq("<p></p>").append(checkbox));
 		taskContainer.append(jq("<p></p>").append(input.name)); 
 		taskContainer.append(saveButton); 
+		taskContainer.append(cancelButton); 
 
-		element.html(taskContainer);
+		this.element.html(taskContainer);
 	},
 
-	remove: function() {
-		this.elements.each(function(element){
-			element.remove();
-		});
+	check: function() {
+		
 	}
-};
+});
 
 
 var expandableDivButtonClick = function (element) {
@@ -275,13 +395,23 @@ var deleteList = function (id, name) {
 	deleteModel(id, "task_lists", name);
 };
 
+var Tornado = new function() { return {
+	tasks: new Hash(),
+	contexts: new Hash(),
+	tags: new Hash(),
+	lists: new Hash(),
+	viewManager: new ViewManager()
+}};
+
 jq(document).ready(function () {
 
 	//var test = new Task(86, "Fin task");
 	//test.load();
 
-	var testlist = new List(5, "test");
-	testlist.load();
+	var listView = new ListView(5, "ListView");
+	var contextView = new ContextView(6, "ContextView");
+	Tornado.viewManager.addView(listView);
+	Tornado.viewManager.addView(contextView);
 
 	/*jq(".expandable-div-button").click(function () {
 		expandableDivButtonClick(this);
