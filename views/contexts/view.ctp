@@ -1,17 +1,19 @@
+<script type="text/javascript">
+	jq(document).ready(function () {
+		//var listView = new Tornado.ListView(5, "ListView");
+		var contextView = new Tornado.ContextView(<?php echo $context['Context']['id']; ?>, "ContextView", "#context-tasks");
+		//Tornado.viewManager.addView(listView);
+		Tornado.viewManager.addView(contextView);
+	});
+</script>
+
 <h2><?php echo $context['Context']['name'] ?></h2> 
 <i><?php echo $context['Context']['created'] ?></i>
-
+<!--
 <h3>Lists</h3>
 <div id="lists">
 	<?php echo $this->element('lists', array('lists' => $lists)); ?>
-</div>
+</div>-->
 
 <h3>Tasks</h3>
-<div id="tasks">
-	<?php echo $this->element('tasks', array('tasks' => $tasks)); ?>
-</div>
-
-<h3>Done tasks</h3>
-<div id="tasks-done">
-	<?php echo $this->element('tasks', array('tasks' => $tasksDone)); ?>
-</div>
+<div id="context-tasks"></div>

@@ -25,6 +25,19 @@
 </script>
 
 <script type="text/javascript" src="/tornado/js/common.js"></script>
+<script type="text/javascript" src="/tornado/js/view-manager.js"></script>
+<script type="text/javascript" src="/tornado/js/tornado.js"></script>
+<script type="text/javascript" src="/tornado/js/view.js"></script>
+<script type="text/javascript" src="/tornado/js/list-view.js"></script>
+<script type="text/javascript" src="/tornado/js/context-view.js"></script>
+<script type="text/javascript" src="/tornado/js/tag-view.js"></script>
+<script type="text/javascript" src="/tornado/js/label.js"></script>
+<script type="text/javascript" src="/tornado/js/tag.js"></script>
+<script type="text/javascript" src="/tornado/js/context.js"></script>
+<script type="text/javascript" src="/tornado/js/item.js"></script>
+<script type="text/javascript" src="/tornado/js/task.js"></script>
+<script type="text/javascript" src="/tornado/js/item-element.js"></script>
+<script type="text/javascript" src="/tornado/js/task-element.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -42,6 +55,11 @@
 				<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
 				<li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
 			</ul>
+		</div>
+		<div id="inputbar">
+			<span>task</span>
+			<input type="text" />
+			<button>add</button>
 		</div>
 		<div id="content">
 			<div id="flash">

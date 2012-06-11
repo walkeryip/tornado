@@ -39,8 +39,13 @@ class TaskListsController extends AppController {
 			if ($this->TaskList->save($this->data)){
 				$this->data = $this->TaskList->getTaskListsByParentId($id);
 
-				$this->set('lists', $this->data);
-				$this->render('/elements/lists', 'ajax');
+				if ($this->RequestHandler->isAjax()){
+        			$this->set('data', $this->data);
+        			$this->render('/general/json', 'ajax');
+				} else {
+					$this->set('lists', $this->data);
+					$this->render('/elements/lists', 'ajax');
+				}
 			} else {
 				$this->Session->setFlash("Failed to save list. Please try again");
 			}
