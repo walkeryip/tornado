@@ -38,23 +38,36 @@ var deleteList = function (id, name) {
 };
 
 jq(document).ready(function () {
+    var self = this;
 	var container = jq("#inputbar");
 	var button = container.find("button");
 	var inputbar = container.find("input");
 
+    inputbar.keypress(function(e){
+        if(e.which == 13){
+            submit();
+            return false;
+        }
+    });
+
 	button.click(function() {
-		var text = inputbar.val();
-
-		var data = {};
-		data.Task = {}
-		
-		data.Task.name = text;
-		data.Context = Tornado.getDefaultContext();
-		data.List = Tornado.getDefaultList();
-		data.Tag = Tornado.getDefaultTag();
-
-		Tornado.viewManager.addItem(data);
-
-		return false;	
+        submit();
+        return false;
 	});
+
+    var submit = function() {
+        var text = inputbar.val();
+
+        var data = {};
+        data.Task = {}
+
+        data.Task.name = text;
+        data.Context = Tornado.getDefaultContext();
+        data.List = Tornado.getDefaultList();
+        data.Tag = Tornado.getDefaultTag();
+
+        Tornado.viewManager.addItem(data);
+
+        inputbar.val("");
+    }
 });

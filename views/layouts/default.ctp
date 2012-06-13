@@ -36,6 +36,7 @@
 <script type="text/javascript" src="/tornado/js/context.js"></script>
 <script type="text/javascript" src="/tornado/js/item.js"></script>
 <script type="text/javascript" src="/tornado/js/task.js"></script>
+<script type="text/javascript" src="/tornado/js/list.js"></script>
 <script type="text/javascript" src="/tornado/js/item-element.js"></script>
 <script type="text/javascript" src="/tornado/js/task-element.js"></script>
 </head>

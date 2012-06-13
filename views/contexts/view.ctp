@@ -4,6 +4,11 @@
 		var contextView = new Tornado.ContextView(<?php echo $context['Context']['id']; ?>, "ContextView", "#context-tasks");
 		//Tornado.viewManager.addView(listView);
 		Tornado.viewManager.addView(contextView);
+
+        var defaultContext = {};
+     	defaultContext.id = 6;
+
+     	Tornado.setDefaultContext(defaultContext);
 	});
 </script>
 

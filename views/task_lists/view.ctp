@@ -9,10 +9,8 @@
 
 		defaultList.id = <?php echo $list['TaskList']['id'] ?>;
 		defaultList.name = "<?php echo $list['TaskList']['name'] ?>";
-		defaultContext.id = 6;
 		
 		Tornado.setDefaultList(defaultList);
-		Tornado.setDefaultContext(defaultContext);
 	});
 </script>
 

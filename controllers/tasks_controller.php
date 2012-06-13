@@ -26,22 +26,20 @@ class TasksController extends AppController {
 		}
 	}
 
-	function add($id){
+	function add($id = null){
 		if (!empty($this->data)){
 			$this->Task->addTags($this->data['Task']['tags']); 
 			$this->Task->addContexts($this->data['Task']['contexts']);
 
 			// Attach to parent
-			$this->data['TaskList']['TaskList'][0] = $id;
+			//$this->data['TaskList']['TaskList'][0] = $id;
 
 			$this->Task->create();
 			if ($this->Task->save($this->data)){
-				$this->data = $this->Task->getTasksByListId($id, false); 
-					
-				$this->set('tasks', $this->data);
-				$this->render('/elements/tasks', 'ajax');
-			} else {
-				$this->Session->setFlash("Failed to save task. Please try again");
+                $this->data = $this->Task->find(array('id' => $this->Task->id));
+
+				$this->set('data', $this->data);
+				$this->render('/general/json', 'ajax');
 			}
 		}
 	}
