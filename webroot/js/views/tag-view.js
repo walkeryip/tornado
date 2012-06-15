@@ -11,14 +11,18 @@ Tornado.TagView = Class.create(Tornado.View, {
 		return "/tornado/tags/view/" + this.id;
 	},
 
+    addItem: function(taskElement) {
+        if (taskElement.task.checked === "0"){
+            taskElement.display(this.tasksContainer);
+        }
+    },
+
 	display: function () {
 		var self = this;
 
 		self.taskElements.each(function(data) {
 			var taskElement = data.value;
-			if (taskElement.task.checked === "0"){
-				taskElement.display(self.tasksContainer);
-			} 
+            self.addItem(taskElement);
 		});
 	},
 
