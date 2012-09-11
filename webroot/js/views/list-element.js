@@ -7,7 +7,7 @@ Tornado.ListElement = Class.create(Tornado.ItemElement, {
 	display: function (container) {
 		var self = this;
 
-		var listContainer = jq("<div class=\"list\"></div>");
+		var listContainer = jq("<div class=\"task_list\"></div>");
 
 		var list = jq("<a href=\"/tornado/task_lists/view/" + this.list.id + "\">" + this.list.name + "</a>");
 

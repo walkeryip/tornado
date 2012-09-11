@@ -42,6 +42,7 @@ jq(document).ready(function () {
 	var container = jq("#inputbar");
 	var button = container.find("button");
 	var inputbar = container.find("input");
+    inputbar.focus();
 
     inputbar.keypress(function(e){
         if(e.which == 13){

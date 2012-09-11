@@ -52,54 +52,84 @@ class TaskListsController extends AppController {
 		}
 	}
 
+
 	function view($id = null){
 		$this->TaskList->id = $id;
 
-		$conditions = array('TaskList.id' => $id);
-		$list = $this->TaskList->getTaskListById($id);
-		$lists = $this->TaskList->getTaskListsByParentId($id);
-		$tasks = $this->TaskList->Task->getTasksByListId($id, false);
-		$tasksDone = $this->TaskList->Task->getTasksByListId($id, true);
-
 		if ($this->RequestHandler->isAjax()){
-			$tasks = $this->TaskList->Task->getTasksByListIdTest($id);
-			$list['List'] = $lists;
-			$list['Task'] = $tasks;
-        	$this->set('data', $list);
+			$data = array();
+		
+			$data["TaskLists"] = $this->TaskList->query("select * from task_lists as TaskList where id = " . $id . " or parent_id = " . $id);
+		    $data["Tasks"] = $this->TaskList->Task->query("SELECT * FROM tasks as Task WHERE id in (SELECT task_id FROM task_lists_tasks WHERE task_list_id = " . $id . ")");
+
+			$taskIds = $this->accId($data["Tasks"], "Task", "id");
+			$data["TagsTasks"] = $this->TaskList->query("select * from tags_tasks as TagTask where task_id in (" . implode(",", $taskIds) . ")");
+			$data["ContextsTasks"] = $this->TaskList->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
+			$data["TagsTaskLists"] = $this->TaskList->query("select * from tags_task_lists as TagTaskList where task_list_id = " . $id);
+			$data["ContextsTaskLists"] = $this->TaskList->query("select * from contexts_task_lists as ContextTaskList where task_list_id = " . $id);
+
+			$tagsTasksTagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$tagsTaskListsTagIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
+			$data["Tags"] = $this->TaskList->Tag->query("select * from tags as tag where id in (" . 
+				implode(",", array_unique(array_merge($tagsTasksTagIds,$tagsTaskListsTagIds))) . ")");
+
+			$contextsTasksContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+			$contextsTaskListsContextIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+			$data["Contexts"] = $this->TaskList->Context->query("select * from contexts as context where id in (" . 
+				implode(",", array_unique(array_merge($contextsTasksContextIds,$contextsTaskListsContextIds))) . ")");
+
+
+			//$tasks = $this->TaskList->Task->getTasksByListIdTest($id);
+			//$list['List'] = $lists;
+			//$list['Task'] = $tasks;
+        	$this->set('data', $data);
         	$this->render('/general/json', 'ajax');
 		} else {
-			$this->set('list', $list);
-			$this->set('lists', $lists);
-			$this->set('tasks', $tasks);
-			$this->set('tasksDone', $tasksDone);
+			
+			$this->set('list_id', $id);
+			//$this->set('tasks', $tasks);
+			//$this->set('tasksDone', $tasksDone);
+		}
+	}
+
+
+
+	function accId($objList, $ident, $var){
+		$result = array();
+		foreach ($objList as $obj){
+			array_push($result,$obj[$ident][$var]);
+		} 
+
+		return $result;
+	}
+
+	function arrayStringJoin($a, $b){
+		if (strlen($a) == 0){
+			return $b;
+		} else if (strlen($b) == 0){
+			return $a;
+		} else {
+			return $a . "," . $b;
 		}
 	}
 
 	function edit($id = null){
-		if (!$id){
-			$this->Session->setFlash("Invalid list");
-			$this->redirect(array('action' => 'index'), null, true);
-		}
+        if ($this->RequestHandler->isAjax()){
 
-		if (empty($this->data)){
-			$this->data = $this->TaskList->getTaskListById($id);
-				
-			$this->data['TaskList']['tags'] = $this->TaskList->getLabels($this->data['Tag']);
-			$this->data['TaskList']['contexts'] = $this->TaskList->getLabels($this->data['Context']);
+            $this->TaskList->addTags($this->data['TaskList']['tags']);
+            $this->TaskList->addContexts($this->data['TaskList']['contexts']);
 
-			$this->set('listId', $id);
-			$this->render('/elements/list_edit', 'ajax');	
-		} else {
-			$this->TaskList->addTags($this->data['TaskList']['tags']); 
-			$this->TaskList->addContexts($this->data['TaskList']['contexts']);
+            if ($this->TaskList->save($this->data)){
+                $this->data = $this->TaskList->getTaskListById($id);
+                $this->set('data', $this->data);
+            } else {
+                $this->set('data', "false");
+            }
 
-			if ($this->TaskList->save($this->data)){
-				$this->data = $this->TaskList->getTaskListById($id);
-				$this->set('list', $this->data);
-				$this->render('/elements/list', 'ajax');
-			}
-		}
-	}	
+            $this->render('/general/json', 'ajax');
+        }
+
+    }
 
 	function delete($id = null){
 		if (!$id){

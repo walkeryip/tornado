@@ -28,9 +28,13 @@ class TasksController extends AppController {
 
 	function add($id = null){
 		if (!empty($this->data)){
-			$this->Task->addTags($this->data['Task']['tags']); 
-			$this->Task->addContexts($this->data['Task']['contexts']);
+			if (isset($this->data["Tags"])){
+				$this->Task->addTags($this->data['Tags']);
+			} 
 
+			if (isset($this->data["Contexts"])){
+				$this->Task->addContexts($this->data['Contexts']);
+			}
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
 

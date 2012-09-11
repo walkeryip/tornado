@@ -7,23 +7,33 @@ Tornado.View.prototype = {
 
 		this.taskElements = new Hash();
 		this.labelElements = new Hash();
-		this.contextElements = new Hash();
+        this.contextElements = new Hash();
+        this.listElements = new Hash();
 
 		this.container = jq(containerId);
 	},
 
 	populate: function (data) {
-		var contexts = data.Context;
-		var tags = data.Tag;
-		var parent = data.Parent;
-		this.populateTaskElements(data.Task);
-		
-		var list = data.TaskList;
-		this.created = data.created;
-		this.description = data.description;
-		this.id = data.id;
-		this.name = data.name;
-	},
+        this.populateTaskElements(data.Tasks);
+        this.populateListElements(data.TaskLists);
+        //this.populateContextElements(data.Context);
+        //this.populateTagElements(data.Tag);
+    },
+
+    populateListElements: function(listsData) {
+        var self = this;
+
+        listsData.each(function(listData) {
+            var list = Tornado.lists.get(listData.TaskList.id);
+
+            if (!list) {
+                list = new Tornado.List(listData);
+                Tornado.lists.set(list.id, list);
+            }
+
+            self.listElements.set(list.id, new Tornado.ListElement(list));
+        });
+    },
 
 	populateTaskElements: function(tasksData) {
 		var self = this;
@@ -95,7 +105,5 @@ Tornado.View.prototype = {
 		}
 	},
 
-	includeItem: function(item) {
-		return true;
-	}
+	includeItem: function(item) { return true; }
 };
