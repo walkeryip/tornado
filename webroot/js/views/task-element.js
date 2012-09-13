@@ -14,6 +14,11 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 		}
 		checkboxString += " />";
 		var checkbox = jq(checkboxString);
+	
+		checkbox.click(function () {
+			self.toggle();
+		});
+
 		var task = jq("<a href=\"/tornado/tasks/view/" + this.task.id + "\">" + this.task.name + "</a>");
 
 		// Info
@@ -105,7 +110,8 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 		this.element.html(taskContainer);
 	},
 
-	check: function() {
-		
+	toggle: function() {
+		this.task.toggle();
+		Tornado.viewManager.itemChanged(this.task);
 	}
 });

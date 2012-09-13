@@ -5,7 +5,17 @@ Tornado.ListView = Class.create(Tornado.MixedView, {
 
     getAjaxUrl: function() {
         return "/tornado/task_lists/view/" + this.id;
-    }
+    },
+
+	includeItem: function(item) {
+		if (item instanceof Tornado.Task){
+			if (item.checked == "0"){
+				return false;
+			}
+		}
+
+		return true;
+	}
 });
 
 /*Tornado.ListView = Class.create(Tornado.View, {

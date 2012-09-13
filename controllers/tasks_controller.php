@@ -28,20 +28,29 @@ class TasksController extends AppController {
 
 	function add($id = null){
 		if (!empty($this->data)){
-			if (isset($this->data["Tags"])){
-				$this->Task->addTags($this->data['Tags']);
+			if (isset($this->data["Task"]["tags"])){
+				$test = $this->Task->addTags($this->data["Task"]['tags']);
+				//print_r($test);
+				$this->data["Tag"] = array();
+				$this->data["Tag"]["Tag"] = $test;
 			} 
 
-			if (isset($this->data["Contexts"])){
-				$this->Task->addContexts($this->data['Contexts']);
+			if (isset($this->data["Task"]["contexts"])){
+				$test = $this->Task->addContexts($this->data["Task"]['contexts']);
+				//print_r($test);
+				$this->data["Context"] = array();
+				$this->data["Context"]["Context"] = $test;
 			}
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
 
 			$this->Task->create();
+			//$this->data["Task"]["id"] = $this->Task->id;
+
+			//print_r($this->data);
 			if ($this->Task->save($this->data)){
                 $this->data = $this->Task->find(array('id' => $this->Task->id));
-
+				//print_r($this->data);
 				$this->set('data', $this->data);
 				$this->render('/general/json', 'ajax');
 			}
@@ -93,24 +102,25 @@ class TasksController extends AppController {
 			$this->Task->id = $id;
 			$this->data['Task']['checked'] = $checked;
 
-			if ($this->RequestHandler->isAjax()){
+//			if ($this->RequestHandler->isAjax()){
 		
 				if ($this->Task->save($this->data)){
 					$this->data = $this->Task->find(array('id' => $id));
 					$this->set('data', $this->data);
-					$this->render('/general/json", "ajax');
 				} else {
 					$this->set('data', false);
-					$this->render('/general/json", "ajax');
 				}
-			} else {
+
+			$this->render("/general/json", "ajax");
+			/*else {
 				if ($this->Task->save($this->data)){
 					$this->data = $this->Task->find(array('id' => $id));
 					$this->set('task', $this->data);
 					$this->render('/elements/task', 'ajax');
 				}
-			}
+			}*/
 		}
+
 	}
 
 	function check($id = null){

@@ -52,9 +52,7 @@ class AppModel extends Model {
 		return $result;
 	}
 
-	/**
-     * 
-     **/
+
 	function createLabels($model, $data){
 		$labels = explode(',', $data);
 		$modelName = $model->name;
@@ -70,17 +68,15 @@ class AppModel extends Model {
 				if (!$label){
 					$model->create();
 					$label = $model->save(array('name' => $_label));
-					$label[$modelName]['id'] = $model->id;
+					$label['id'] = $model->id;
 				}
 
-				if ($label){
-					$labelId = $label[$modelName]['id'];
-					$this->data[$modelName][$modelName][$labelId] = $labelId;
-				} else {
-					$this->Session->setFlash("Could not save ' . $modelName . ' with name " . $label);
-				}
+				//print_r($label);
+				array_push($result, $label[$modelName]["id"]);
 			}
 		}
+//		print_r($result);
+		return $result;
 	}
 
 }

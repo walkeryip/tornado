@@ -44,6 +44,8 @@ jq(document).ready(function () {
 	var inputbar = container.find("input");
     inputbar.focus();
 
+	extractKeywords("abc @fem asdkasd @olle #blabla#blabla", "@");
+
     inputbar.keypress(function(e){
         if(e.which == 13){
             submit();
@@ -62,13 +64,54 @@ jq(document).ready(function () {
         var data = {};
         data.Task = {}
 
-        data.Task.name = text;
-        data.Context = Tornado.getDefaultContext();
+		var tagKeywordObject = extractKeywords(text, "#");
+		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
+
+        data.Task.name = contextKeywordObject.text;
+        data.Context = contextKeywordObject.keywords; 
         data.List = Tornado.getDefaultList();
-        data.Tag = Tornado.getDefaultTag();
+        data.Tag = tagKeywordObject.keywords;
 
         Tornado.viewManager.addItem(data);
 
         inputbar.val("");
     }
 });
+
+var extractKeywords = function (text, keywordCharacter) {
+	var result = {};
+	var keywords = new Array();
+	var insideKeyword = false;
+	var keyword = "";
+	var newText = "";
+
+	for (var index=0; index < text.length; index++){
+		var currentChar = text[index];
+		
+		if (currentChar === keywordCharacter) {
+			insideKeyword = true;
+			continue;
+		} 
+		
+		if (insideKeyword) {
+			if (currentChar === " ") {
+				keywords.push({name: keyword});
+				keyword = "";
+				insideKeyword = false;
+				continue;
+			} else {
+				keyword += currentChar;
+			}
+		} else {
+			newText += currentChar;
+		}
+	}
+
+	if (insideKeyword){
+		keywords.push({name: keyword});
+	}
+
+	result.text = newText;
+	result.keywords = keywords;
+	return result;
+};

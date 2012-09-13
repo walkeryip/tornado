@@ -77,22 +77,22 @@ Tornado.Item.prototype = {
     },
 
 	fetchContext: function(contextData) {
-		var context = Tornado.contexts.get(contextData.id);
+		var context = Tornado.contexts.get(contextData.name);
 
-		if (!context) {
+		if (!context || context === undefined) {
 			context = new Tornado.Context(contextData);
-			Tornado.contexts.set(context.id, context);
+			Tornado.contexts.set(context.name, context);
 		}
 
 		this.contexts.push(context);
 	},
 
     fetchTag: function(tagData) {
-        var tag = Tornado.tags.get(tagData.id);
+        var tag = Tornado.tags.get(tagData.name);
 
-        if (!tag) {
+        if (!tag || tag === undefined) {
             tag = new Tornado.Tag(tagData);
-            Tornado.tags.set(tag.id, tag);
+            Tornado.tags.set(tag.name, tag);
         }
 
         this.tags.push(tag);
@@ -101,7 +101,7 @@ Tornado.Item.prototype = {
     fetchList: function(listData) {
         var list = Tornado.lists.get(listData.id);
 
-        if (!list) {
+        if (!list || list === undefined) {
             list = new Tornado.List(listData);
             Tornado.lists.set(list.id, list);
         }
@@ -116,7 +116,7 @@ Tornado.Item.prototype = {
 			result.push(label.name);
 		});
 
-		return data.join(", ");
+		return result.join(",");
 	},
 
 	getContextsString: function() {
@@ -133,7 +133,11 @@ Tornado.Item.prototype = {
 
         if (data.length > 0){
             data.each(function(item, index){
-                result[hashString + "[id]"] = item.id;
+				if (item.id === undefined) {
+					result[hashString + "[name]"] = item.name;
+				} else {
+                	result[hashString + "[id]"] = item.id;
+				}
             });
         }
         return result;

@@ -30,15 +30,33 @@ Tornado.Task = Class.create(Tornado.Item, {
             "data[Task][deadline]": this.deadline,
             "data[Task][priority]": this.priority};
 
-        if (compactMode){
+        //if (compactMode){
             Object.extend(data, {"data[Task][tags]": this.getTagsString(),
                                  "data[Task][contexts]": this.getContextsString()});
-        } else {
+        /*} else {
             Object.extend(data, this.getContextsSubmitString());
-            Object.extend(data, this.getTagsSubmitString());
+            Object.extend(data, this.getTagsSubmitString());*/
             Object.extend(data, this.getListsSubmitString());
-        }
+        //}
 
         return data;
-    }
+    },
+
+	toggle: function() {
+		var checkFunction = "check";
+		if (this.checked != "0"){
+			checkFunction = "un" + checkFunction;
+		}
+
+		jq.ajax({
+            type: "post",
+            cache: false,
+            dataType: 'json',
+            url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id,
+        }).done(function (result) {
+                if (result){
+                    self.populate(result);
+                }
+            });
+	}
 });

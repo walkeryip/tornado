@@ -50,11 +50,11 @@ class Task extends AppModel {
 	}
 
 	public function addTags($tags){
-		$this->createLabels($this->Tag, $tags);
+		return $this->createLabels($this->Tag, $tags);
 	}
 
 	public function addContexts($contexts){
-		$this->createLabels($this->Context, $contexts);
+		return $this->createLabels($this->Context, $contexts);
 	}
 
 	public function getTagsString(){
