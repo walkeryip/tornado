@@ -2,8 +2,8 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var listView = new Tornado.ListView(<?php echo $list_id; ?>, "ListView", "#tasks");
-		var contextView = new Tornado.TagView(22, "TagView", "#tag-tasks");
+		var listView = new Tornado.ListView(<?php echo $list_id; ?>, "#tasks");
+		var contextView = new Tornado.TagView(22, "#tag-tasks");
 		Tornado.viewManager.addView(listView);
 		Tornado.viewManager.addView(contextView);
 		var defaultList = {};
@@ -16,5 +16,5 @@
 	});
 </script>
 
-<div style="float:right;" id="tasks"></div>
-<div style="float: right;" id="tag-tasks"></div>
+<div id="tasks"></div>
+<div id="tag-tasks"></div>

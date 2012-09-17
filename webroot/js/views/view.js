@@ -1,23 +1,26 @@
 // Abstract class
 Tornado.View = Class.create();
 Tornado.View.prototype = {
-	initialize: function (id, name, containerId) {
+	initialize: function (id, containerId) {
 		this.id = id;
-		this.name = name;
 
 		this.taskElements = new Hash();
-		this.labelElements = new Hash();
+		this.tagElements = new Hash();
         this.contextElements = new Hash();
         this.listElements = new Hash();
 
 		this.container = jq(containerId);
+		this.container.addClass("view");
 	},
 
 	populate: function (data) {
         this.populateTaskElements(data.Tasks);
         this.populateListElements(data.TaskLists);
         //this.populateContextElements(data.Context);
-        //this.populateTagElements(data.Tag);
+        this.populateTagElements(data.Tags);
+		this.model = this.getModel();
+
+		this.container.prepend("<h2>" + this.getTitle() + "</h2>");
     },
 
     populateListElements: function(listsData) {
@@ -50,8 +53,28 @@ Tornado.View.prototype = {
 		});
 	},
 
+	populateTagElements: function(tagsData) {
+		var self = this;
+
+		tagsData.each(function(tagData) {
+			var tag = Tornado.tags.get(tagData.Tag.id);
+
+			if (!tag) {
+				tag = new Tornado.Tag(tagData);
+				Tornado.tags.set(tag.id, tag);			
+			}
+			
+			//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+		});
+	},
+
 	// Abstract function
 	display: function() {},
+
+	// Overridable function
+	getTitle: function() {
+		return "unknown";
+	},
 
     // Abstract function
     addItem: function() {},
@@ -105,5 +128,7 @@ Tornado.View.prototype = {
 		}
 	},
 
-	includeItem: function(item) { return true; }
+	includeItem: function(item) { return true; },
+	
+	getModel: function() { return null; }
 };

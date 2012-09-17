@@ -68,10 +68,12 @@ class AppModel extends Model {
 				if (!$label){
 					$model->create();
 					$label = $model->save(array('name' => $_label));
-					$label['id'] = $model->id;
+					$label[$modelName]['id'] = $model->id;
 				}
 
-				//print_r($label);
+				/*print_r($label);
+				print_r($result);
+				echo $modelName;*/
 				array_push($result, $label[$modelName]["id"]);
 			}
 		}

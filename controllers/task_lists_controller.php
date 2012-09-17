@@ -70,12 +70,12 @@ class TaskListsController extends AppController {
 
 			$tagsTasksTagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
 			$tagsTaskListsTagIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
-			$data["Tags"] = $this->TaskList->Tag->query("select * from tags as tag where id in (" . 
+			$data["Tags"] = $this->TaskList->Tag->query("select * from tags as Tag where id in (" . 
 				implode(",", array_unique(array_merge($tagsTasksTagIds,$tagsTaskListsTagIds))) . ")");
 
 			$contextsTasksContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
 			$contextsTaskListsContextIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
-			$data["Contexts"] = $this->TaskList->Context->query("select * from contexts as context where id in (" . 
+			$data["Contexts"] = $this->TaskList->Context->query("select * from contexts as Context where id in (" . 
 				implode(",", array_unique(array_merge($contextsTasksContextIds,$contextsTaskListsContextIds))) . ")");
 
 

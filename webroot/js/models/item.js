@@ -1,9 +1,9 @@
 Tornado.Item = Class.create();
 Tornado.Item.prototype = {
 	initialize: function(data) {
-		this.contexts = new Array();
-        this.tags = new Array();
-        this.lists = new Array();
+		this.contexts = new Hash();
+        this.tags = new Hash();
+        this.lists = new Hash();
 
         this.populate(data);
 	},
@@ -84,7 +84,7 @@ Tornado.Item.prototype = {
 			Tornado.contexts.set(context.name, context);
 		}
 
-		this.contexts.push(context);
+		this.contexts.set(context.name, context);
 	},
 
     fetchTag: function(tagData) {
@@ -95,7 +95,7 @@ Tornado.Item.prototype = {
             Tornado.tags.set(tag.name, tag);
         }
 
-        this.tags.push(tag);
+        this.tags.set(tag.name, tag);
     },
 
     fetchList: function(listData) {
@@ -106,14 +106,14 @@ Tornado.Item.prototype = {
             Tornado.lists.set(list.id, list);
         }
 
-        this.lists.push(list);
+        this.lists.set(list.id, list);
     },
 
 	getLabelsString: function(data) {
 		var result = new Array();
 	
 		data.each(function(label) {
-			result.push(label.name);
+			result.push(label.value.name);
 		});
 
 		return result.join(",");
@@ -131,15 +131,13 @@ Tornado.Item.prototype = {
         var result = {};
         var hashString = "data[" + name + "]";
 
-        if (data.length > 0){
-            data.each(function(item, index){
-				if (item.id === undefined) {
-					result[hashString + "[name]"] = item.name;
-				} else {
-                	result[hashString + "[id]"] = item.id;
-				}
-            });
-        }
+        data.each(function(item, index){
+			if (item.value.id === undefined) {
+				result[hashString + "[name]"] = item.value.name;
+			} else {
+               	result[hashString + "[id]"] = item.value.id;
+			}
+        });
         return result;
     },
 
@@ -156,5 +154,33 @@ Tornado.Item.prototype = {
     },
 
     getModelUrlName: function() { return ""; },
-    getSubmitData: function() { return {}; }
+    getSubmitData: function() { return {}; },
+
+	hasLabel: function(map, labelString) {
+		/*var result = false;
+
+		array.each(function(item, index){
+			if (item.name === labelString){
+				result = true;
+			}
+		});*/
+
+		return map.get(labelString) !== undefined;
+	},
+
+	hasContext: function(contextString) {
+		return this.hasLabel(this.contexts, contextString);
+	},
+
+	hasTag: function(tagString) {
+		return this.hasLabel(this.tags, tagString);
+	},
+
+	getParent: function() {
+		var result = null;
+		this.lists.each(function (item, index){
+			result = item.value;
+		});
+		return result;
+	}
 };

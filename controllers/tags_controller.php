@@ -20,7 +20,7 @@ class TagsController extends AppController {
 			$tag['Task'] = $tasks;
         	$this->set('data', $tag);*/
 
-			$data["Tags"] = $this->Tag->query("select * from tags as tag where id = " . $id);
+			$data["Tags"] = $this->Tag->query("select * from tags as Tag where id = " . $id);
 
 			$data["TagsTasks"] = $this->Tag->query("select * from tags_tasks as TagTask where tag_id = " . $id);
 			$data["TagsTaskLists"] = $this->Tag->query("select * from tags_task_lists as TagTaskList where tag_id = " . $id);

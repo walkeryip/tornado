@@ -1,6 +1,6 @@
 Tornado.ListView = Class.create(Tornado.MixedView, {
-    initialize: function($super, id, name, containerId){
-        $super(id, name, containerId);
+    initialize: function($super, id, containerId){
+        $super(id, containerId);
     },
 
     getAjaxUrl: function() {
@@ -9,12 +9,18 @@ Tornado.ListView = Class.create(Tornado.MixedView, {
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
-			if (item.checked == "0"){
-				return false;
+			var parentId = item.getParent().id;
+			if (item.checked == "0" && this.id == parentId){
+				return true;
 			}
 		}
 
-		return true;
+		return false;
+	},
+
+	getTitle: function() {
+		var list = Tornado.lists.get(this.id);
+		return "-" + list.name;
 	}
 });
 
