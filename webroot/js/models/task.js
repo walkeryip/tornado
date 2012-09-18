@@ -42,8 +42,10 @@ Tornado.Task = Class.create(Tornado.Item, {
         return data;
     },
 
-	toggle: function() {
+	toggle: function(callback) {
 		var checkFunction = "check";
+		var self = this;
+
 		if (this.checked != "0"){
 			checkFunction = "un" + checkFunction;
 		}
@@ -56,6 +58,7 @@ Tornado.Task = Class.create(Tornado.Item, {
         }).done(function (result) {
                 if (result){
                     self.populate(result);
+					callback();
                 }
             });
 	}

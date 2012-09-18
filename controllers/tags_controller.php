@@ -44,17 +44,6 @@ class TagsController extends AppController {
 			$this->set('tasksDone', $tasksDone);
 		}
 	}
-
-
-	function accId($objList, $ident, $var){
-		$result = array();
-		foreach ($objList as $obj){
-			array_push($result,$obj[$ident][$var]);
-		} 
-
-		return $result;
-	}
-
 }
 
 ?>

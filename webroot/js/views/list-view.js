@@ -9,8 +9,8 @@ Tornado.ListView = Class.create(Tornado.MixedView, {
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
-			var parentId = item.getParent().id;
-			if (item.checked == "0" && this.id == parentId){
+			//var parentId = item.getParent().id;
+			if (item.checked == "0"){// && this.id == parentId){
 				return true;
 			}
 		}

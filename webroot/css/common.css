@@ -113,3 +113,8 @@ background-color: rgba(255, 255, 0, .5);
 	float: left;
 	margin-top: 200px;
 }
+
+.column {
+	float: left;
+	width: 50%;
+}	

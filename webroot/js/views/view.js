@@ -10,13 +10,14 @@ Tornado.View.prototype = {
         this.listElements = new Hash();
 
 		this.container = jq(containerId);
+		this.container.hide();
 		this.container.addClass("view");
 	},
 
 	populate: function (data) {
         this.populateTaskElements(data.Tasks);
         this.populateListElements(data.TaskLists);
-        //this.populateContextElements(data.Context);
+        this.populateContextElements(data.Contexts);
         this.populateTagElements(data.Tags);
 		this.model = this.getModel();
 
@@ -26,46 +27,69 @@ Tornado.View.prototype = {
     populateListElements: function(listsData) {
         var self = this;
 
-        listsData.each(function(listData) {
-            var list = Tornado.lists.get(listData.TaskList.id);
+		if (listsData !== undefined){
+		    listsData.each(function(listData) {
+		        var list = Tornado.lists.get(listData.TaskList.id);
 
-            if (!list) {
-                list = new Tornado.List(listData);
-                Tornado.lists.set(list.id, list);
-            }
+		        if (!list) {
+		            list = new Tornado.List(listData);
+		            Tornado.lists.set(list.id, list);
+		        }
 
-            self.listElements.set(list.id, new Tornado.ListElement(list));
-        });
+		        self.listElements.set(list.id, new Tornado.ListElement(list));
+		    });
+		}
     },
 
 	populateTaskElements: function(tasksData) {
 		var self = this;
 
-		tasksData.each(function(taskData) {
-			var task = Tornado.tasks.get(taskData.Task.id);
+		if (tasksData !== undefined){
+			tasksData.each(function(taskData) {
+				var task = Tornado.tasks.get(taskData.Task.id);
 
-			if (!task) {
-				task = new Tornado.Task(taskData);
-				Tornado.tasks.set(task.id, task);			
-			}
+				if (!task) {
+					task = new Tornado.Task(taskData);
+					Tornado.tasks.set(task.id, task);			
+				}
 			
-			self.taskElements.set(task.id, new Tornado.TaskElement(task));
-		});
+				self.taskElements.set(task.id, new Tornado.TaskElement(task));
+			});
+		}
 	},
 
 	populateTagElements: function(tagsData) {
 		var self = this;
 
-		tagsData.each(function(tagData) {
-			var tag = Tornado.tags.get(tagData.Tag.id);
+		if (tagsData !== undefined){
+			tagsData.each(function(tagData) {
+				var tag = Tornado.tags.get(tagData.Tag.id);
 
-			if (!tag) {
-				tag = new Tornado.Tag(tagData);
-				Tornado.tags.set(tag.id, tag);			
-			}
+				if (!tag) {
+					tag = new Tornado.Tag(tagData);
+					Tornado.tags.set(tag.id, tag);			
+				}
 			
-			//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
-		});
+				//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+			});
+		}
+	},
+
+	populateContextElements: function(contextsData) {
+		var self = this;
+
+		if (contextsData !== undefined){
+			contextsData.each(function(contextData) {
+				var context = Tornado.contexts.get(contextData.Context.id);
+
+				if (!context) {
+					context = new Tornado.Context(contextData);
+					Tornado.contexts.set(context.id, context);			
+				}
+			
+				//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+			});
+		}
 	},
 
 	// Abstract function
@@ -78,6 +102,7 @@ Tornado.View.prototype = {
 
     // Abstract function
     addItem: function() {},
+	updateItem: function() {},
 
 	load: function () {
 		var view = this;
@@ -90,6 +115,7 @@ Tornado.View.prototype = {
 			if (data){
 				view.populate(data);
 				view.display();
+				view.container.fadeIn("slow");
 				view.loaded = true;
 			}
 		});
@@ -99,23 +125,21 @@ Tornado.View.prototype = {
 	getAjaxUrl: function() {},
 
 	itemChanged: function(item) {
-		if (this.includeItem(item)){
-			this.display(foundItem);
+		var foundItem = this.taskElements.get(item.id);
+		if (foundItem) {
+			this.updateItem(foundItem);
 		} else {
-			var foundItem = this.taskElements.get(item.id);
-			
-			if (foundItem){
-				foundItem.remove();
-				this.taskElements.unset(item.id);
-			}
+			this.itemAdded(item);
 		}
 	},
 
 	itemDeleted: function(item) {
 		var foundItem = this.taskElements.get(item.id);
 
-		if (foundItem){
-			foundItem.remove();
+		if (foundItem){			
+			foundItem.element.fadeOut("fast", function (){
+				$(this).remove();
+			});
 			this.taskElements.unset(item.id);
 		}
 	},

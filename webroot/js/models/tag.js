@@ -18,5 +18,5 @@ Tornado.Tag = Class.create(Tornado.Label, {
 		} else {
 			this.name = data.name;
 		}
-	},
+	}
 });

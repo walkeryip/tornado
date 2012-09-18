@@ -76,6 +76,7 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 		} else {	
 			this.element.html(taskContainer);
 			container.append(this.element);
+			this.element.hide().fadeIn();
 		}
 	},
 
@@ -111,7 +112,9 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 	},
 
 	toggle: function() {
-		this.task.toggle();
-		Tornado.viewManager.itemChanged(this.task);
+		var self = this;
+		this.task.toggle(function (){
+			Tornado.viewManager.itemChanged(self.task);
+		});
 	}
 });

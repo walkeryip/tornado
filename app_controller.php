@@ -32,4 +32,13 @@
  */
 class AppController extends Controller {
 	
+
+	function accId($objList, $ident, $var){
+		$result = array();
+		foreach ($objList as $obj){
+			array_push($result,$obj[$ident][$var]);
+		} 
+
+		return $result;
+	}
 }

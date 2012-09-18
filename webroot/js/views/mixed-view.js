@@ -1,6 +1,6 @@
 Tornado.MixedView = Class.create(Tornado.View, {
-	initialize: function($super, id, name, containerId){
-		$super(id, name, containerId);
+	initialize: function($super, id, containerId){
+		$super(id, containerId);
 
         this.container.append("<ul class=\"lists\"></ul>");
         this.listsContainer = this.container.find(".lists");
@@ -38,6 +38,17 @@ Tornado.MixedView = Class.create(Tornado.View, {
                 var listElement = data.value;
                 self.addItem(listElement);
             });
+		}
+	},
+
+	updateItem: function(item) {
+		if (this.includeItem(item.task)){
+			item.display(this.tasksContainer);
+		} else {
+			item.element.fadeOut("fast", function (){
+				$(this).remove();
+			});
+			this.taskElements.unset(item.id);
 		}
 	}
 });
