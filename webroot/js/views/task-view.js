@@ -46,7 +46,7 @@ Tornado.TaskView = Class.create(Tornado.View, {
 
 	updateItem: function(item) {
 		if (this.includeItem(item.task)){
-			item.display(this.container);
+			item.display(this.tasksContainer);
 		} else {
 			item.element.fadeOut("fast", function (){
 				$(this).remove();

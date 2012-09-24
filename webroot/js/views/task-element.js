@@ -1,6 +1,8 @@
 Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 	initialize: function(task){
-		this.task = task;			
+		this.task = task;	
+		this.tags = task.tags;
+		this.contexts = task.contexts;		
 		this.element = jq("<li></li>");
 	},
 
@@ -19,7 +21,17 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 			self.toggle();
 		});
 
-		var task = jq("<a href=\"/tornado/tasks/view/" + this.task.id + "\">" + this.task.name + "</a>");
+		var tagsString = "";
+		this.task.tags.each(function(tag){
+			tagsString += "<li><a href=\"tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+		});
+
+		var contextsString = "";
+		this.task.contexts.each(function(context){
+			contextsString += "<li><a href=\"contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+		});
+
+		var task = jq("<span>" + this.task.name + "</span><ul class=\"tags\">" + tagsString + "</ul><ul class=\"contexts\">" + contextsString + "</ul>");
 
 		// Info
 		var info = jq("<a href=\"#\" class=\"info-button expandable-div-button\" \">I</a>");
@@ -28,10 +40,11 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 			expandableDivButtonClick(info); 
 			return false;
 		});
+
 		
 		var infoBox = jq("<div class=\"info expandable-div\" style=\"display: none; \"></div>");
 		infoBox.append("<p>" + this.task.created + "</p>");
-		infoBox.append("<p>tags</p>");
+		infoBox.append("<p>" + tagsString + "</p>");
 		infoBox.append("<p>contexts</p>");
 		infoBox.append("<p>parent</p>");
 		
@@ -91,9 +104,10 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 		var saveButton = jq("<button>Save</button>");
 		saveButton.click(function() {
 			self.task.name = jq(input.name).val();
+			self.task.tagsString = jq(input.tags).val();
+			self.task.contextsString = jq(input.contexts).val();
 
 			self.task.save(function() {
-				//self.display(container);
 				Tornado.viewManager.itemChanged(self.task);
 			});
 		});
@@ -103,8 +117,13 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 			self.display(container);
 		});
 
+		input.tags = jq("<input type=\"text\" value=\"" + Tornado.Label.arrayToLabelString(self.task.tags) + "\" name=\"tags\" />");
+		input.contexts = jq("<input type=\"text\" value=\"" + Tornado.Label.arrayToLabelString(self.task.contexts) + "\" name=\"contexts\" />");
+
 		taskContainer.append(jq("<p></p>").append(checkbox));
 		taskContainer.append(jq("<p></p>").append(input.name)); 
+		taskContainer.append(jq("<p></p>").append(input.tags)); 
+		taskContainer.append(jq("<p></p>").append(input.contexts)); 
 		taskContainer.append(saveButton); 
 		taskContainer.append(cancelButton); 
 

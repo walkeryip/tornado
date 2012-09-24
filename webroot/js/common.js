@@ -44,13 +44,34 @@ jq(document).ready(function () {
 	var inputbar = container.find("input");
     inputbar.focus();
 
-	extractKeywords("abc @fem asdkasd @olle #blabla#blabla", "@");
+	var inputMode = new Array();
+	inputMode[0] = "task";
+	inputMode[1] = "list";
 
-    inputbar.keypress(function(e){
-        if(e.which == 13){
+	var inputModeIndex = 0;
+
+	var changeInputBarIndex = function(index){
+		if (index >= inputMode.length){
+			index = 0;
+		} else if (index < 0){
+			index = inputMode.length - 1;
+		}
+		container.find("span").text(inputMode[index]);	
+
+		inputModeIndex = index;
+	}
+
+    inputbar.keydown(function(e){
+        if(e.keyCode == 13){
             submit();
             return false;
-        }
+        } else if (e.keyCode == 40) { 
+			changeInputBarIndex(++inputModeIndex);
+       		return false;
+    	} else if (e.keyCode == 38) {
+			changeInputBarIndex(--inputModeIndex);
+			return false;	
+		}
     });
 
 	button.click(function() {
@@ -62,21 +83,31 @@ jq(document).ready(function () {
         var text = inputbar.val();
 
         var data = {};
-        data.Task = {}
+
+		var inputMode = jq("#inputbar").find("span").text();
 
 		var tagKeywordObject = extractKeywords(text, "#");
 		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
 
-        data.Task.name = contextKeywordObject.text;
-        data.Context = contextKeywordObject.keywords; 
-        data.List = Tornado.getDefaultList();
-        data.Tag = tagKeywordObject.keywords;
+
+		if (inputMode === "task"){		
+		    data.Task = {}
+		    data.Task.name = contextKeywordObject.text;
+		} else if (inputMode === "list"){
+			data.TaskList = {};
+			data.TaskList.name = contextKeywordObject.text;
+		}
+
+	    data.Context = contextKeywordObject.keywords; 
+	    data.List = Tornado.getDefaultList();
+	    data.Tag = tagKeywordObject.keywords;
 
         Tornado.viewManager.addItem(data);
 
         inputbar.val("");
     }
 });
+
 
 var extractKeywords = function (text, keywordCharacter) {
 	var result = {};

@@ -15,18 +15,25 @@ Tornado.View.prototype = {
 	},
 
 	populate: function (data) {
-        this.populateTaskElements(data.Tasks);
-        this.populateListElements(data.TaskLists);
-        this.populateContextElements(data.Contexts);
-        this.populateTagElements(data.Tags);
+        var contexts = this.populateContexts(data);
+        var tags = this.populateTags(data);
+        var tasks = this.populateTasks(data);
+        var lists = this.populateLists(data);
+
+        //this.populateContextElements(contexts);
+        //this.populateTagElements(tags);
+        this.populateTaskElements(tasks);
+        this.populateListElements(lists);
 		this.model = this.getModel();
 
 		this.container.prepend("<h2>" + this.getTitle() + "</h2>");
     },
 
-    populateListElements: function(listsData) {
-        var self = this;
 
+    populateLists: function(data) {
+		var lists = Array();
+		
+		var listsData = data.TaskLists;
 		if (listsData !== undefined){
 		    listsData.each(function(listData) {
 		        var list = Tornado.lists.get(listData.TaskList.id);
@@ -35,32 +42,60 @@ Tornado.View.prototype = {
 		            list = new Tornado.List(listData);
 		            Tornado.lists.set(list.id, list);
 		        }
-
-		        self.listElements.set(list.id, new Tornado.ListElement(list));
+				
+				lists.push(list);
 		    });
 		}
+		
+		return lists;
     },
 
-	populateTaskElements: function(tasksData) {
-		var self = this;
+	populateTasks: function(data) {
+		var tasks = Array();
 
+		var tasksData = data.Tasks;
 		if (tasksData !== undefined){
 			tasksData.each(function(taskData) {
 				var task = Tornado.tasks.get(taskData.Task.id);
 
 				if (!task) {
 					task = new Tornado.Task(taskData);
-					Tornado.tasks.set(task.id, task);			
+					Tornado.tasks.set(task.id, task);	
 				}
-			
-				self.taskElements.set(task.id, new Tornado.TaskElement(task));
+
+				tasks.push(task);		
 			});
 		}
+
+		var contextsTasks = data.ContextsTasks;
+		if (contextsTasks !== undefined){
+			contextsTasks.each(function(contextTaskData) {
+				var contextTask = contextTaskData.ContextTask;
+
+				var task = Tornado.tasks.get(contextTask.task_id);
+				var context = Tornado.contexts.get(contextTask.context_id);
+				task.contexts.set(contextTask.context_id, context); 
+			});
+		}
+
+		var tagsTasks = data.TagsTasks;
+		if (tagsTasks !== undefined){
+			tagsTasks.each(function(tagTaskData) {
+				var tagTask = tagTaskData.TagTask;
+
+				var task = Tornado.tasks.get(tagTask.task_id);
+				var tag = Tornado.tags.get(tagTask.tag_id);
+				task.tags.set(tagTask.tag_id, tag); 
+			});
+		}
+
+		return tasks;
 	},
 
-	populateTagElements: function(tagsData) {
-		var self = this;
+	populateTags: function(data) {
+		var tags = Array();
 
+		var tagsData = data.Tags;
 		if (tagsData !== undefined){
 			tagsData.each(function(tagData) {
 				var tag = Tornado.tags.get(tagData.Tag.id);
@@ -69,25 +104,50 @@ Tornado.View.prototype = {
 					tag = new Tornado.Tag(tagData);
 					Tornado.tags.set(tag.id, tag);			
 				}
-			
-				//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+
+				tags.push(tag);
 			});
 		}
+
+		return tags;
 	},
 
-	populateContextElements: function(contextsData) {
-		var self = this;
+	populateContexts: function(data) {
+		var contexts = Array();
 
+		var contextsData = data.Contexts;
 		if (contextsData !== undefined){
 			contextsData.each(function(contextData) {
 				var context = Tornado.contexts.get(contextData.Context.id);
 
 				if (!context) {
 					context = new Tornado.Context(contextData);
-					Tornado.contexts.set(context.id, context);			
+					Tornado.contexts.set(context.id, context);
 				}
-			
-				//self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+
+				contexts.push(context);			
+			});
+		}
+
+		return contexts;
+	},
+
+
+
+	populateListElements: function(lists) {
+		var self = this;
+		if (lists !== undefined){
+		    lists.each(function(list) {
+		        self.listElements.set(list.id, new Tornado.ListElement(list));
+		    });
+		}
+    },
+
+	populateTaskElements: function(tasks) {
+		var self = this;
+		if (tasks !== undefined){
+			tasks.each(function(task) {
+				self.taskElements.set(task.id, new Tornado.TaskElement(task));
 			});
 		}
 	},

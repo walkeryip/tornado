@@ -29,7 +29,13 @@ Tornado.ViewManager.prototype = {
 
 	addItem: function(data) {
 		var self = this;
-		var item = new Tornado.Task(data);
+		var item;
+		if (data.Task){
+			item = new Tornado.Task(data);
+		} else if (data.TaskList){
+			item = new Tornado.TaskList(data);
+		}
+
 		item.create(function() {
 			self.itemAdded(item);
 		});

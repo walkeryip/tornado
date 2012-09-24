@@ -59,11 +59,13 @@ class TasksController extends AppController {
 
 	function edit($id = null){
 		if ($this->RequestHandler->isAjax()){
-				$this->Task->addTags($this->data['Task']['tags']); 
-				$this->Task->addContexts($this->data['Task']['contexts']);
-
+				$this->data["Tag"] = $this->Task->addTags($this->data['Task']['tags']); 
+				$this->data["Context"] = $this->Task->addContexts($this->data['Task']['contexts']);
+				//print_r($this->data);
+					
 				if ($this->Task->save($this->data)){
 					$this->data = $this->Task->find(array('id' => $id));
+					//print_r($this->data);
 					$this->set('data', $this->data);
 				} else {
         			$this->set('data', "false");

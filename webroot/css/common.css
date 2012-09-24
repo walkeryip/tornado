@@ -22,6 +22,10 @@ li {
 	list-style: none;
 }
 
+#content input[type=text]{
+	width: 100%;
+}
+
 li p {
 	display: inline;
 }
@@ -118,3 +122,29 @@ background-color: rgba(255, 255, 0, .5);
 	float: left;
 	width: 50%;
 }	
+
+.tags, .contexts {
+	display: inline;
+	font-size: 11px;
+}
+
+.tags li, .contexts li{
+	display: inline;	
+	margin: 2px;
+}
+
+.tags a, .contexts a{	
+	text-decoration: none;
+}
+
+.tags a{
+	color: blue;
+}
+
+.contexts a{
+	color: red;
+}
+
+.tags a:hover, .contexts a:hover {
+	text-decoration: underline;
+}
