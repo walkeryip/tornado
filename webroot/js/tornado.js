@@ -52,3 +52,11 @@ var Tornado = new function() { return {
         }
     }
 }};
+
+(function() { 
+	function Hash_clear() { 
+		this._object = {}; 
+	} 
+
+	Hash.prototype.clear = Hash_clear;
+})(); 

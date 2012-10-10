@@ -10,25 +10,33 @@ Tornado.Item.prototype = {
 
     populate: function(data) {
         var self = this;
+		self.reset();
 
         if (data.Context){
             data.Context.each(function(contextData){
-                self.fetchContext(contextData);
+            	self.fetchContext(contextData);
             });
         }
 
         if (data.Tag){
             data.Tag.each(function(tagData){
-                self.fetchTag(tagData);
+            	self.fetchTag(tagData);
             });
         }
 
         if (data.List){
             data.List.each(function(listData){
-                self.fetchList(listData);
+            	self.fetchList(listData);
             });
         }
     },
+
+	// Make sure that no old data remains after an update
+	reset: function() {
+		this.contexts.clear();
+		this.tags.clear();
+		this.lists.clear();
+	},
 
     delete: function(callback) {
         jq.ajax({
@@ -81,10 +89,12 @@ Tornado.Item.prototype = {
 
 		if (!context || context === undefined) {
 			context = new Tornado.Context(contextData);
-			Tornado.contexts.set(context.name, context);
+			if (context.id !== undefined) {
+				Tornado.contexts.set(context.id, context);
+			}
 		}
 
-		this.contexts.set(context.name, context);
+		this.contexts.set(context.id, context);
 	},
 
     fetchTag: function(tagData) {
@@ -92,10 +102,12 @@ Tornado.Item.prototype = {
 
         if (!tag || tag === undefined) {
             tag = new Tornado.Tag(tagData);
-            Tornado.tags.set(tag.name, tag);
+        	if (tag.id !== undefined) {
+            	Tornado.tags.set(tag.id, tag);
+			}
         }
 
-        this.tags.set(tag.name, tag);
+		this.tags.set(tag.id, tag);
     },
 
     fetchList: function(listData) {
@@ -156,24 +168,16 @@ Tornado.Item.prototype = {
     getModelUrlName: function() { return ""; },
     getSubmitData: function() { return {}; },
 
-	hasLabel: function(map, labelString) {
-		/*var result = false;
-
-		array.each(function(item, index){
-			if (item.name === labelString){
-				result = true;
-			}
-		});*/
-
-		return map.get(labelString) !== undefined;
+	hasLabelId: function(map, labelId) {
+		return map.get(labelId) !== undefined;
 	},
 
-	hasContext: function(contextString) {
-		return this.hasLabel(this.contexts, contextString);
+	hasContextId: function(contextId) {
+		return this.hasLabelId(this.contexts, contextId);
 	},
 
-	hasTag: function(tagString) {
-		return this.hasLabel(this.tags, tagString);
+	hasTagId: function(tagId) {
+		return this.hasLabelId(this.tags, tagId);
 	},
 
 	getParent: function() {

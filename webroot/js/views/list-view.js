@@ -13,6 +13,8 @@ Tornado.ListView = Class.create(Tornado.MixedView, {
 			if (item.checked == "0"){// && this.id == parentId){
 				return true;
 			}
+		} else if (item instanceof Tornado.List){
+			return false;
 		}
 
 		return false;

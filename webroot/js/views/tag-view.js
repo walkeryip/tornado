@@ -9,7 +9,7 @@ Tornado.TagView = Class.create(Tornado.MixedView, {
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
-			if (item.checked == "0" && item.hasTag(this.model.name)){
+			if (item.checked == "0" && item.hasTagId(this.id)){
 				return true;
 			}
 		}

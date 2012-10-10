@@ -58,6 +58,13 @@ class AppModel extends Model {
 		$modelName = $model->name;
 		$result = array();
 
+		// explode on empty string returns one null element (hurray!), so if empty return an array with an empty element
+		// this is so that cake deletes all labels from the database associated with the object
+		if (sizeof($labels) == 1 && $labels[0] == null){
+			return Array(0 => null);
+		}
+
+
 		foreach ($labels as $_label){
 			$_label = strtolower(trim($_label));
 

@@ -147,7 +147,9 @@ Tornado.View.prototype = {
 		var self = this;
 		if (tasks !== undefined){
 			tasks.each(function(task) {
-				self.taskElements.set(task.id, new Tornado.TaskElement(task));
+				if (self.includeItem(task)){
+					self.taskElements.set(task.id, new Tornado.TaskElement(task));
+				}
 			});
 		}
 	},

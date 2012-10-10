@@ -9,7 +9,7 @@ Tornado.ContextView = Class.create(Tornado.MixedView, {
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
-			if (item.checked == "0" && item.hasContext(this.model.name)){
+			if (item.checked == "0" && item.hasContextId(this.id)){
 				return true;
 			}
 		}

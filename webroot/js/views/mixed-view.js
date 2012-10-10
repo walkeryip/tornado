@@ -20,7 +20,10 @@ Tornado.MixedView = Class.create(Tornado.View, {
                 element.display(this.tasksContainer);
             }
         } else if (element.list) {
-            element.display(this.listsContainer);
+			// We don't want to list the current list again
+			if (element.list.id != this.id){
+	            element.display(this.listsContainer);
+			}
         }
     },
 

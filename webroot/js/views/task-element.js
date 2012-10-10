@@ -8,6 +8,7 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 
 	display: function (container) {
 		var self = this;
+		self.visible = true;
 
 		var taskContainer = jq("<div class=\"task\"></div>");
 		var checkboxString = "<input type=\"checkbox\" ";
@@ -23,12 +24,12 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 
 		var tagsString = "";
 		this.task.tags.each(function(tag){
-			tagsString += "<li><a href=\"tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+			tagsString += "<li><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
 		});
 
 		var contextsString = "";
 		this.task.contexts.each(function(context){
-			contextsString += "<li><a href=\"contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+			contextsString += "<li><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
 		});
 
 		var task = jq("<span>" + this.task.name + "</span><ul class=\"tags\">" + tagsString + "</ul><ul class=\"contexts\">" + contextsString + "</ul>");
@@ -103,13 +104,7 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 
 		var saveButton = jq("<button>Save</button>");
 		saveButton.click(function() {
-			self.task.name = jq(input.name).val();
-			self.task.tagsString = jq(input.tags).val();
-			self.task.contextsString = jq(input.contexts).val();
-
-			self.task.save(function() {
-				Tornado.viewManager.itemChanged(self.task);
-			});
+			submit();
 		});
 
 		var cancelButton = jq("<button>Cancel</button>");
@@ -128,6 +123,23 @@ Tornado.TaskElement = Class.create(Tornado.ItemElement, {
 		taskContainer.append(cancelButton); 
 
 		this.element.html(taskContainer);
+
+		taskContainer.find("input").keydown(function(e){
+		    if(e.keyCode == 13){
+		        submit();
+		        return false;
+		    }
+		});
+
+		var submit = function (){
+			self.task.name = jq(input.name).val();
+			self.task.tagsString = jq(input.tags).val();
+			self.task.contextsString = jq(input.contexts).val();
+
+			self.task.save(function() {
+				Tornado.viewManager.itemChanged(self.task);
+			});
+		}
 	},
 
 	toggle: function() {

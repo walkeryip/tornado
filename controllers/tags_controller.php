@@ -20,6 +20,24 @@ class TagsController extends AppController {
 			$tag['Task'] = $tasks;
         	$this->set('data', $tag);*/
 
+
+			/*$data["Tasks"] = $this->Task->query("SELECT * FROM tasks as Task where checked = " . $checked);
+			$taskIds = $this->accId($data["Tasks"], "Task", "id");
+
+			$data["TaskLists"] = $this->Task->query("select * from task_lists as TaskList where id in (select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
+
+			$data["TagsTasks"] = $this->Task->query("select * from tags_tasks as TagTask where task_id in (" . implode(",", $taskIds) . ")");
+			$data["ContextsTasks"] = $this->Task->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
+
+			$tagsTasksTagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$data["Tags"] = $this->Task->Tag->query("select * from tags as Tag where id in (" . 
+				implode(",", $tagsTasksTagIds) . ")");
+
+			$contextsTasksContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+			$data["Contexts"] = $this->Task->Context->query("select * from contexts as Context where id in (" . 
+				implode(",", $contextsTasksContextIds) . ")");
+*/
+
 			$data["Tags"] = $this->Tag->query("select * from tags as Tag where id = " . $id);
 
 			$data["TagsTasks"] = $this->Tag->query("select * from tags_tasks as TagTask where tag_id = " . $id);
@@ -38,10 +56,8 @@ class TagsController extends AppController {
 			$this->set("data", $data);
         	$this->render('/general/json', 'ajax');
 		} else {
-			$this->set('tag', $tag);
-			$this->set('lists', $lists);
-			$this->set('tasks', $tasks);
-			$this->set('tasksDone', $tasksDone);
+			$context = $this->Tag->getTagById($id);
+			$this->set('tag_id', $context["Tag"]["id"]);
 		}
 	}
 }

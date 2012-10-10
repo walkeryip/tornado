@@ -61,7 +61,7 @@ class TasksController extends AppController {
 		if ($this->RequestHandler->isAjax()){
 				$this->data["Tag"] = $this->Task->addTags($this->data['Task']['tags']); 
 				$this->data["Context"] = $this->Task->addContexts($this->data['Task']['contexts']);
-				//print_r($this->data);
+	
 					
 				if ($this->Task->save($this->data)){
 					$this->data = $this->Task->find(array('id' => $id));

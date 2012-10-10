@@ -59,7 +59,7 @@
             <li><?php echo $this->Html->link('Agenda', '/tasks/agenda/'); ?></li>
             <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
             <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
-            <li><?php echo $this->Html->link('Lists', '/task_lists/lists/'); ?></li>
+            <li><?php echo $this->Html->link('Lists', '/task_lists/'); ?></li>
             <li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
             <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
         </ul>

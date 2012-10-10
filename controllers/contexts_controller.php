@@ -37,11 +37,8 @@ class ContextsController extends AppController {
 			$this->set("data", $data);
         	$this->render('/general/json', 'ajax');
 		} else {
-
-			$this->set('context', $context);
-			$this->set('lists', $lists);
-			$this->set('tasks', $tasks);
-			$this->set('tasksDone', $tasksDone);
+			$context = $this->Context->getContextById($id);
+			$this->set('context_id', $context["Context"]["id"]);
 		}
 	}
 
