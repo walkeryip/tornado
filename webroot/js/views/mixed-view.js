@@ -13,15 +13,15 @@ Tornado.MixedView = Class.create(Tornado.View, {
 	},
 
     addItem: function(element) {
-        if (element.task){
-            if (element.task.checked === "1"){
+        if (element.model instanceof Tornado.Task){
+            if (element.model.checked === "1"){
                 //element.display(this.tasksDoneContainer);
             } else {
                 element.display(this.tasksContainer);
             }
-        } else if (element.list) {
+        } else if (element.model instanceof Tornado.List) {
 			// We don't want to list the current list again
-			if (element.list.id != this.id){
+			if (element.model.id != this.id){
 	            element.display(this.listsContainer);
 			}
         }
@@ -45,7 +45,7 @@ Tornado.MixedView = Class.create(Tornado.View, {
 	},
 
 	updateItem: function(item) {
-		if (this.includeItem(item.task)){
+		if (this.includeItem(item.model)){
 			item.display(this.tasksContainer);
 		} else {
 			item.element.fadeOut("fast", function (){

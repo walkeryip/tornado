@@ -35,9 +35,10 @@
     <script type="text/javascript" src="/tornado/js/models/task.js"></script>
     <script type="text/javascript" src="/tornado/js/models/list.js"></script>
     <script type="text/javascript" src="/tornado/js/models/label.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/item-element.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/task-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/list-element.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/tag-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/mixed-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/task-view.js"></script>
@@ -46,6 +47,7 @@
     <script type="text/javascript" src="/tornado/js/views/tag-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/deadline-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/todo-view.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/tags-view.js"></script>
 </head>
 <body>
 <div id="container">

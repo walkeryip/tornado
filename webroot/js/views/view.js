@@ -21,7 +21,7 @@ Tornado.View.prototype = {
         var lists = this.populateLists(data);
 
         //this.populateContextElements(contexts);
-        //this.populateTagElements(tags);
+        this.populateTagElements(tags);
         this.populateTaskElements(tasks);
         this.populateListElements(lists);
 		this.model = this.getModel();
@@ -150,6 +150,15 @@ Tornado.View.prototype = {
 				if (self.includeItem(task)){
 					self.taskElements.set(task.id, new Tornado.TaskElement(task));
 				}
+			});
+		}
+	},
+	
+	populateTagElements: function(tags) {
+		var self = this;
+		if (tags !== undefined){
+			tags.each(function(tag){
+				self.tagElements.set(tag.id, new Tornado.TagElement(tag));
 			});
 		}
 	},

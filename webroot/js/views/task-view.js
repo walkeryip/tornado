@@ -1,6 +1,6 @@
 Tornado.TaskView = Class.create(Tornado.View, {
 	initialize: function($super, containerId){
-		$super("done-tasks", containerId);
+		$super(containerId, containerId);
 
         this.container.append("<ul class=\"tasks\"></ul>");
         this.tasksContainer = this.container.find(".tasks");
@@ -11,7 +11,7 @@ Tornado.TaskView = Class.create(Tornado.View, {
 	},
 
     addItem: function(element) {
-        if (element.task && this.includeItem){
+        if (element.model && this.includeItem){
             element.display(this.tasksContainer);
         }
     },   
@@ -45,7 +45,7 @@ Tornado.TaskView = Class.create(Tornado.View, {
 	},
 
 	updateItem: function(item) {
-		if (this.includeItem(item.task)){
+		if (this.includeItem(item.model)){
 			item.display(this.tasksContainer);
 		} else {
 			item.element.fadeOut("fast", function (){

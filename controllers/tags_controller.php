@@ -8,6 +8,15 @@ class TagsController extends AppController {
 	function index($id = null){
 		$this->set('tags', $this->Tag->find('all'));
 	}
+	
+	function all(){
+		if ($this->RequestHandler->isAjax()){
+			$tags = $this->Tag->find('all');
+			$data["Tags"] = $tags;
+			$this->set("data", $data);
+        	$this->render('/general/json', 'ajax');
+		}
+	}
 
 	function view($id){
 		/*$tag = $this->Tag->getTagById($id);

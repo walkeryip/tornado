@@ -1,5 +1,5 @@
 <?php
-class Redirect:Controller extends AppController {
+class RedirectController extends AppController {
 
        var $name = 'Redirect:';
 }
