@@ -8,7 +8,7 @@ Tornado.TagElement = Class.create(Tornado.Element, {
 	},
 	
 	deleteModel: function() {
-		Tornado.tags.unset(self.model.id);
+		Tornado.tags.unset(this.model.id);
 	},
 	
 	getInfoBoxContent: function() {

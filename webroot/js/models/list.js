@@ -19,15 +19,14 @@ Tornado.List = Class.create(Tornado.Item, {
     getSubmitData: function(compactMode) {
         var data = {"data[TaskList][name]": this.name,
             "data[TaskList][id]": this.id};
-
+        
         if (compactMode){
+            Object.extend(data, {"data[TaskList][tags]": this.tagsString,
+                                 "data[TaskList][contexts]": this.contextsString});
+		} else {
             Object.extend(data, {"data[TaskList][tags]": this.getTagsString(),
-                "data[TaskList][contexts]": this.getContextsString()});
-        } else {
-            Object.extend(data, this.getContextsSubmitString());
-            Object.extend(data, this.getTagsSubmitString());
-            Object.extend(data, this.getListsSubmitString());
-        }
+                                 "data[TaskList][contexts]": this.getContextsString()});
+		}
 
         return data;
     }

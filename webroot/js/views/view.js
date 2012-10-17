@@ -20,7 +20,7 @@ Tornado.View.prototype = {
         var tasks = this.populateTasks(data);
         var lists = this.populateLists(data);
 
-        //this.populateContextElements(contexts);
+        this.populateContextElements(contexts);
         this.populateTagElements(tags);
         this.populateTaskElements(tasks);
         this.populateListElements(lists);
@@ -45,6 +45,28 @@ Tornado.View.prototype = {
 				
 				lists.push(list);
 		    });
+		}
+		
+		var contextsLists = data.ContextsLists;
+		if (contextsLists !== undefined){
+			contextsLists.each(function(contextListData) {
+				var contextList = contextListData.ContextTaskList;
+
+				var list = Tornado.lists.get(contextList.task_id);
+				var context = Tornado.contexts.get(contextList.context_id);
+				list.contexts.set(contextList.context_id, context); 
+			});
+		}
+
+		var tagsLists = data.TagsLists;
+		if (tagsLists !== undefined){
+			tagsLists.each(function(tagListData) {
+				var tagList = tagListData.TagTaskList;
+
+				var list = Tornado.lists.get(tagList.task_id);
+				var tag = Tornado.tags.get(tagList.tag_id);
+				list.tags.set(tagList.tag_id, tag); 
+			});
 		}
 		
 		return lists;
@@ -162,6 +184,15 @@ Tornado.View.prototype = {
 			});
 		}
 	},
+	
+	populateContextElements: function(contexts) {
+		var self = this;
+		if (contexts !== undefined){
+			contexts.each(function(context){
+				self.contextElements.set(context.id, new Tornado.ContextElement(context));
+			});
+		}
+	},
 
 	// Abstract function
 	display: function() {},
@@ -183,7 +214,7 @@ Tornado.View.prototype = {
 			dataType: 'json',
 		  	url: this.getAjaxUrl()
 		}).done(function (data) {
-			if (data){
+			if (data && view.containsData(data)){
 				view.populate(data);
 				view.display();
 				view.container.fadeIn("slow");
@@ -191,12 +222,23 @@ Tornado.View.prototype = {
 			}
 		});
 	},
+	
+	arrayHasElements: function(data){
+		
+	},
+	
+	containsData: function(data){
+		return (data.Tags !== undefined && data.Tags.length > 0) || 
+				(data.Tasks !== undefined && data.Tasks.length > 0) || 
+				(data.TaskLists !== undefined && data.TaskLists.length > 0) || 
+				(data.Contexts !== undefined && data.Contexts.length > 0);
+	},
 
 	// Abstract function 
 	getAjaxUrl: function() {},
 
 	itemChanged: function(item) {
-		var foundItem = this.taskElements.get(item.id);
+		var foundItem = this.getItemElement(item);
 		if (foundItem) {
 			this.updateItem(foundItem);
 		} else {
@@ -205,22 +247,61 @@ Tornado.View.prototype = {
 	},
 
 	itemDeleted: function(item) {
-		var foundItem = this.taskElements.get(item.id);
+		var foundItem = this.getItemElement(item);
 
 		if (foundItem){			
 			foundItem.element.fadeOut("fast", function (){
 				$(this).remove();
 			});
-			this.taskElements.unset(item.id);
+			this.unsetItemElement(item);
 		}
 	},
 
-	itemAdded: function(task) {
-		if (this.includeItem(task)){
-            var taskElement = new Tornado.TaskElement(task);
-			this.taskElements.set(task.id, taskElement);
-            this.addItem(taskElement);
+	itemAdded: function(item) {
+		if (this.includeItem(item)){
+			var element = this.newItemElement(item);
+			
+            this.addItem(element);
 		}
+	},
+	
+	getModelElementMatrix: function(item) {
+		if (item instanceof Tornado.Task) {
+			return this.taskElements; 
+		} else if (item instanceof Tornado.Tag) {
+			return this.tagElements;
+		} else if (item instanceof Tornado.Context) {
+			return this.contextElements;
+		} else if (item instanceof Tornado.List) {
+			return this.listElements;
+		}
+	},
+	
+	getNewModelElement: function(item) {
+		if (item instanceof Tornado.Task) {
+			return new Tornado.TaskElement(item);
+		} else if (item instanceof Tornado.Tag) {
+			return new Tornado.TagElement(item);
+		} else if (item instanceof Tornado.Context) {
+			return new Tornado.ContextElement(item);
+		} else if (item instanceof Tornado.List) {
+			return new Tornado.ListElement(item);
+		}
+	},
+	
+	getItemElement: function(item) {
+		return this.getModelElementMatrix(item).get(item.id);
+	},
+	
+	unsetItemElement: function(item) {
+		this.getModelElementMatrix(item).unset(item.id);
+	},
+	
+	newItemElement: function(item) {
+		var element = this.getNewModelElement(item);
+		this.getModelElementMatrix(item).set(item.id, element);
+		
+		return element;
 	},
 
 	includeItem: function(item) { return true; },

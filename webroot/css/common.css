@@ -50,11 +50,11 @@ li .expandable-div-button + div {
 	display: inline;
 }
 
-.lists, .tasks {
+.lists, .tasks, .items {
 	width: 600px;
 }
 
-.lists li, .tasks li{
+.lists li, .tasks li, .items li{
 	margin: 5px;
 	position: relative;
 }

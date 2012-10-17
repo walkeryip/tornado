@@ -27,6 +27,6 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 	},
 	
 	deleteModel: function() {
-		Tornado.tasks.unset(self.model.id);
+		Tornado.tasks.unset(this.model.id);
 	}
 });

@@ -28,10 +28,10 @@
     <script type="text/javascript" src="/tornado/js/common.js"></script>
     <script type="text/javascript" src="/tornado/js/view-manager.js"></script>
     <script type="text/javascript" src="/tornado/js/tornado.js"></script>
+    <script type="text/javascript" src="/tornado/js/models/item.js"></script>
     <script type="text/javascript" src="/tornado/js/models/label.js"></script>
     <script type="text/javascript" src="/tornado/js/models/tag.js"></script>
     <script type="text/javascript" src="/tornado/js/models/context.js"></script>
-    <script type="text/javascript" src="/tornado/js/models/item.js"></script>
     <script type="text/javascript" src="/tornado/js/models/task.js"></script>
     <script type="text/javascript" src="/tornado/js/models/list.js"></script>
     <script type="text/javascript" src="/tornado/js/models/label.js"></script>
@@ -39,15 +39,19 @@
     <script type="text/javascript" src="/tornado/js/views/task-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/list-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/tag-element.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/context-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/mixed-view.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/single-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/task-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/list-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/context-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/tag-view.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/lists-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/deadline-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/todo-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/tags-view.js"></script>
+    <script type="text/javascript" src="/tornado/js/views/contexts-view.js"></script>
 </head>
 <body>
 <div id="container">
@@ -56,12 +60,11 @@
     </div>
     <div id="menu">
         <ul>
-            <li><?php echo $this->Html->link('Todo', '/task_lists/'); ?></li>
+            <li><?php echo $this->Html->link('Todo', '/task_lists/todo'); ?></li>
+            <li><?php echo $this->Html->link('Lists', '/task_lists/'); ?></li>
             <li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
-            <li><?php echo $this->Html->link('Agenda', '/tasks/agenda/'); ?></li>
             <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
             <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
-            <li><?php echo $this->Html->link('Lists', '/task_lists/'); ?></li>
             <li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
             <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
         </ul>

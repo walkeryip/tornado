@@ -1,8 +1,9 @@
-<h2>Lists</h2> 
-<?php if(empty($lists)): ?> 
-<p>There are no tasks in this list</p>
-<?php else: ?>
-<div id="lists">
-	<?php echo $this->element('lists', array('lists' => $lists)); ?>
-</div>
-<?php endif; ?>
+<h2>Lists</h2>
+<script type="text/javascript">
+
+	jq(document).ready(function () {
+		var listsView = new Tornado.ListsView("#lists-view");
+		Tornado.viewManager.addView(listsView);
+	});
+</script>
+<div id="lists-view"></div>

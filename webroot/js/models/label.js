@@ -8,7 +8,7 @@ Tornado.Label.prototype = {
 		this.name = data.name;
 		this.id = data.id;
 		this.created = data.created;
-	},
+	}
 
 
 };

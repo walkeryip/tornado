@@ -1,6 +1,12 @@
 Tornado.ListElement = Class.create(Tornado.Element, {
 	initialize: function($super, list){
 		$super(list);
+		
+		this.hasTags = true;
+		this.hasContexts = true;
+		
+		this.tags = list.tags;
+		this.contexts = list.contexts;	
 	},
 	
 	getBody: function(){
@@ -13,6 +19,6 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 	},
 
 	deleteModel: function() {
-		Tornado.lists.unset(self.model.id);
+		Tornado.lists.unset(this.model.id);
 	}
 });

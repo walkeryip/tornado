@@ -1,4 +1,4 @@
-Tornado.Context = Class.create(Tornado.Label, {
+Tornado.Context = Class.create(Tornado.Item, {
 	initialize: function($super, data) {
 		$super(data);
 	},
@@ -8,7 +8,7 @@ Tornado.Context = Class.create(Tornado.Label, {
     },
 
 	populate: function($super, data) {
-        $super(data);
+       // $super(data);
 
 		var context = data.Context;
 
@@ -18,5 +18,12 @@ Tornado.Context = Class.create(Tornado.Label, {
 		} else {
 			this.name = data.name;
 		}
-	}
+	},
+    
+    getSubmitData: function(compactMode) {
+        var data = {"data[Context][name]": this.name,
+            "data[Context][id]": this.id};
+
+        return data;
+    }
 });

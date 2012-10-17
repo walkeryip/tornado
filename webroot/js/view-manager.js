@@ -33,7 +33,7 @@ Tornado.ViewManager.prototype = {
 		if (data.Task){
 			item = new Tornado.Task(data);
 		} else if (data.TaskList){
-			item = new Tornado.TaskList(data);
+			item = new Tornado.List(data);
 		}
 
 		item.create(function() {

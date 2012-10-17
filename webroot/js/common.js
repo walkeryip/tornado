@@ -89,7 +89,6 @@ jq(document).ready(function () {
 		var tagKeywordObject = extractKeywords(text, "#");
 		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
 
-
 		if (inputMode === "task"){		
 		    data.Task = {}
 		    data.Task.name = contextKeywordObject.text;

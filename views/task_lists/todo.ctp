@@ -1,24 +1,33 @@
-<h2>ToDo Lists</h2> 
-<?php if(empty($lists)): ?> 
-There are no lists here 
-<?php else: ?>
-<table id="tasklists_todo"> 
-<tr> 
-<!--<th>ID</th>-->
-<th></th>
-<th>Name</th>
-<th>Created</th>
-<th>Labels</th>
-<th>Contexts</th>
-<th>Parent</th>
-<th></th>
-<th></th>
-</tr>
-<?php foreach ($lists as $list): ?>
-<tr id="list-<?php echo $list['TaskList']['id'];?>"> 
-<?php echo $this->element('list', array('list' => $list)); ?>
-</tr>
-<?php endforeach; ?>
+<?php echo "test"; ?>
+<script type="text/javascript">
 
-</table> 
-<?php endif; ?>
+	jq(document).ready(function () {
+		var listView = new Tornado.ListView(5, "#tasks");
+		var tagView = new Tornado.TagView(22, "#tag-tasks");
+		var tagView2 = new Tornado.TagView(41, "#tag-tasks2");
+		var contextView = new Tornado.ContextView(6, "#context-tasks");
+		var taskView = new Tornado.TaskView("#task-view");
+		Tornado.viewManager.addView(listView);
+		Tornado.viewManager.addView(tagView);
+		Tornado.viewManager.addView(tagView2);
+		Tornado.viewManager.addView(contextView);
+		Tornado.viewManager.addView(taskView);
+		var defaultList = {};
+		var defaultContext = {};
+
+		defaultList.id = 5;
+		
+		
+		Tornado.setDefaultList(defaultList);
+	});
+</script>
+
+<div class="column">
+	<div id="tasks"></div>
+	<div id="task-view"></div>
+</div>
+<div class="column">
+	<div id="tag-tasks"></div>
+	<div id="tag-tasks2"></div>
+	<div id="context-tasks"></div>
+</div>

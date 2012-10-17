@@ -37,11 +37,8 @@ Tornado.Task = Class.create(Tornado.Item, {
             Object.extend(data, {"data[Task][tags]": this.getTagsString(),
                                  "data[Task][contexts]": this.getContextsString()});
 		}
-        /*} else {
-            Object.extend(data, this.getContextsSubmitString());
-            Object.extend(data, this.getTagsSubmitString());*/
-            Object.extend(data, this.getListsSubmitString());
-        //}
+        
+        Object.extend(data, this.getListsSubmitString());
 
         return data;
     },
@@ -58,7 +55,7 @@ Tornado.Task = Class.create(Tornado.Item, {
             type: "post",
             cache: false,
             dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id,
+            url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id
         }).done(function (result) {
                 if (result){
                     self.populate(result);

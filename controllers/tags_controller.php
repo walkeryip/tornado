@@ -69,6 +69,18 @@ class TagsController extends AppController {
 			$this->set('tag_id', $context["Tag"]["id"]);
 		}
 	}
+	
+	function delete($id = null){
+		if ($this->RequestHandler->isAjax()){
+			$status = false;
+			if ($this->Tag->delete($id)){
+				$status = true;
+			} 
+
+        	$this->set('data', $status);
+        	$this->render('/general/json', 'ajax');
+		}
+	}
 }
 
 ?>

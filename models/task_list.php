@@ -9,7 +9,6 @@ class TaskList extends AppModel {
 	var $validate = array(
 		'name' => 'notEmpty');
 
-	var $belongsTo = array('Parent' => array('className' => 'TaskList', 'foreignKey' => 'parent_id'));
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
 		'Task' => array('className'=>'Task'),
@@ -20,7 +19,7 @@ class TaskList extends AppModel {
 		$this->Behaviors->attach('Containable');
 		$this->bindModel(array('hasOne' => $bind));
 		$data = $this->find('all', array(
-			'fields' => array('TaskList.*', 'Parent.id', 'Parent.name'),
+			'fields' => array('TaskList.*'),
 			'contain' => $contain,
 			'conditions' => $conditions));
 
@@ -29,12 +28,12 @@ class TaskList extends AppModel {
 
 	public function getTaskListsByContextId($id){
 		$conditions = array('ContextsTaskLists.context_id' => $id);
-		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'ContextsTaskLists', 'Parent'), array('ContextsTaskLists'));
+		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'ContextsTaskLists'), array('ContextsTaskLists'));
 	}
 
 	public function getTaskListsByTagId($id){
 		$conditions = array('TagsTaskLists.tag_id' => $id);
-		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'TagsTaskLists', 'Parent'), array('TagsTaskLists'));
+		return $this->getTaskLists($id, $conditions, array('Tag', 'Context', 'TagsTaskLists'), array('TagsTaskLists'));
 	}
 
 	public function getTaskListById($id){
@@ -48,11 +47,11 @@ class TaskList extends AppModel {
 	}
 
 	public function addTags($tags){
-		$this->createLabels($this->Tag, $tags);
+		return $this->createLabels($this->Tag, $tags);
 	}
 
 	public function addContexts($contexts){
-		$this->createLabels($this->Context, $contexts);
+		return $this->createLabels($this->Context, $contexts);
 	}
 
 	public function getTagsString(){
@@ -62,6 +61,7 @@ class TaskList extends AppModel {
 	public function getContextsString(){
 		return $this->getLabels($this->Context);
 	}
+	
 }
 
 ?>

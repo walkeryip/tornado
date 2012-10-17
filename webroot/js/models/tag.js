@@ -18,5 +18,17 @@ Tornado.Tag = Class.create(Tornado.Label, {
 		} else {
 			this.name = data.name;
 		}
-	}
+	},
+	
+	remove: function(callback) {
+        jq.ajax({
+            cache: false,
+            dataType: 'json',
+            url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id
+        }).done(function (data) {
+                if (data){
+                    callback();
+                }
+            });
+    }
 });

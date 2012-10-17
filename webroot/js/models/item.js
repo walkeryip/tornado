@@ -38,7 +38,7 @@ Tornado.Item.prototype = {
 		this.lists.clear();
 	},
 
-    delete: function(callback) {
+    remove: function(callback) {
         jq.ajax({
             cache: false,
             dataType: 'json',
@@ -90,11 +90,11 @@ Tornado.Item.prototype = {
 		if (!context || context === undefined) {
 			context = new Tornado.Context(contextData);
 			if (context.id !== undefined) {
-				Tornado.contexts.set(context.id, context);
+				Tornado.contexts.set(context.name, context);
 			}
 		}
 
-		this.contexts.set(context.id, context);
+		this.contexts.set(context.name, context);
 	},
 
     fetchTag: function(tagData) {
@@ -103,11 +103,11 @@ Tornado.Item.prototype = {
         if (!tag || tag === undefined) {
             tag = new Tornado.Tag(tagData);
         	if (tag.id !== undefined) {
-            	Tornado.tags.set(tag.id, tag);
+            	Tornado.tags.set(tag.name, tag);
 			}
         }
 
-		this.tags.set(tag.id, tag);
+		this.tags.set(tag.name, tag);
     },
 
     fetchList: function(listData) {
