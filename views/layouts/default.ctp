@@ -54,6 +54,16 @@
     <script type="text/javascript" src="/tornado/js/views/contexts-view.js"></script>
 </head>
 <body>
+<?
+
+if (isset($_SESSION['Auth']['User'])) {
+	echo "Logged in as " . $_SESSION['Auth']['User']['username'];
+	echo "<br /><a href=\"/tornado/logout\">Logout</a>";
+} else {
+	echo "<a href=\"/tornado/register\">Register</a>";
+}
+
+?>
 <div id="container">
     <div id="header">
         <h1><?php echo $this->Html->link(__('t[x]rnado', true), '/'); ?></h1>

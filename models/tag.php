@@ -14,6 +14,8 @@ class Tag extends AppModel {
 		$conditions = array('Tag.id' => $id);
 		return $this->find('first', array('conditions' => $conditions));
 	}
+	
+	
 }
 
 ?>

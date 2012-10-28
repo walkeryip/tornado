@@ -6,35 +6,85 @@ class ContextsController extends AppController {
     var $components = array('RequestHandler'); 
 
 	function index($id = null){
-		$this->set('contexts', $this->Context->find('all'));
+		
 	}
 	
 	function all(){
-		$contexts = $this->Context->find('all');
-		$data["Contexts"] = $contexts;
-		$this->set("data", $data);
+		$this->set("data", $this->getContexts());
         $this->render('/general/json', 'ajax');
 	}
 
+	function getContextById($id){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$data["Contexts"] = $this->Context->getContextById($id, $userId);
+		
+		$data["ContextsTasks"] = $this->Context->getContextsTasksByContextId($id);
+		$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextId($id);
+
+		$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
+		$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
+
+		$tagIds = array();
+		$contextIds = array();
+		$data["Tags"] = array();
+		$data["Contexts"] = array();
+		
+		// TODO: dessa borde kunna göras generella och användas på flera ställen, t ex under tags
+		if (sizeof($taskListIds)>0){
+			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds);
+			
+			$data["TagsTaskLists"] = $this->Context->getTagsTaskListsByTaskListIds($taskListIds);
+			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByTaskListIds($taskListIds);
+			
+			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
+			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+		}
+		if (sizeof($taskIds)>0){
+		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds);
+			
+			$data["TagsTasks"] = $this->Context->getTagsTasksByTaskIds($taskIds);
+			$data["ContextsTasks"] = $this->Context->getContextsTasksByTaskIds($taskIds);
+			
+			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+		}
+		if (sizeof($taskIds)>0 || sizeof($taskListIds)>0){
+			$data["Tags"] += $this->Context->getTagsByTagIds($tagIds);
+			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds);
+		}
+		
+		return $data;
+	}
+	
+	function getContexts(){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$data["Contexts"] = $this->Context->getContexts($userId);
+		
+		$contextIds = $this->accId($data["Contexts"], "Context", "id");
+		$data["ContextsTasks"] = $this->Context->getContextsTasksByContextIds($contextIds);
+		$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
+
+		$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
+		$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
+
+		if (sizeof($taskListIds)>0){
+			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds);
+		}
+		if (sizeof($taskIds)>0){
+		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds);
+		}
+				
+		return $data;
+	}
+	
 	function view($id){		
-
-		$data["Contexts"] = $this->Context->query("select * from contexts as Context where id = " . $id);
-
-		$data["ContextsTasks"] = $this->Context->query("select * from contexts_tasks as ContextTask where context_id = " . $id);
-		$data["ContextsTaskLists"] = $this->Context->query("select * from contexts_task_lists as ContextTaskList where context_id = " . $id);
-
-		$taskContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
-		$taskListContextIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
-
-		if (sizeof($taskListContextIds)>0){
-			$data["TaskLists"] = $this->Context->query("select * from task_lists as TaskList where id in (" . implode(",", array_unique($taskListContextIds)) . ")");
+		if ($this->RequestHandler->isAjax()){
+			$this->set("data", $this->getContextById($id));
+        	$this->render('/general/json', 'ajax');
+		} else {
+			$context = $this->Context->getContextById($id, $_SESSION['Auth']['User']['id']);
+			$this->set('context_id', $context[0]["Context"]["id"]);
 		}
-		if (sizeof($taskContextIds)>0){
-		   	$data["Tasks"] = $this->Context->query("SELECT * FROM tasks as Task WHERE id in (" . implode(",", array_unique($taskContextIds)) . ")");
-		}
-
-		$this->set("data", $data);
-        $this->render('/general/json', 'ajax');
 	}
 	
 	function delete($id = null){

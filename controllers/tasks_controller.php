@@ -66,26 +66,43 @@ class TasksController extends AppController {
 	   	$this->render('/general/json', 'ajax');
 	}	
 
-	function all($checked = false){
+	
+	function getTasks($checked){
+		$userId = $_SESSION['Auth']['User']['id'];
 		$data = array();
+		$data["Tasks"] = $this->Task->getTasks($userId, $checked);
 		
-		$data["Tasks"] = $this->Task->query("SELECT * FROM tasks as Task where checked = " . $checked);
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
+		$data["TaskLists"] = $this->Task->getTaskListsByTasksIds($taskIds);
+		$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
+		$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
+		$data["TasksUsers"] = $this->Task->getUsersTasksByTaskIds($taskIds);
 
-		$data["TaskLists"] = $this->Task->query("select * from task_lists as TaskList where id in (select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
+		$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+		$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds);
 
-		$data["TagsTasks"] = $this->Task->query("select * from tags_tasks as TagTask where task_id in (" . implode(",", $taskIds) . ")");
-		$data["ContextsTasks"] = $this->Task->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
+		$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+		$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds);
+		
+		$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+		$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+		
+		return $data;
+	}
+			
+	function all($checked = false){
+	
 
-		$tagsTasksTagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-		$data["Tags"] = $this->Task->Tag->query("select * from tags as Tag where id in (" . 
-			implode(",", $tagsTasksTagIds) . ")");
-
-		$contextsTasksContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-		$data["Contexts"] = $this->Task->Context->query("select * from contexts as Context where id in (" . 
-			implode(",", $contextsTasksContextIds) . ")");
-
-        $this->set('data', $data);
+		/*$data = $this->Task->Context->query("select * from tasks as Task " .
+		"inner join tasks_users as TasksUsers on TasksUsers.task_id = Task.id and TasksUsers.user_id = 5 " .
+		"inner join tags_tasks as TagsTasks on TagsTasks.task_id = Task.id " . 
+		"inner join tags as Tag on Tag.id = TagsTasks.tag_id " .
+		"inner join contexts_tasks as ContextsTasks on ContextsTasks.task_id = Task.id " .
+		"inner join contexts as Context on Context.id = ContextsTasks.context_id"); 
+		*/
+		//print_r($data);
+			
+        $this->set('data', $this->getTasks($checked));
         $this->render('/general/json', 'ajax');
 	}
 

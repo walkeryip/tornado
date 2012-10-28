@@ -87,5 +87,92 @@ class AppModel extends Model {
 //		print_r($result);
 		return $result;
 	}
+	
 
+	
+	
+	
+	// Tasks
+	public function getTasks($userId, $checked){
+		return $this->query("SELECT * FROM tasks as Task inner join tasks_users on tasks_users.task_id = Task.id " .
+								   "and tasks_users.user_id = " . $userId . " where checked = " . $checked);
+	}
+	
+	public function getTaskListsByTasksIds($taskIds){
+		return $this->query("select * from task_lists as TaskList where id in " .
+								   "(select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
+	}
+	
+	public function getTasksByTaskIds($ids) {
+		return $this->query("select * from tasks as Task where id in (" . implode(",", array_unique($ids)) . ")");
+	}
+
+	// Contexts
+	public function getContextById($id, $userId){
+		return $this->query("select * from contexts as Context where id = " . $id . " and user_id = " . $userId);
+	}
+	
+	public function getContexts($userId){
+		return $this->query("select * from contexts as Context where user_id = " . $userId);
+	}
+	
+	public function getContextsByContextIds($contextIds){
+		return $this->query("select * from contexts as Context where id in (" . 	implode(",", $contextIds) . ")");
+	}
+
+	public function getContextsTasksByTaskIds($taskIds) {
+		return $this->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
+	}
+	
+
+	// Tags
+	public function getTagsByTagIds($tagIds){
+		return $this->query("select * from tags as Tag where id in (" . implode(",", $tagIds) . ")");
+	}
+	
+	public function getTagsTasksByTaskIds($taskIds){
+		return $this->query("select * from tags_tasks as TagTask where task_id in (" . implode(",", $taskIds) . ")");
+	}
+
+	
+	// Users
+	public function getUsersByUserIds($userIds){
+		return $this->query("select id, username from users as User where id in (" . implode(",", $userIds) . ")");
+	}
+	
+	public function getUsersTasksByTaskIds($taskIds) {
+		return $this->query("select * from tasks_users as TaskUser where task_id in (" . implode(",", $taskIds) . ")");
+	}
+	
+	// ContextsTasks
+	public function getContextsTasksByContextId($id) {
+		return $this->query("select * from contexts_tasks as ContextTask where context_id = " . $id);
+	}
+	
+	public function getContextsTasksByContextIds($ids) {
+		return $this->query("select * from contexts_tasks as ContextTask where context_id in (" . implode(",", $ids) . ")");
+	}
+	
+	// ContextsTaskLists
+	public function getContextsTaskListsByContextId($id) {
+		return $this->query("select * from contexts_task_lists as ContextTaskList where context_id = " . $id);
+	}
+	
+	public function getContextsTaskListsByContextIds($ids) {
+		return $this->query("select * from contexts_task_lists as ContextTaskList where context_id in (" . implode(",", $ids) . ")");
+	}
+	
+	public function getContextsTaskListsByTaskListIds($ids) {
+		return $this->query("select * from contexts_task_lists as ContextTaskList where task_list_id in (" . implode(",", $ids) . ")");	
+	}
+	
+	// TaskLists
+	public function getTaskListsByTaskListIds($ids) {
+		return $this->query("select * from task_lists as TaskList where id in (" . implode(",", array_unique($ids)) . ")");
+	}
+	
+	// TagsTaskLists
+	public function getTagsTaskListsByTaskListIds($taskListIds){
+		return $this->query("select * from tags_task_lists as TagTaskList where task_list_id in (" . implode(",", $taskListIds) . ")");
+	}
 }

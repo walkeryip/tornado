@@ -12,10 +12,11 @@ class Task extends AppModel {
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
 		'Context' => array('className' => 'Context'),
+		'User' => array('className' => 'User'),
 		'TaskList' => array('className' => 'TaskList')); 
 
 	
-	public function getTasks($id, $conditions, $contain, $bind){
+	/*public function getTasks($id, $conditions, $contain, $bind){
 		$this->Behaviors->attach('Containable');
 		$this->bindModel(array('hasOne' => $bind));
 		$data = $this->find('all', array(
@@ -24,7 +25,7 @@ class Task extends AppModel {
 			'conditions' => $conditions));
 
 		return $data;
-	}
+	}*/
 
 	public function getTasksByListId($id, $checked){
 		$conditions = array('Task.checked' => $checked, 'TaskListsTasks.task_list_id' => $id);
@@ -65,6 +66,15 @@ class Task extends AppModel {
 	public function getContextsString(){
 		return $this->getLabels($this->Context);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
 
