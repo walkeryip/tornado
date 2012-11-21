@@ -79,6 +79,20 @@ jq(document).ready(function () {
         return false;
 	});
 
+	var modelify = function(list, name) {
+		var result = new Array();
+
+		if (list !== null) {
+		list.each(function(item){
+			var n = new Array();
+			n[name] = item;
+			result.push(n);
+		});	
+		}
+
+		return result;
+	}
+
     var submit = function() {
         var text = inputbar.val();
 
@@ -97,9 +111,9 @@ jq(document).ready(function () {
 			data.TaskList.name = contextKeywordObject.text;
 		}
 
-	    data.Context = contextKeywordObject.keywords; 
-	    data.List = Tornado.getDefaultList();
-	    data.Tag = tagKeywordObject.keywords;
+	    data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
+	    data.Lists = modelify(Tornado.getDefaultList(), "List");
+	    data.Tags = modelify(tagKeywordObject.keywords, "Tag");
 
         Tornado.viewManager.addItem(data);
 

@@ -6,81 +6,112 @@ class TagsController extends AppController {
     var $components = array('RequestHandler'); 
 
 	function index($id = null){
-		$this->set('tags', $this->Tag->find('all'));
+		
 	}
 	
 	function all(){
-		if ($this->RequestHandler->isAjax()){
-			$tags = $this->Tag->find('all');
-			$data["Tags"] = $tags;
-			$this->set("data", $data);
-        	$this->render('/general/json', 'ajax');
-		}
+		$this->set("data", $this->getTags());
+        $this->render('/general/json', 'ajax');
 	}
 
-	function view($id){
-		/*$tag = $this->Tag->getTagById($id);
-		$lists = $this->Tag->TaskList->getTaskListsByTagId($id);
-		$tasks = $this->Tag->Task->getTasksByTagId($id, false);
-		$tasksDone = $this->Tag->Task->getTasksByTagId($id, true);*/
+	function getTagById($id){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$data["Tags"] = $this->Tag->getTagById($id, $userId);
+		
+		$data["TagsTasks"] = $this->Tag->getTagsTasksByTagId($id);
+		$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagId($id);
 
+		$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
+		$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
+
+		$tagIds = array();
+		$contextIds = array();
+		$data["Contexts"] = array();
+		
+		// TODO: dessa borde kunna göras generella och användas på flera ställen, t ex under tags
+		if (sizeof($taskListIds)>0){
+			$data["TaskLists"] = $this->Tag->getTaskListsByTaskListIds($taskListIds, $userId);
+			
+			$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTaskListIds($taskListIds);
+			$data["ContextsTaskLists"] = $this->Tag->getContextsTaskListsByTaskListIds($taskListIds);
+			
+			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
+			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+		}
+		if (sizeof($taskIds)>0){
+		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
+			
+			$data["TagsTasks"] = $this->Tag->getTagsTasksByTaskIds($taskIds);
+			$data["ContextsTasks"] = $this->Tag->getContextsTasksByTaskIds($taskIds);
+			
+			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+		}
+		if (sizeof($tagIds)>0){
+			$data["Tags"] += $this->Tag->getTagsByTagIds($tagIds, $userId);
+		}
+		if (sizeof($contextIds)>0){
+			$data["Contexts"] += $this->Tag->getContextsByContextIds($contextIds, $userId);
+		}
+
+		return $data;
+	}
+
+	function getTags(){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$data["Tags"] = $this->Tag->getTags($userId);
+		
+		$tagIds = $this->accId($data["Tags"], "Tag", "id");
+		$data["TagsTasks"] = $this->Tag->getTagsTasksByTagIds($tagIds);
+		$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagIds($tagIds);
+
+		$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
+		$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
+
+		if (sizeof($taskListIds)>0){
+			$data["TaskLists"] = $this->Tag->getTaskListsByTaskListIds($taskListIds, $userId);
+		}
+		if (sizeof($taskIds)>0){
+		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
+		}
+				
+		return $data;
+	}
+
+	function view($id){		
 		if ($this->RequestHandler->isAjax()){
-/*			$tag['List'] = $lists;
-			$tag['Task'] = $tasks;
-        	$this->set('data', $tag);*/
-
-
-			/*$data["Tasks"] = $this->Task->query("SELECT * FROM tasks as Task where checked = " . $checked);
-			$taskIds = $this->accId($data["Tasks"], "Task", "id");
-
-			$data["TaskLists"] = $this->Task->query("select * from task_lists as TaskList where id in (select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
-
-			$data["TagsTasks"] = $this->Task->query("select * from tags_tasks as TagTask where task_id in (" . implode(",", $taskIds) . ")");
-			$data["ContextsTasks"] = $this->Task->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
-
-			$tagsTasksTagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-			$data["Tags"] = $this->Task->Tag->query("select * from tags as Tag where id in (" . 
-				implode(",", $tagsTasksTagIds) . ")");
-
-			$contextsTasksContextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-			$data["Contexts"] = $this->Task->Context->query("select * from contexts as Context where id in (" . 
-				implode(",", $contextsTasksContextIds) . ")");
-*/
-
-			$data["Tags"] = $this->Tag->query("select * from tags as Tag where id = " . $id);
-
-			$data["TagsTasks"] = $this->Tag->query("select * from tags_tasks as TagTask where tag_id = " . $id);
-			$data["TagsTaskLists"] = $this->Tag->query("select * from tags_task_lists as TagTaskList where tag_id = " . $id);
-
-			$taskTagIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
-			$taskListTagIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
-
-			if (sizeof($taskListTagIds)>0){
-				$data["TaskLists"] = $this->Tag->query("select * from task_lists as TaskList where id in (" . implode(",", array_unique($taskListTagIds)) . ")");
-			}
-			if (sizeof($taskTagIds)>0){
-		    	$data["Tasks"] = $this->Tag->query("SELECT * FROM tasks as Task WHERE id in (" . implode(",", array_unique($taskTagIds)) . ")");
-			}
-
-			$this->set("data", $data);
+			$this->set("data", $this->getTagById($id));
         	$this->render('/general/json', 'ajax');
 		} else {
-			$context = $this->Tag->getTagById($id);
-			$this->set('tag_id', $context["Tag"]["id"]);
+			$tag = $this->Tag->getTagById($id, $_SESSION['Auth']['User']['id']);
+			if ($tag != null) {
+				$this->set('tag_id', $tag[0]["Tag"]["id"]);
+			}
 		}
 	}
 	
+	
 	function delete($id = null){
-		if ($this->RequestHandler->isAjax()){
-			$status = false;
-			if ($this->Tag->delete($id)){
-				$status = true;
-			} 
+		$status = false;
+		if ($this->Tag->delete($id)){
+			$status = true;
+		} 
 
-        	$this->set('data', $status);
-        	$this->render('/general/json', 'ajax');
-		}
+        $this->set('data', $status);
+        $this->render('/general/json', 'ajax');
 	}
+	
+	function edit($id = null){
+		if ($this->Tag->save($this->data)){
+			$this->data = $this->Tag->find(array('id' => $id));
+			//print_r($this->data);
+			$this->set('data', $this->data);
+		} else {
+        	$this->set('data', "false");
+		}
+	
+	   	$this->render('/general/json', 'ajax');
+	}	
 }
 
 ?>

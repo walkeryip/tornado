@@ -12,25 +12,46 @@ Tornado.View.prototype = {
 		this.container = jq(containerId);
 		this.container.hide();
 		this.container.addClass("view");
+
+
 	},
 
 	populate: function (data) {
-        var contexts = this.populateContexts(data);
+        /*var contexts = this.populateContexts(data);
         var tags = this.populateTags(data);
         var tasks = this.populateTasks(data);
-        var lists = this.populateLists(data);
+        var lists = this.populateLists(data);*/
 
-        this.populateContextElements(contexts);
-        this.populateTagElements(tags);
-        this.populateTaskElements(tasks);
-        this.populateListElements(lists);
-		this.model = this.getModel();
+        /*this.populateContextElements(data.contexts);
+        this.populateTagElements(data.tags);
+        this.populateTaskElements(data.tasks);
+        this.populateListElements(data.lists);*/
 
-		this.container.prepend("<h2>" + this.getTitle() + "</h2>");
     },
 
+	dataUpdated: function (data) {
+		
+		var emptyView = false;
+		if (this.taskElements.size() == 0 && this.tagElements.size() == 0 && this.contextElements.size() == 0 && this.listElements.size() == 0){
+			emptyView = true;
+		}
 
-    populateLists: function(data) {
+        this.populateItemElements(data.contexts);
+        this.populateItemElements(data.tags);
+        this.populateItemElements(data.tasks);
+        this.populateItemElements(data.lists);
+		this.display();
+
+		if (emptyView) {
+			this.model = this.getModel();
+			this.container.prepend("<h2>" + this.getTitle() + "</h2>");
+			this.container.fadeIn("slow");
+			this.loaded = true;
+		}
+	},
+
+
+    /*populateLists: function(data) {
 		var lists = Array();
 		
 		var listsData = data.TaskLists;
@@ -41,31 +62,37 @@ Tornado.View.prototype = {
 		        if (!list) {
 		            list = new Tornado.List(listData);
 		            Tornado.lists.set(list.id, list);
-		        }
+		        } else {
+					list.populate(listData);
+				}
 				
 				lists.push(list);
 		    });
 		}
 		
-		var contextsLists = data.ContextsLists;
+		var contextsLists = data.ContextsTaskLists;
 		if (contextsLists !== undefined){
 			contextsLists.each(function(contextListData) {
 				var contextList = contextListData.ContextTaskList;
 
-				var list = Tornado.lists.get(contextList.task_id);
+				var list = Tornado.lists.get(contextList.task_list_id);
 				var context = Tornado.contexts.get(contextList.context_id);
-				list.contexts.set(contextList.context_id, context); 
+				if (list !== undefined && context !== undefined){
+					list.contexts.set(contextList.context_id, context); 
+				}
 			});
 		}
 
-		var tagsLists = data.TagsLists;
+		var tagsLists = data.TagsTaskLists;
 		if (tagsLists !== undefined){
 			tagsLists.each(function(tagListData) {
 				var tagList = tagListData.TagTaskList;
 
-				var list = Tornado.lists.get(tagList.task_id);
+				var list = Tornado.lists.get(tagList.task_list_id);
 				var tag = Tornado.tags.get(tagList.tag_id);
-				list.tags.set(tagList.tag_id, tag); 
+				if (list !== undefined && tag !== undefined){
+					list.tags.set(tagList.tag_id, tag); 
+				}
 			});
 		}
 		
@@ -83,6 +110,8 @@ Tornado.View.prototype = {
 				if (!task) {
 					task = new Tornado.Task(taskData);
 					Tornado.tasks.set(task.id, task);	
+				} else {
+					task.populate(taskData);
 				}
 
 				tasks.push(task);		
@@ -96,7 +125,9 @@ Tornado.View.prototype = {
 
 				var task = Tornado.tasks.get(contextTask.task_id);
 				var context = Tornado.contexts.get(contextTask.context_id);
-				task.contexts.set(contextTask.context_id, context); 
+				if (task !== undefined && context !== undefined){
+					task.contexts.set(contextTask.context_id, context);
+				} 
 			});
 		}
 
@@ -107,7 +138,9 @@ Tornado.View.prototype = {
 
 				var task = Tornado.tasks.get(tagTask.task_id);
 				var tag = Tornado.tags.get(tagTask.tag_id);
-				task.tags.set(tagTask.tag_id, tag); 
+				if (task !== undefined && tag !== undefined){
+					task.tags.set(tagTask.tag_id, tag); 
+				}
 			});
 		}
 
@@ -125,6 +158,8 @@ Tornado.View.prototype = {
 				if (!tag) {
 					tag = new Tornado.Tag(tagData);
 					Tornado.tags.set(tag.id, tag);			
+				} else {
+					tag.populate(tagData);
 				}
 
 				tags.push(tag);
@@ -145,6 +180,8 @@ Tornado.View.prototype = {
 				if (!context) {
 					context = new Tornado.Context(contextData);
 					Tornado.contexts.set(context.id, context);
+				} else {
+					context.populate(contextData);
 				}
 
 				contexts.push(context);			
@@ -152,90 +189,28 @@ Tornado.View.prototype = {
 		}
 
 		return contexts;
-	},
+	},*/
 
-
-
-	populateListElements: function(lists) {
-		var self = this;
-		if (lists !== undefined){
-		    lists.each(function(list) {
-		        self.listElements.set(list.id, new Tornado.ListElement(list));
-		    });
-		}
-    },
-
-	populateTaskElements: function(tasks) {
-		var self = this;
-		if (tasks !== undefined){
-			tasks.each(function(task) {
-				if (self.includeItem(task)){
-					self.taskElements.set(task.id, new Tornado.TaskElement(task));
-				}
-			});
-		}
-	},
-	
-	populateTagElements: function(tags) {
-		var self = this;
-		if (tags !== undefined){
-			tags.each(function(tag){
-				self.tagElements.set(tag.id, new Tornado.TagElement(tag));
-			});
-		}
-	},
-	
-	populateContextElements: function(contexts) {
-		var self = this;
-		if (contexts !== undefined){
-			contexts.each(function(context){
-				self.contextElements.set(context.id, new Tornado.ContextElement(context));
-			});
-		}
-	},
-
-	// Abstract function
-	display: function() {},
-
-	// Overridable function
-	getTitle: function() {
-		return "unknown";
-	},
-
-    // Abstract function
-    addItem: function() {},
-	updateItem: function() {},
-
-	load: function () {
-		var view = this;
-
-		jq.ajax({
-		  	cache: false,
-			dataType: 'json',
-		  	url: this.getAjaxUrl()
-		}).done(function (data) {
-			if (data && view.containsData(data)){
-				view.populate(data);
-				view.display();
-				view.container.fadeIn("slow");
-				view.loaded = true;
+	populateItemElement: function(item, itemElements) {
+		if (this.includeItem(item)){
+			if (itemElements.get(item.id) == undefined){
+				this.itemAdded(item);
+			} else {
+				this.itemChanged(item);
 			}
-		});
-	},
-	
-	arrayHasElements: function(data){
-		
-	},
-	
-	containsData: function(data){
-		return (data.Tags !== undefined && data.Tags.length > 0) || 
-				(data.Tasks !== undefined && data.Tasks.length > 0) || 
-				(data.TaskLists !== undefined && data.TaskLists.length > 0) || 
-				(data.Contexts !== undefined && data.Contexts.length > 0);
+		}
 	},
 
-	// Abstract function 
-	getAjaxUrl: function() {},
+	populateItemElements: function(items) {
+		var self = this;
+		var itemElements = this.getModelElementMatrix(items);
+
+		if (items !== undefined){
+			items.each(function(item) {
+				self.populateItemElement(item, itemElements);
+			});
+		}
+	},
 
 	itemChanged: function(item) {
 		var foundItem = this.getItemElement(item);
@@ -258,14 +233,21 @@ Tornado.View.prototype = {
 	},
 
 	itemAdded: function(item) {
-		if (this.includeItem(item)){
+		//if (this.includeItem(item)){
 			var element = this.newItemElement(item);
 			
             this.addItem(element);
-		}
+		//}
 	},
 	
-	getModelElementMatrix: function(item) {
+	getModelElementMatrix: function(o) {
+		var item = o;
+
+		// If list
+		if (o[0] !== undefined){
+			item = o[0];
+		}
+
 		if (item instanceof Tornado.Task) {
 			return this.taskElements; 
 		} else if (item instanceof Tornado.Tag) {
@@ -288,6 +270,107 @@ Tornado.View.prototype = {
 			return new Tornado.ListElement(item);
 		}
 	},
+
+	/*populateListElements: function(lists) {
+		var self = this;
+		if (lists !== undefined){
+		    lists.each(function(list) {
+				if (self.includeItem(list)){
+					if (self.listElements.get(list.id) == undefined){
+						self.itemAdded(list);
+					} else {
+						self.itemChanged(list);
+					}
+				}
+				self.populateItemElement(list);
+		    });
+		}
+    },
+
+	populateTaskElements: function(tasks) {
+		var self = this;
+		if (tasks !== undefined){
+			tasks.each(function(task) {
+				if (self.includeItem(task) && self.taskElements.get(task.id) == undefined && self.includeItem(task)){
+					self.taskElements.set(task.id, new Tornado.TaskElement(task));
+				}
+			});
+		}
+	},
+	
+	populateTagElements: function(tags) {
+		var self = this;
+		if (tags !== undefined){
+			tags.each(function(tag){
+				if (self.includeItem(tag) && self.listElements.get(tag.id) == undefined){
+					self.tagElements.set(tag.id, new Tornado.TagElement(tag));
+				}
+			});
+		}
+	},
+	
+	populateContextElements: function(contexts) {
+		var self = this;
+		if (contexts !== undefined){
+			contexts.each(function(context){
+				if (self.includeItem(context) && self.contextElements.get(context.id) == undefined){
+					self.contextElements.set(context.id, new Tornado.ContextElement(context));
+				}
+			});
+		}
+	},*/
+
+	// Abstract function
+	display: function() {},
+
+	// Overridable function
+	getTitle: function() {
+		return "unknown";
+	},
+
+	
+
+    // Abstract function
+    addItem: function() {},
+	updateItem: function() {},
+
+	load: function () {
+		var view = this;
+
+		/*jq.ajax({
+		  	cache: false,
+			dataType: 'json',
+			error: function(data){
+				Tornado.error(data);
+			}, 
+		  	url: this.getAjaxUrl()
+		}).done(function (data) {
+			if (data && view.containsData(data)){
+				view.populate(data);
+				view.display();
+				view.container.fadeIn("slow");
+				view.loaded = true;
+			} 
+		});*/
+
+		Tornado.viewManager.loadData(this.getAjaxUrl(), this);
+	},
+	
+	arrayHasElements: function(data){
+		
+	},
+	
+	/*containsData: function(data){
+		return (data.Tags !== undefined && data.Tags.length > 0) || 
+				(data.Tasks !== undefined && data.Tasks.length > 0) || 
+				(data.TaskLists !== undefined && data.TaskLists.length > 0) || 
+				(data.Contexts !== undefined && data.Contexts.length > 0);
+	},*/
+
+	// Abstract function 
+	getAjaxUrl: function() {},
+
+	
 	
 	getItemElement: function(item) {
 		return this.getModelElementMatrix(item).get(item.id);

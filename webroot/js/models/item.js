@@ -12,23 +12,31 @@ Tornado.Item.prototype = {
         var self = this;
 		self.reset();
 
-        if (data.Context){
-            data.Context.each(function(contextData){
-            	self.fetchContext(contextData);
-            });
-        }
+		var contexts, tags, lists, tasks;
 
-        if (data.Tag){
-            data.Tag.each(function(tagData){
-            	self.fetchTag(tagData);
+		if (data.Contexts !== undefined){
+			data.Contexts.each(function(contextData){
+            	self.fetchContext(contextData.Context);
             });
-        }
+		}
 
-        if (data.List){
-            data.List.each(function(listData){
-            	self.fetchList(listData);
+		if (data.Tags !== undefined){
+            data.Tags.each(function(tagData){
+            	self.fetchTag(tagData.Tag);
             });
-        }
+		}
+
+		if (data.TaskLists !== undefined){
+			data.TaskList.each(function(listData){
+            	self.fetchList(listData.TaskList);
+            });
+		}
+
+		/*if (data.Tasks !== undefined){
+			data.Tasks.each(function(taskData){
+            	self.fetchTask(taskData.Task);
+            });
+		}*/
     },
 
 	// Make sure that no old data remains after an update
@@ -39,49 +47,64 @@ Tornado.Item.prototype = {
 	},
 
     remove: function(callback) {
-        jq.ajax({
+        /*jq.ajax({
             cache: false,
             dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id
+            url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id,
+			error: function(data){
+				Tornado.error(data);
+			}
         }).done(function (data) {
                 if (data){
                     callback();
                 }
-            });
+            });*/
+
+		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/delete/" + this.id, callback, false);
     },
 
     create: function(callback) {
-        var self = this;
+        /*var self = this;
 
         jq.ajax({
             type: "post",
             cache: false,
             dataType: 'json',
             url: "/tornado/" + this.getModelUrlName() + "/add/",
-            data: this.getSubmitData(false)
+            data: this.getSubmitData(false),
+			error: function(data){
+				Tornado.error(data);
+			}
         }).done(function (result) {
                 if (result){
                     self.populate(result);
                     callback();
                 }
-            });
+            });*/
+
+		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/add/", callback, this.getSubmitData(false), true);
     },
 
     save: function(callback) {
-        var self = this;
+        /*var self = this;
 
         jq.ajax({
             type: "post",
             cache: false,
             dataType: 'json',
             url: "/tornado/" + this.getModelUrlName() + "/edit/" + self.id,
-            data: this.getSubmitData(true)
+            data: this.getSubmitData(true),
+			error: function(data){
+				Tornado.error(data);
+			}
         }).done(function (result) {
                 if (result){
                     self.populate(result);
                     callback();
                 }
-            });
+            });*/
+
+		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/edit/" + self.id, callback, this.getSubmitData(true), true);
     },
 
 	fetchContext: function(contextData) {
@@ -119,6 +142,17 @@ Tornado.Item.prototype = {
         }
 
         this.lists.set(list.id, list);
+    },
+
+    fetchTask: function(taskData) {
+        var task = Tornado.tasks.get(taskData.id);
+
+        if (!task || task === undefined) {
+            task = new Tornado.Task(taskData);
+            Tornado.tasks.set(task.id, task);
+        }
+
+        this.tasks.set(task.id, task);
     },
 
 	getLabelsString: function(data) {

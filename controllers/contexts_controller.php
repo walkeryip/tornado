@@ -27,11 +27,10 @@ class ContextsController extends AppController {
 		$tagIds = array();
 		$contextIds = array();
 		$data["Tags"] = array();
-		$data["Contexts"] = array();
 		
 		// TODO: dessa borde kunna göras generella och användas på flera ställen, t ex under tags
 		if (sizeof($taskListIds)>0){
-			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds);
+			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
 			
 			$data["TagsTaskLists"] = $this->Context->getTagsTaskListsByTaskListIds($taskListIds);
 			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByTaskListIds($taskListIds);
@@ -40,7 +39,7 @@ class ContextsController extends AppController {
 			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
 		}
 		if (sizeof($taskIds)>0){
-		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds);
+		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
 			
 			$data["TagsTasks"] = $this->Context->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Context->getContextsTasksByTaskIds($taskIds);
@@ -48,9 +47,11 @@ class ContextsController extends AppController {
 			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
 			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
 		}
-		if (sizeof($taskIds)>0 || sizeof($taskListIds)>0){
-			$data["Tags"] += $this->Context->getTagsByTagIds($tagIds);
-			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds);
+		if (sizeof($tagIds)>0){
+			$data["Tags"] += $this->Context->getTagsByTagIds($tagIds, $userId);
+		}
+		if (sizeof($contextIds)>0){
+			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds, $userId);
 		}
 		
 		return $data;
@@ -58,7 +59,7 @@ class ContextsController extends AppController {
 	
 	function getContexts(){
 		$userId = $_SESSION['Auth']['User']['id'];
-		$data["Contexts"] = $this->Context->getContexts($userId);
+		$data["Contexts"] = $this->Context->getContexts($userId, $userId);
 		
 		$contextIds = $this->accId($data["Contexts"], "Context", "id");
 		$data["ContextsTasks"] = $this->Context->getContextsTasksByContextIds($contextIds);
@@ -68,10 +69,10 @@ class ContextsController extends AppController {
 		$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
 
 		if (sizeof($taskListIds)>0){
-			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds);
+			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
 		}
 		if (sizeof($taskIds)>0){
-		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds);
+		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
 		}
 				
 		return $data;
@@ -83,7 +84,9 @@ class ContextsController extends AppController {
         	$this->render('/general/json', 'ajax');
 		} else {
 			$context = $this->Context->getContextById($id, $_SESSION['Auth']['User']['id']);
-			$this->set('context_id', $context[0]["Context"]["id"]);
+			if ($context != null){
+				$this->set('context_id', $context[0]["Context"]["id"]);
+			}
 		}
 	}
 	

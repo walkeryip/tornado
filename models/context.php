@@ -6,9 +6,9 @@
 class Context extends AppModel {
 	var $name = 'Context';
 	
-	var $hasAndBelongsToMany = array(
+	/*var $hasAndBelongsToMany = array(
 		'Task' => array('className' => 'Task'),
-		'TaskList' => array('className' => 'TaskList')); 
+		'TaskList' => array('className' => 'TaskList')); */
 
 	/*public function getContextById($id){
 		$conditions = array('Context.id' => $id);

@@ -18,7 +18,7 @@
     <script type="text/javascript" src="/tornado/js/lib/prototype.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.1.4.2.min.js"></script>
+    <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.js"></script>
 
     <script>
         jQuery.noConflict();

@@ -50,7 +50,11 @@ var Tornado = new function() { return {
         } else {
             return null;
         }
-    }
+    },
+
+	error: function(data) {
+		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
+	}
 }};
 
 (function() { 

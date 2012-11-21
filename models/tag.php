@@ -6,15 +6,11 @@
 class Tag extends AppModel {
 	var $name = 'Tag';
 	
-	var $hasAndBelongsToMany = array(
+	/*var $hasAndBelongsToMany = array(
 		'Task' => array('className' => 'Task'),
-		'TaskList' => array('className' => 'TaskList')); 
+		'TaskList' => array('className' => 'TaskList')); */
 
-	public function getTagById($id){
-		$conditions = array('Tag.id' => $id);
-		return $this->find('first', array('conditions' => $conditions));
-	}
-	
+
 	
 }
 

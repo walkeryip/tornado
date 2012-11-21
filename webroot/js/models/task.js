@@ -10,7 +10,12 @@ Tornado.Task = Class.create(Tornado.Item, {
 	populate: function($super, data) {
         $super(data);
 
-		var task = data.Task;
+		var task;
+		if (data.Task !== undefined){
+			task = data.Task;
+		} else if (data.Tasks[0].Task !== undefined) {
+			task = data.Tasks[0].Task;
+		}
 
 		this.checked = task.checked;
 		this.created = task.created;

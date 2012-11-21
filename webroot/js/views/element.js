@@ -69,10 +69,7 @@ Tornado.Element.prototype = {
 		});		
 
 		deleteButton.click(function() {
-			self.model.remove(function () {
-				Tornado.viewManager.itemDeleted(self.model);
-				self.deleteModel();
-			});
+			self.model.remove();
 			return false;
 		});
 

@@ -14,17 +14,7 @@ class TaskList extends AppModel {
 		'Task' => array('className'=>'Task'),
 		'Context' => array('className' => 'Context')); 
 
-	// TODO: Om Parent ska vara med så måste Parent.id och Parent.name synas, fixa automagiskt? Som parameter?
-	public function getTaskLists($id, $conditions, $contain, $bind){
-		$this->Behaviors->attach('Containable');
-		$this->bindModel(array('hasOne' => $bind));
-		$data = $this->find('all', array(
-			'fields' => array('TaskList.*'),
-			'contain' => $contain,
-			'conditions' => $conditions));
-
-		return $data;
-	}
+	
 
 	public function getTaskListsByContextId($id){
 		$conditions = array('ContextsTaskLists.context_id' => $id);
@@ -46,12 +36,12 @@ class TaskList extends AppModel {
 		return $this->find('all', array('recursive' => 1, 'conditions' => $conditions));
 	}
 
-	public function addTags($tags){
-		return $this->createLabels($this->Tag, $tags);
+	public function addTags($tags, $userId){
+		return $this->createLabels($this->Tag, $tags, $userId);
 	}
 
-	public function addContexts($contexts){
-		return $this->createLabels($this->Context, $contexts);
+	public function addContexts($contexts, $userId){
+		return $this->createLabels($this->Context, $contexts, $userId);
 	}
 
 	public function getTagsString(){
