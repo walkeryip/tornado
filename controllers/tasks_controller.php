@@ -145,15 +145,45 @@ class TasksController extends AppController {
 
 	}
 
-	function check($id = null){
+	function move($taskId, $fromListId, $toListId) {
+		$data = array();
+		$index = 0;
+
+		$this->Task->deleteTaskListTaskByTaskIdAndTaskListId($taskId, $fromListId);
+		$data["TaskListsTasks"] = array();
+
+		if (mysql_affected_rows() >= 0){
+			$data["TaskListsTasks"][$index] = array();
+			$data["TaskListsTasks"][$index]["TaskListTask"] = array();
+			$data["TaskListsTasks"][$index]["TaskListTask"]["deleted"] = true;
+			$data["TaskListsTasks"][$index]["TaskListTask"]["id"] = $fromListId;
+			$index++;
+		}
+
+		$this->Task->addTaskListTask($taskId, $toListId);
+
+		if (mysql_affected_rows() > 0){
+			$data["TaskListsTasks"][$index] = array();
+			$data["TaskListsTasks"][$index]["TaskListTask"] = array();
+			$data["TaskListsTasks"][$index]["TaskListTask"]["id"] = mysql_insert_id();
+			$data["TaskListsTasks"][$index]["TaskListTask"]["task_id"] = $taskId;
+			$data["TaskListsTasks"][$index]["TaskListTask"]["task_list_id"] = $toListId;
+		}
+
+		
+				$this->set('data', $data);
+			$this->render("/general/json", "ajax");
+	}
+
+	function check($id){
 		$this->setChecked($id, 1);
 	}
 
-	function uncheck($id = null){
+	function uncheck($id){
 		$this->setChecked($id, 0);
 	}
 
-	function delete($id = null){
+	function delete($id){
 		$status = false;
 
 

@@ -19,14 +19,5 @@ Tornado.SingleView = Class.create(Tornado.View, {
 			});
 			this.getModelList().unset(item.id);;
 		}
-	},
-	
-	display: function(item) {
-		var self = this;
-	
-		this.getModelList().each(function(data) {
-			var element = data.value;
-			element.display(self.itemsContainer);
-		});
 	}
 });

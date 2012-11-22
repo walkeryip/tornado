@@ -67,5 +67,13 @@ Tornado.Task = Class.create(Tornado.Item, {
 					callback();
                 }
             });
+	},
+
+	getClass: function() {
+		return Tornado.Task;
+	},
+
+	getContainer: function() {
+		return Tornado.tasks;
 	}
 });

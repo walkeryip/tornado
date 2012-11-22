@@ -29,5 +29,13 @@ Tornado.List = Class.create(Tornado.Item, {
 		}
 
         return data;
-    }
+    },
+
+	getClass: function() {
+		return Tornado.List;
+	},
+
+	getContainer: function() {
+		return Tornado.lists;
+	}
 });

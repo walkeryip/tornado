@@ -17,5 +17,9 @@ Tornado.ListsView = Class.create(Tornado.SingleView, {
 	
 	getModelList: function() {
 		return this.listElements;
+	},
+
+	getTitle: function() {
+		return "Lists";
 	}
 });

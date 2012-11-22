@@ -47,64 +47,15 @@ Tornado.Item.prototype = {
 	},
 
     remove: function(callback) {
-        /*jq.ajax({
-            cache: false,
-            dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id,
-			error: function(data){
-				Tornado.error(data);
-			}
-        }).done(function (data) {
-                if (data){
-                    callback();
-                }
-            });*/
-
 		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/delete/" + this.id, callback, false);
     },
 
     create: function(callback) {
-        /*var self = this;
-
-        jq.ajax({
-            type: "post",
-            cache: false,
-            dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/add/",
-            data: this.getSubmitData(false),
-			error: function(data){
-				Tornado.error(data);
-			}
-        }).done(function (result) {
-                if (result){
-                    self.populate(result);
-                    callback();
-                }
-            });*/
-
 		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/add/", callback, this.getSubmitData(false), true);
     },
 
     save: function(callback) {
-        /*var self = this;
-
-        jq.ajax({
-            type: "post",
-            cache: false,
-            dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/edit/" + self.id,
-            data: this.getSubmitData(true),
-			error: function(data){
-				Tornado.error(data);
-			}
-        }).done(function (result) {
-                if (result){
-                    self.populate(result);
-                    callback();
-                }
-            });*/
-
-		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/edit/" + self.id, callback, this.getSubmitData(true), true);
+		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/edit/" + this.id, callback, this.getSubmitData(true), true);
     },
 
 	fetchContext: function(contextData) {
@@ -220,5 +171,13 @@ Tornado.Item.prototype = {
 			result = item.value;
 		});
 		return result;
+	},
+
+	getClass: function() {
+		return Tornado.Item;
+	},
+
+	getContainer: function() {
+		return null;
 	}
 };

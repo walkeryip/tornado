@@ -159,3 +159,10 @@ var extractKeywords = function (text, keywordCharacter) {
 	result.keywords = keywords;
 	return result;
 };
+
+jq.fn.animateHighlight = function(highlightColor, duration) {
+    var highlightBg = highlightColor || "#FFFF9C";
+    var animateMs = duration || 1500;
+    var originalBg = this.css("backgroundColor");
+    this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
+};

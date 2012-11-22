@@ -16,10 +16,12 @@ a:hover {
 
 ul {
 	padding: 0px;
+	background-color: inherit;
 }
 
 li {
 	list-style: none;
+	background-color: inherit;
 }
 
 #content input[type=text]{

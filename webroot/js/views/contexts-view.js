@@ -17,5 +17,9 @@ Tornado.ContextsView = Class.create(Tornado.SingleView, {
 	
 	getModelList: function() {
 		return this.contextElements;
+	},
+
+	getTitle: function() {
+		return "Contexts";
 	}
 });

@@ -13,6 +13,10 @@ Tornado.Element.prototype = {
 		this.element.remove();
 		this.visible = false;
 	},
+
+	flash: function () {
+		this.element.effect("highlight", {}, 2000);
+	},
 	
 	display: function (container) {
 		var self = this;
@@ -105,6 +109,8 @@ Tornado.Element.prototype = {
 			container.append(this.element);
 			this.element.hide().fadeIn();
 		}
+
+		this.flash();
 	},
 	
 	edit: function(container) {
@@ -167,8 +173,10 @@ Tornado.Element.prototype = {
 				self.model.contextsString = jq(input.contexts).val();
 			}
 
-			self.model.save(function() {
-				Tornado.viewManager.itemChanged(self.model);
+			self.model.save(function(data) {
+				//Tornado.viewManager.itemChanged(self.model);
+				Tornado.viewManager.dataUpdated(data);
+				
 			});
 		}
 	}

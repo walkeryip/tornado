@@ -4,9 +4,9 @@ Tornado.ViewManager.prototype = {
 		this.views = new Array();
 	},
 	
+	// Add a view to viewmanager
 	addView: function(view) {
 		this.views.push(view);
-		view.populate();
 		this.loadData(view.getAjaxUrl(), function(data) {
 			view.dataUpdated(data);
 		});
@@ -30,6 +30,7 @@ Tornado.ViewManager.prototype = {
 		});
 	},
 
+	// Called when data is updated
 	dataUpdated: function(data) {
 		this.views.each(function(view){
 			view.dataUpdated(data);
@@ -104,8 +105,6 @@ Tornado.ViewManager.prototype = {
 				Tornado.viewManager.itemDeleted(self.model);
 				self.deleteModel();
 			}*/
-
-
 
 	populateListModels: function(data) {
 		var lists = Array();

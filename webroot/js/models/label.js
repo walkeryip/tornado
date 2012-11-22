@@ -8,6 +8,14 @@ Tornado.Label.prototype = {
 		this.name = data.name;
 		this.id = data.id;
 		this.created = data.created;
+	},
+
+	getClass: function() {
+		return Tornado.Label;
+	},
+
+	getContainer: function() {
+		return null;
 	}
 
 

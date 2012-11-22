@@ -25,5 +25,13 @@ Tornado.Context = Class.create(Tornado.Item, {
             "data[Context][id]": this.id};
 
         return data;
-    }
+    },
+
+	getClass: function() {
+		return Tornado.Context;
+	},
+
+	getContainer: function() {
+		return Tornado.contexts;
+	}
 });

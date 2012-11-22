@@ -30,5 +30,13 @@ Tornado.Tag = Class.create(Tornado.Label, {
                     callback();
                 }
             });
-    }
+    },
+
+	getClass: function() {
+		return Tornado.Tag;
+	},
+
+	getContainer: function() {
+		return Tornado.tags;
+	}
 });

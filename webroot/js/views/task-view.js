@@ -14,20 +14,7 @@ Tornado.TaskView = Class.create(Tornado.View, {
         if (element.model && this.includeItem){
             element.display(this.tasksContainer);
         }
-    },   
-
-	display: function(item) {
-		var self = this;
-
-		if (item){
-			self.displayElement(item);
-		} else {
-            self.taskElements.each(function(data) {
-                var taskElement = data.value;
-                self.addItem(taskElement);
-            });
-		}
-	},
+    },
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){

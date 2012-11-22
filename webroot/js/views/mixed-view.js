@@ -27,21 +27,6 @@ Tornado.MixedView = Class.create(Tornado.View, {
         }
     },
 
-	display: function(item) {
-		var self = this;
-
-		if (item){
-			self.displayElement(item);
-		} else {
-            self.taskElements.each(function(data) {
-                self.addItem(data.value);
-            });
-            self.listElements.each(function(data) {
-                self.addItem(data.value);
-            });
-		}
-	},
-
 	updateItem: function(item) {
 		if (this.includeItem(item.model)){
 			item.display(this.tasksContainer);

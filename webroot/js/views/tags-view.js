@@ -17,5 +17,9 @@ Tornado.TagsView = Class.create(Tornado.SingleView, {
 	
 	getModelList: function() {
 		return this.tagElements;
+	},
+
+	getTitle: function() {
+		return "Tags";
 	}
 });

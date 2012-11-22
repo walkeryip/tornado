@@ -227,5 +227,16 @@ class AppModel extends Model {
 	public function getTaskListsTasksByTaskListIds($ids) {
 		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id in (" . implode(",", array_unique($ids)) . ")");
 	}
+
+	public function getTaskListsTasksByTaskListTaskId($id) {
+		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id = " . $id);
+	}
+
+	public function deleteTaskListTaskByTaskIdAndTaskListId($taskId, $listId) {
+		return $this->query("delete from task_lists_tasks where task_id = " . $taskId . " and task_list_id = " . $listId);
+	}
 	
+	public function addTaskListTask($taskId, $listId) {
+		return $this->query("insert into task_lists_tasks (task_id, task_list_id) values (" . $taskId . "," . $listId . ")");
+	}
 }
