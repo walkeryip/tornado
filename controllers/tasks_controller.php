@@ -156,7 +156,8 @@ class TasksController extends AppController {
 			$data["TaskListsTasks"][$index] = array();
 			$data["TaskListsTasks"][$index]["TaskListTask"] = array();
 			$data["TaskListsTasks"][$index]["TaskListTask"]["deleted"] = true;
-			$data["TaskListsTasks"][$index]["TaskListTask"]["id"] = $fromListId;
+			$data["TaskListsTasks"][$index]["TaskListTask"]["task_id"] = $taskId;
+			$data["TaskListsTasks"][$index]["TaskListTask"]["task_list_id"] = $fromListId;
 			$index++;
 		}
 

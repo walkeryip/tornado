@@ -176,6 +176,15 @@ class TaskListsController extends AppController {
         	$this->render('/general/json', 'ajax');
 		}
 	}
+
+	function tree(){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$data = $this->TaskList->getNavigationTree($userId);
+		
+		$this->set('data', $data);
+		$this->render('/general/json', 'ajax');
+
+	}
 	
 	function all(){
 		$this->set("data", $this->getTaskLists());

@@ -110,7 +110,14 @@ Tornado.Element.prototype = {
 			this.element.hide().fadeIn();
 		}
 
+		elementContainer.draggable(
+			{revert: true,
+			 create: function(event, ui){ 
+				this.model = self.model; 
+			}});
+		elementContainer.disableSelection();
 		this.flash();
+
 	},
 	
 	edit: function(container) {

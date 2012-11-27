@@ -4,6 +4,7 @@ Tornado.Item.prototype = {
 		this.contexts = new Hash();
         this.tags = new Hash();
         this.lists = new Hash();
+        this.tasks = new Hash();
 
         this.populate(data);
 	},
@@ -57,6 +58,10 @@ Tornado.Item.prototype = {
     save: function(callback) {
 		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/edit/" + this.id, callback, this.getSubmitData(true), true);
     },
+
+	move: function(parentId, callback) {
+		Tornado.viewManager.loadData("/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + this.parent.id + "/" + parentId, callback, null, true);
+	},
 
 	fetchContext: function(contextData) {
 		var context = Tornado.contexts.get(contextData.name);

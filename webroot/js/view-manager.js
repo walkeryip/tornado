@@ -24,6 +24,13 @@ Tornado.ViewManager.prototype = {
 		});
 	},
 
+	itemMoved: function(item) {
+		this.views.each(function(view){
+			view.itemDeleted(item);
+			view.dataUpdated(item);
+		});
+	},
+
 	itemAdded: function(item) {
 		this.views.each(function(view){
 			view.itemAdded(item);
@@ -98,7 +105,12 @@ Tornado.ViewManager.prototype = {
 		return (data.Tags !== undefined && data.Tags.length > 0) || 
 				(data.Tasks !== undefined && data.Tasks.length > 0) || 
 				(data.TaskLists !== undefined && data.TaskLists.length > 0) || 
-				(data.Contexts !== undefined && data.Contexts.length > 0);
+				(data.Contexts !== undefined && data.Contexts.length > 0) ||
+				(data.ContextsTasks !== undefined && data.ContextsTasks.length > 0) ||
+				(data.TagsTasks !== undefined && data.TagsTasks.length > 0) ||
+				(data.TaskListsTasks !== undefined && data.TaskListsTasks.length > 0) || 
+				(data.ContextsTaskLists !== undefined && data.ContextsTaskLists.length > 0) || 
+				(data.TagsTaskLists !== undefined && data.TagsTaskLists.length > 0);
 	},
 
 	/* function () {
@@ -161,6 +173,27 @@ Tornado.ViewManager.prototype = {
 					var tag = Tornado.tags.get(tagList.tag_id);
 					if (list !== undefined && tag !== undefined){
 						list.tags.set(tagList.tag_id, tag); 
+					}
+				}
+			});
+		}
+
+		var listsTasks = data.TaskListsTasks;
+		if (listsTasks !== undefined){
+			listsTasks.each(function(listsTasks) {
+				var listTask = listsTasks.TaskListTask;
+
+				if (listTask !== undefined && listTask.deleted) {
+					var list = Tornado.lists.get(listTask.task_list_id);
+					var task = Tornado.tasks.get(listTask.task_id);
+					list.tasks.unset(task.id);
+					task.parent = null;
+				} else {
+					var list = Tornado.lists.get(listTask.task_list_id);
+					var task = Tornado.tasks.get(listTask.task_id);
+					if (list !== undefined && task !== undefined){
+						list.tasks.set(listTask.task_id, task); 
+						task.parent = list;
 					}
 				}
 			});

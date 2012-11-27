@@ -119,8 +119,83 @@ jq(document).ready(function () {
 
         inputbar.val("");
     }
+
+	getNavigationTree();
 });
 
+var printTree = function(trees, treeChildren, node, object) {
+	var list = jq("<ul></ul>");
+	for (i in node) {
+		var listItem = jq("<li><span>" + node[i].name + "</span></li>");
+		listItem.attr("data-id",node[i].id);
+
+		listItem.droppable({
+        	activeClass: "ui-state-hover",
+        	hoverClass: "ui-state-active",
+            greedy: true,
+            drop: function(event, ui) {
+				event.revert = false;
+				var item = ui.draggable[0].model;
+				var destId = jq(this).attr("data-id");
+				item.move(destId, function () {
+					Tornado.viewManager.itemMoved(item);
+				});    		
+            },
+			deactivate: function(event, ui) {
+				event.revert = true;
+			}
+        });
+
+		var children = treeChildren[node[i].id];
+		if (children !== undefined) {
+			listItem.append(printTree(trees, treeChildren, children));
+		}
+
+		list.append(listItem);
+	}
+	return list;
+}
+
+var displayNavigationTree = function(data) {
+	var trees = {}
+	var treeChildren = {};
+
+	data.each(function(obj) {
+		var item = obj["TaskList"];
+		var parent_id = item.parent_id == null ? "root" : item.parent_id;
+		var children = treeChildren[parent_id];
+ 
+		trees[item.id] = item;
+
+		if (children == undefined) {
+			children = {};
+		}
+
+		children[item.id] = item;
+		treeChildren[parent_id] = children;
+	});
+
+	jq("body").append(printTree(trees, treeChildren, treeChildren.root));
+};
+
+var getNavigationTree = function () {
+	var self = this;
+	
+	jq.ajax({			
+        type: "get",
+	  	cache: false,
+		dataType: "json",
+		error: function(data){
+			Tornado.error(data);
+		}, 
+	  	url: "/tornado/task_lists/tree"
+	}).done(function (data) {
+		if (data){
+			displayNavigationTree(data);
+		} 
+	});
+
+};
 
 var extractKeywords = function (text, keywordCharacter) {
 	var result = {};

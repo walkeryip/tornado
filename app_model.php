@@ -223,6 +223,11 @@ class AppModel extends Model {
 					  	    "and task_lists_users.user_id = " . $userId);
 	}
 
+	public function getNavigationTree($userId) {
+		return $this->query("select TaskList.id, TaskList.name, TaskList.parent_id from task_lists as TaskList inner join task_lists_users on " .
+							"task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id = " . $userId);
+	}
+
 	// TaskListsTasks
 	public function getTaskListsTasksByTaskListIds($ids) {
 		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id in (" . implode(",", array_unique($ids)) . ")");
