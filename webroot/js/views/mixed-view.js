@@ -17,12 +17,12 @@ Tornado.MixedView = Class.create(Tornado.View, {
             if (element.model.checked === "1"){
                 //element.display(this.tasksDoneContainer);
             } else {
-                element.display(this.tasksContainer);
+                element.display(this.tasksContainer, this.loaded);
             }
         } else if (element.model instanceof Tornado.List) {
 			// We don't want to list the current list again
 			if (element.model.id != this.id){
-	            element.display(this.listsContainer);
+	            element.display(this.listsContainer, this.loaded);
 			}
         }
     },

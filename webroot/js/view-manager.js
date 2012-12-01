@@ -7,16 +7,16 @@ Tornado.ViewManager.prototype = {
 	// Add a view to viewmanager
 	addView: function(view) {
 		this.views.push(view);
-		this.loadData(view.getAjaxUrl(), function(data) {
+		this.loadData({url: view.getAjaxUrl(), callback: function(data) {
 			view.dataUpdated(data);
-		});
+		}});
 	},
 
-	itemChanged: function(item) {
+	/*itemChanged: function(item) {
 		this.views.each(function(view){
 			view.itemChanged(item);
 		});
-	},
+	},*/
 
 	itemDeleted: function(item) {
 		this.views.each(function(view){
@@ -24,18 +24,18 @@ Tornado.ViewManager.prototype = {
 		});
 	},
 
-	itemMoved: function(item) {
+	/*itemMoved: function(item) {
 		this.views.each(function(view){
 			view.itemDeleted(item);
 			view.dataUpdated(item);
 		});
-	},
+	},*/
 
-	itemAdded: function(item) {
+	/*itemAdded: function(item) {
 		this.views.each(function(view){
 			view.itemAdded(item);
 		});
-	},
+	},*/
 
 	// Called when data is updated
 	dataUpdated: function(data) {
@@ -71,11 +71,16 @@ Tornado.ViewManager.prototype = {
 				lists: listModels};
 	},
 
-	loadData: function(dataURL, callback, data, post) {
+	//loadData: function(dataURL, callback, data, post) {
+	loadData: function(args) {
 		var self = this;
 		var type = "get";
 
-		if (post){
+		if (args === undefined) {
+			args = {};
+		}
+
+		if (args.post !== undefined && args.post == true){
 			type = "post";
 		} else {
 			type = "get";
@@ -87,17 +92,25 @@ Tornado.ViewManager.prototype = {
 			dataType: 'json',
 			error: function(data){
 				Tornado.error(data);
+				
+				if (args.error !== undefined) {
+					args.error(data);
+				}
 			}, 
-			data: data,
-		  	url: dataURL
+			data: args.data,
+		  	url: args.url
 		}).done(function (data) {
 			if (data && self.containsData(data)){
 				var models = self.populateModels(data);
 
-				if (callback !== undefined) {
-					callback(models);
+				if (args.callback !== undefined) {
+					args.callback(models);
 				}
-			} 
+			} else {
+				if (args.error !== undefined) {
+					args.error(data);
+				}
+			}
 		});
 	},
 
@@ -127,7 +140,7 @@ Tornado.ViewManager.prototype = {
 		    listsData.each(function(listData) {
 		        var list = Tornado.lists.get(listData.TaskList.id);
 
-				if (list !== undefined && list.deleted) {
+				if (listData !== undefined && listData.TaskList.deleted) {
 					self.itemDeleted(list);
 				} else {
 				    if (!list) {
@@ -147,7 +160,7 @@ Tornado.ViewManager.prototype = {
 			contextsLists.each(function(contextListData) {
 				var contextList = contextListData.ContextTaskList;
 			
-				if (contextList !== undefined && contextList.deleted) {
+				if (contextListData !== undefined && contextListData.ContextTaskList.deleted) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -165,7 +178,7 @@ Tornado.ViewManager.prototype = {
 			tagsLists.each(function(tagListData) {
 				var tagList = tagListData.TagTaskList;
 
-				if (tagList !== undefined && tagList.deleted) {
+				if (tagListData !== undefined && tagListData.TagTaskList.deleted) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -180,10 +193,10 @@ Tornado.ViewManager.prototype = {
 
 		var listsTasks = data.TaskListsTasks;
 		if (listsTasks !== undefined){
-			listsTasks.each(function(listsTasks) {
-				var listTask = listsTasks.TaskListTask;
+			listsTasks.each(function(taskListData) {
+				var listTask = taskListData.TaskListTask;
 
-				if (listTask !== undefined && listTask.deleted) {
+				if (taskListData !== undefined && taskListData.TaskListTask.deleted) {
 					var list = Tornado.lists.get(listTask.task_list_id);
 					var task = Tornado.tasks.get(listTask.task_id);
 					list.tasks.unset(task.id);

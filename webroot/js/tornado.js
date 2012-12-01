@@ -52,6 +52,10 @@ var Tornado = new function() { return {
         }
     },
 
+	getDefaultListId: function() {
+		return Tornado.defaultModel.list.id;
+	},
+
 	error: function(data) {
 		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
 	}

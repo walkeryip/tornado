@@ -18,7 +18,7 @@ Tornado.Element.prototype = {
 		this.element.effect("highlight", {}, 2000);
 	},
 	
-	display: function (container) {
+	display: function (container, loaded) {
 		var self = this;
 		self.visible = true;
 
@@ -99,6 +99,12 @@ Tornado.Element.prototype = {
 		elementContainer.append(infoBox);
 		elementContainer.append(actions);
 		elementContainer.append(actionsBox);
+		elementContainer.draggable(
+			{revert: "invalid",
+			 create: function(event, ui){ 
+				this.model = self.model; 
+			}});
+		elementContainer.disableSelection();
 
 		var existingElement = container.find(this.element);
 
@@ -110,14 +116,9 @@ Tornado.Element.prototype = {
 			this.element.hide().fadeIn();
 		}
 
-		elementContainer.draggable(
-			{revert: true,
-			 create: function(event, ui){ 
-				this.model = self.model; 
-			}});
-		elementContainer.disableSelection();
-		this.flash();
-
+		if (loaded !== undefined && loaded == true) {
+			this.flash();
+		}
 	},
 	
 	edit: function(container) {
@@ -181,9 +182,7 @@ Tornado.Element.prototype = {
 			}
 
 			self.model.save(function(data) {
-				//Tornado.viewManager.itemChanged(self.model);
 				Tornado.viewManager.dataUpdated(data);
-				
 			});
 		}
 	}

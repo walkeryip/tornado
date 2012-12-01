@@ -29,10 +29,8 @@ class TaskListsController extends AppController {
 				$this->data["Context"]["Context"] = $test;
 			}
 
-			$this->data["TaskListUser"] = array();
-			$this->data["TaskListUser"]["TaskListUser"] = array();
-			$this->data["TaskListUser"]["TaskListUser"]["task_list_id"] = $id;
-			$this->data["TaskListUser"]["TaskListUser"]["user_id"] = $userId;
+			$this->data["User"] = array();
+			$this->data["User"]["User"] = $userId;
 
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
@@ -42,7 +40,7 @@ class TaskListsController extends AppController {
 
 			//print_r($this->data);
 			if ($this->TaskList->save($this->data)){
-                $this->data = $this->TaskList->getTaskListById($this->TaskList->id);
+                $this->data = $this->getTaskListById($this->TaskList->id);
 				//print_r($this->data);
 				$this->set('data', $this->data);
 				$this->render('/general/json', 'ajax');
@@ -165,16 +163,22 @@ class TaskListsController extends AppController {
 	   	$this->render('/general/json', 'ajax');
 	}
 
-	function delete($id = null){
-		if ($this->RequestHandler->isAjax()){
-			$status = false;
-			if ($this->TaskList->delete($id)){
-				$status = true;
-			} 
+	function delete($id){
+		$status = false;
 
-        	$this->set('data', $status);
-        	$this->render('/general/json', 'ajax');
-		}
+
+		$data["TaskLists"] = array();
+		$data["TaskLists"][0] = array();
+		$data["TaskLists"][0]["TaskList"] = array();
+		$data["TaskLists"][0]["TaskList"]["id"] = $id;
+		$data["TaskLists"][0]["TaskList"]["deleted"] = true;
+
+		if ($this->TaskList->delete($id)){
+			$status = true;
+		} 
+
+        $this->set('data', $data);
+        $this->render('/general/json', 'ajax');
 	}
 
 	function tree(){

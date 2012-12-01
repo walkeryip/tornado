@@ -96,12 +96,12 @@ class AppModel extends Model {
 	// Tasks
 	public function getTasks($userId, $checked){
 		return $this->query("SELECT Task.* FROM tasks as Task inner join tasks_users on tasks_users.task_id = Task.id " .
-								   "and tasks_users.user_id = " . $userId . " where checked = " . $checked);
+								   "and tasks_users.user_id = " . $userId . " where checked = " . $checked . " group by Task.id");
 	}
 
 	public function getTaskByTaskId($taskId, $userId){
 		return $this->query("SELECT Task.* FROM tasks as Task inner join tasks_users on tasks_users.task_id = Task.id " .
-								   "and tasks_users.user_id = " . $userId . " where Task.id = " . $taskId);
+								   "and tasks_users.user_id = " . $userId . " where Task.id = " . $taskId . " group by Task.id");
 	}
 	
 	public function getTaskListsByTasksIds($taskIds){
@@ -111,8 +111,12 @@ class AppModel extends Model {
 	
 	public function getTasksByTaskIds($ids, $userId) {
 		return $this->query("select Task.* from tasks as Task inner join tasks_users on tasks_users.task_id = Task.id and " . 
-							"tasks_users.user_id = " . $userId . " where Task.id in (" . implode(",", array_unique($ids)) . ")");
+							"tasks_users.user_id = " . $userId . " where Task.id in (" . implode(",", array_unique($ids)) . ") group by Task.id");
 	}
+
+	/*public function getParentsByTaskIds($ids) {
+		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_id in (" . implode(",", array_unique($ids)) . ")");
+	}*/
 
 	// Contexts
 	public function getContextById($id, $userId){
@@ -206,31 +210,35 @@ class AppModel extends Model {
 	// TaskLists
 	public function getTaskListByTaskListId($id, $userId) {
 		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.id = " . $id);
+					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.id = " . $id  . " group by TaskList.id");
 	}
 	public function getTaskListsByTaskListIds($ids, $userId) {
 		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.id in (" . implode(",", array_unique($ids)) . ")");
+					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.id in (" . implode(",", array_unique($ids)) . ") group by TaskList.id");
 	}
 
 	public function getTaskListAndParentByTaskListId($id, $userId) {
 		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " and TaskList.id = " . $id . " or TaskList.parent_id = " . $id);
+					  	    "and task_lists_users.user_id = " . $userId . " and TaskList.id = " . $id . " or TaskList.parent_id = " . $id . " group by TaskList.id");
 	}
 
 	public function getTaskLists($userId) {
 		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId);
+					  	    "and task_lists_users.user_id = " . $userId . " group by TaskList.id");
 	}
 
 	public function getNavigationTree($userId) {
 		return $this->query("select TaskList.id, TaskList.name, TaskList.parent_id from task_lists as TaskList inner join task_lists_users on " .
-							"task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id = " . $userId);
+							"task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id = " . $userId . " group by TaskList.id");
 	}
 
 	// TaskListsTasks
 	public function getTaskListsTasksByTaskListIds($ids) {
 		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id in (" . implode(",", array_unique($ids)) . ")");
+	}
+
+	public function getTaskListsTasksByTaskIds($ids) {
+		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_id in (" . implode(",", array_unique($ids)) . ")");
 	}
 
 	public function getTaskListsTasksByTaskListTaskId($id) {

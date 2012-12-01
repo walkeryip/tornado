@@ -48,7 +48,7 @@ Tornado.Task = Class.create(Tornado.Item, {
         return data;
     },
 
-	toggle: function(callback) {
+	/*toggle: function(callback) {
 		var checkFunction = "check";
 		var self = this;
 
@@ -67,7 +67,18 @@ Tornado.Task = Class.create(Tornado.Item, {
 					callback();
                 }
             });
-	},
+	},*/
+
+
+    toggle: function(callback) {var checkFunction = "check";
+		if (this.checked != "0"){
+			checkFunction = "un" + checkFunction;
+		}
+
+		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id, 
+										callback: callback,  
+										post: true});
+    },
 
 	getClass: function() {
 		return Tornado.Task;

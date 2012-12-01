@@ -16,8 +16,9 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 
 	toggle: function() {
 		var self = this;
-		this.model.toggle(function (){
-			Tornado.viewManager.itemChanged(self.model);
+		this.model.toggle(function (data){
+			Tornado.viewManager.dataUpdated(data);
+			//Tornado.viewManager.itemChanged(self.model);
 		});
 	},
 	

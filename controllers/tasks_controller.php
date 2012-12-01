@@ -81,6 +81,14 @@ class TasksController extends AppController {
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
 
 		if (sizeof($taskIds) > 0){
+			$data["TaskListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
+			$taskListIds = $this->accId($data["TaskListsTasks"], "TaskListTask", "id");
+
+			if (sizeof($taskListIds) > 0){
+				$data["TaskLists"] = $this->Task->getTaskListsByTaskListIds($taskListIds, $userId);
+			}
+			$data["TasksUsers"] = $this->Task->getUsersTasksByTaskIds($taskIds);
+
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
 
@@ -96,10 +104,14 @@ class TasksController extends AppController {
 				$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds, $userId);
 			}
 
+			$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+			$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+
 		}
 		return $data;
 	}
 	
+	/* TODO: ADD PARENT */
 	function getTasks($checked){
 		$userId = $_SESSION['Auth']['User']['id'];
 		$data = array();

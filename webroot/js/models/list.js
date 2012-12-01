@@ -14,12 +14,14 @@ Tornado.List = Class.create(Tornado.Item, {
 
         this.id = list.id;
         this.name = list.name;
+		this.parent_id = list.parent_id;
     },
 
     getSubmitData: function(compactMode) {
         var data = {"data[TaskList][name]": this.name,
-            "data[TaskList][id]": this.id};
-        
+            "data[TaskList][id]": this.id,
+			"data[TaskList][parent_id]": this.parent_id};
+
         if (compactMode){
             Object.extend(data, {"data[TaskList][tags]": this.tagsString,
                                  "data[TaskList][contexts]": this.contextsString});

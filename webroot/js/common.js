@@ -109,10 +109,11 @@ jq(document).ready(function () {
 		} else if (inputMode === "list"){
 			data.TaskList = {};
 			data.TaskList.name = contextKeywordObject.text;
+			data.TaskList.parent_id = Tornado.getDefaultListId();
 		}
 
 	    data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
-	    data.Lists = modelify(Tornado.getDefaultList(), "List");
+	    data.TaskLists = modelify(Tornado.getDefaultList(), "TaskList");
 	    data.Tags = modelify(tagKeywordObject.keywords, "Tag");
 
         Tornado.viewManager.addItem(data);
@@ -129,7 +130,7 @@ var printTree = function(trees, treeChildren, node, object) {
 		var listItem = jq("<li><span>" + node[i].name + "</span></li>");
 		listItem.attr("data-id",node[i].id);
 
-		listItem.droppable({
+		/*listItem.droppable({
         	activeClass: "ui-state-hover",
         	hoverClass: "ui-state-active",
             greedy: true,
@@ -144,7 +145,7 @@ var printTree = function(trees, treeChildren, node, object) {
 			deactivate: function(event, ui) {
 				event.revert = true;
 			}
-        });
+        });*/
 
 		var children = treeChildren[node[i].id];
 		if (children !== undefined) {
