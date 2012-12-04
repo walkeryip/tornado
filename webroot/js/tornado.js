@@ -1,10 +1,14 @@
-var Tornado = new function() { return {
-	tasks: new Hash(),
-	contexts: new Hash(),
-	tags: new Hash(),
-	lists: new Hash(),
-	defaultModel: {},
-	viewManager: new Tornado.ViewManager(),
+Tornado = {
+	initialize: function() {
+		this.tasks = new Hash();
+		this.contexts = new Hash();
+		this.tags = new Hash();
+		this.lists = new Hash();
+		this.defaultModel = {};
+
+		this.navigationTree = new Tornado.NavigationTree();
+		this.viewManager = new Tornado.ViewManager();
+	},
 
 	setDefaultTag: function(tag){
 		Tornado.defaultModel.tag = {};
@@ -22,6 +26,8 @@ var Tornado = new function() { return {
 		Tornado.defaultModel.list = {};
 		Tornado.defaultModel.list.id = list.id;
 		Tornado.defaultModel.list.name = list.name;
+
+		this.breadcrumbs = new Tornado.Breadcrumbs(list.id);
 	},
 
 	getDefaultTag: function() {
@@ -53,13 +59,13 @@ var Tornado = new function() { return {
     },
 
 	getDefaultListId: function() {
-		return Tornado.defaultModel.list.id;
+		return Tornado.defaultModel.list !== undefined ? Tornado.defaultModel.list.id : null;
 	},
 
 	error: function(data) {
 		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
 	}
-}};
+};
 
 (function() { 
 	function Hash_clear() { 

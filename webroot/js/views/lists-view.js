@@ -9,7 +9,9 @@ Tornado.ListsView = Class.create(Tornado.SingleView, {
 	
 	includeItem: function(item) {
 		if (item instanceof Tornado.List){
-			return true;
+			if (item.parent_id == null) {
+				return true;
+			}
 		}
 		
 		return false;

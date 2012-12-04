@@ -27,6 +27,14 @@ a:hover {
 	color: red;
 }
 
+.settings-button {
+	display: none;
+}
+
+div.element:hover .settings-button {
+	display: block;
+}
+
 ul {
 	padding: 0px;
 	background-color: inherit;
@@ -37,9 +45,6 @@ li {
 	background-color: inherit;
 }
 
-#content input[type=text]{
-	width: 100%;
-}
 
 li p {
 	display: inline;
@@ -49,12 +54,20 @@ li p {
 	display: inline;
 }
 
-.expandable-div-button {
+.edit label {
+
+}
+
+.edit p {
 	display: block;
 }
 
-li .expandable-div-button {
-	display: inline;
+.edit input, .edit textarea {
+
+}
+
+.infobox {
+	display: none;
 }
 
 li .expandable-div-button p {

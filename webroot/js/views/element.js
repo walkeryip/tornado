@@ -44,16 +44,6 @@ Tornado.Element.prototype = {
 			body += "<ul class=\"contexts\">" + contextsString + "</ul>";
 		}
 
-		// Info
-		var info = jq("<a href=\"#\" class=\"info-button expandable-div-button\" \">I</a>");
-		
-		info.click(function () { 
-			expandableDivButtonClick(info); 
-			return false;
-		});
-
-		var infoBox = jq("<div class=\"info expandable-div\" style=\"display: none; \"></div>");
-		infoBox.append(self.getInfoBoxContent());
 		
 		// Actions
 		var actions = jq("<a href=\"#\" class=\"settings-button expandable-div-button\">O</a>");
@@ -94,11 +84,16 @@ Tornado.Element.prototype = {
 			elementContainer.append(jq("<p></p>").append(checkbox));
 		}
 		
+		// Infobox
+		var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
+		elementContainer.mouseup(function() {
+			infoBox.toggle("fast");
+		});
+
 		elementContainer.append(jq("<p></p>").append(jq(body))); 
-		elementContainer.append(info);
-		elementContainer.append(infoBox);
 		elementContainer.append(actions);
 		elementContainer.append(actionsBox);
+		elementContainer.append(infoBox);
 		elementContainer.draggable(
 			{revert: "invalid",
 			 create: function(event, ui){ 
@@ -144,20 +139,23 @@ Tornado.Element.prototype = {
 			elementContainer.append(jq("<p></p>").append(checkbox));
 		}
 		
-		elementContainer.append(jq("<p></p>").append(input.name)); 
+		elementContainer.append(jq("<p><label>Name:</label></p>").append(input.name)); 
 		
 		if (self.hasTags){
 			var tagsArray = Tornado.Label.arrayToLabelString(self.model.tags);
 			input.tags = jq("<input type=\"text\" value=\"" + tagsArray + "\" name=\"tags\" />");	
-			elementContainer.append(jq("<p></p>").append(input.tags)); 
+			elementContainer.append(jq("<p><label>Tags:</label></p>").append(input.tags)); 
 		}
 		
 		if (self.hasContexts){
 			var contextsArray = Tornado.Label.arrayToLabelString(self.model.contexts);
 			input.contexts = jq("<input type=\"text\" value=\"" + contextsArray + "\" name=\"contexts\" />");
-			elementContainer.append(jq("<p></p>").append(input.contexts)); 
+			elementContainer.append(jq("<p><label>Contexts:</label></p>").append(input.contexts)); 
 		}
 		
+		input.description = jq("<textarea name=\"description\">" + this.model.description + "</textarea>");
+		elementContainer.append(jq("<p><label>Description:</label></p>").append(input.description)); 
+
 		elementContainer.append(saveButton); 
 		elementContainer.append(cancelButton); 
 
@@ -172,6 +170,7 @@ Tornado.Element.prototype = {
 
 		var submit = function (){
 			self.model.name = jq(input.name).val();
+			self.model.description = jq(input.description).val();
 			
 			if (self.hasTags){
 				self.model.tagsString = jq(input.tags).val();

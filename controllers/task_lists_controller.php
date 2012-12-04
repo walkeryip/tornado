@@ -145,16 +145,22 @@ class TaskListsController extends AppController {
 	}
 
 	function edit($id = null){
+		$userId = $_SESSION['Auth']['User']['id'];
+
 		if (isset($this->data["TaskList"]["tags"])){
-			$this->data["Tag"] = $this->TaskList->addTags($this->data['TaskList']['tags']); 
+			$test = $this->TaskList->addTags($this->data['TaskList']['tags'], $userId); 
+			$this->data["Tag"] = array();
+			$this->data["Tag"]["Tag"] = $test;
 		}
 		
 		if (isset($this->data["TaskList"]["contexts"])){
-			$this->data["Context"] = $this->TaskList->addContexts($this->data['TaskList']['contexts']);
+			$test = $this->TaskList->addContexts($this->data['TaskList']['contexts'], $userId);
+			$this->data["Context"] = array();
+			$this->data["Context"]["Context"] = $test;
 		}	
 					
 		if ($this->TaskList->save($this->data)){
-			$this->data = $this->TaskList->getTaskListById($id);
+			$this->data = $this->getTaskListById($id);
 			$this->set('data', $this->data);
 		} else {
         	$this->set('data', "false");
@@ -179,6 +185,20 @@ class TaskListsController extends AppController {
 
         $this->set('data', $data);
         $this->render('/general/json', 'ajax');
+	}
+
+	function move($listId, $fromListId, $toListId) {
+		$this->TaskList->id = $listId;
+		$this->data["TaskList"]["parent_id"] = $toListId;
+		
+		if ($this->TaskList->save($this->data)){
+			$this->data = $this->getTaskListById($listId);
+			$this->set('data', $this->data);
+		} else {
+        	$this->set('data', "false");
+		}
+		
+		$this->render("/general/json", "ajax");
 	}
 
 	function tree(){

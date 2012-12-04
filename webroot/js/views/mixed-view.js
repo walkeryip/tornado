@@ -27,14 +27,25 @@ Tornado.MixedView = Class.create(Tornado.View, {
         }
     },
 
-	updateItem: function(item) {
-		if (this.includeItem(item.model)){
-			item.display(this.tasksContainer);
-		} else {
-			item.element.fadeOut("fast", function (){
-				$(this).remove();
-			});
-			this.taskElements.unset(item.id);
+	updateItem: function(element) {
+		if (element.model instanceof Tornado.Task){
+			if (this.includeItem(element.model)){
+				element.display(this.tasksContainer);
+			} else {
+				element.fadeOut("fast", function (){
+					$(this).remove();
+				});
+				this.taskElements.unset(element.model.id);
+			}
+		} else if (element.model instanceof Tornado.List) {
+			if (this.includeItem(element.model)){
+				element.display(this.listsContainer);
+			} else {
+				element.fadeOut("fast", function (){
+					$(this).remove();
+				});
+				this.listElements.unset(element.model.id);
+			}
 		}
 	}
 });

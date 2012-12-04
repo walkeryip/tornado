@@ -6,8 +6,6 @@
 // TODO: add buttons for every view
 // TODO: sorting
 
-Tornado = {};
-
 var expandableDivButtonClick = function (element) {
 	$(element).next("div").toggle();
 
@@ -50,6 +48,9 @@ jq(document).ready(function () {
 
 	var inputModeIndex = 0;
 
+	inputbar.change(function(e){
+	});
+
 	var changeInputBarIndex = function(index){
 		if (index >= inputMode.length){
 			index = 0;
@@ -71,6 +72,13 @@ jq(document).ready(function () {
     	} else if (e.keyCode == 38) {
 			changeInputBarIndex(--inputModeIndex);
 			return false;	
+		} else {
+			
+			/*if (!inputbar.initialized) {
+				inputbar.val(inputbar.val() + " @test #dator");
+					
+				inputbar.initialized = true;
+			}*/
 		}
     });
 
@@ -121,7 +129,6 @@ jq(document).ready(function () {
         inputbar.val("");
     }
 
-	getNavigationTree();
 });
 
 var printTree = function(trees, treeChildren, node, object) {
@@ -129,23 +136,6 @@ var printTree = function(trees, treeChildren, node, object) {
 	for (i in node) {
 		var listItem = jq("<li><span>" + node[i].name + "</span></li>");
 		listItem.attr("data-id",node[i].id);
-
-		/*listItem.droppable({
-        	activeClass: "ui-state-hover",
-        	hoverClass: "ui-state-active",
-            greedy: true,
-            drop: function(event, ui) {
-				event.revert = false;
-				var item = ui.draggable[0].model;
-				var destId = jq(this).attr("data-id");
-				item.move(destId, function () {
-					Tornado.viewManager.itemMoved(item);
-				});    		
-            },
-			deactivate: function(event, ui) {
-				event.revert = true;
-			}
-        });*/
 
 		var children = treeChildren[node[i].id];
 		if (children !== undefined) {
@@ -157,7 +147,43 @@ var printTree = function(trees, treeChildren, node, object) {
 	return list;
 }
 
-var displayNavigationTree = function(data) {
+/*var getNavigationTree2 = function(data, listId) {
+	var trees = {};
+	var treeParents = {};
+
+	data.each(function(obj) {
+		var item = obj["TaskList"];
+		var parent_id = item.parent_id == null ? "root" : item.parent_id;
+		var parents = treeParents[item.id];
+ 
+		trees[item.id] = item;
+
+		if (parents == undefined) {
+			parents = {};
+		}
+
+		parents[parent_id] = item;
+		treeParents[item.id] = parents;
+	});
+
+	var result = new Array();
+
+	var currentId = listId;
+	while (currentId !== null && currentId !== undefined && currentId !== "root") {
+		var item = trees[currentId];
+
+		if (item === undefined) {
+			break;
+		}
+
+		result.push({id: item.id, name: item.name});
+		currentId = item.parent_id;
+	}
+
+	return result.reverse();
+};*/
+
+/*var displayNavigationTree = function(data) {
 	var trees = {}
 	var treeChildren = {};
 
@@ -177,9 +203,19 @@ var displayNavigationTree = function(data) {
 	});
 
 	jq("body").append(printTree(trees, treeChildren, treeChildren.root));
-};
 
-var getNavigationTree = function () {
+	var test = getNavigationTree2(data, 65);
+
+	test.each(function(item) {
+		jq("body").append("<p>" + item.name + "</p>");
+	});
+};*/
+
+/*var displayBreadCrumbs = function(data) {
+	
+};*/
+
+/*var getNavigationTree = function () {
 	var self = this;
 	
 	jq.ajax({			
@@ -196,7 +232,7 @@ var getNavigationTree = function () {
 		} 
 	});
 
-};
+};*/
 
 var extractKeywords = function (text, keywordCharacter) {
 	var result = {};

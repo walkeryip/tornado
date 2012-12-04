@@ -75,7 +75,7 @@ class AppModel extends Model {
 				if (!$label){
 					$model->create();
 					$label[$modelName]['user_id'] = $userId;
-					$label = $model->save(array('name' => $_label));
+					$label = $model->save(array('name' => $_label, 'user_id' => $userId));
 					$label[$modelName]['id'] = $model->id;
 				}
 

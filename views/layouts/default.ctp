@@ -26,9 +26,11 @@
         var jq = jQuery;
     </script>
 
+    <script type="text/javascript" src="/tornado/js/tornado.js"></script>
     <script type="text/javascript" src="/tornado/js/common.js"></script>
     <script type="text/javascript" src="/tornado/js/view-manager.js"></script>
-    <script type="text/javascript" src="/tornado/js/tornado.js"></script>
+    <script type="text/javascript" src="/tornado/js/breadcrumbs.js"></script>
+    <script type="text/javascript" src="/tornado/js/navigationtree.js"></script>
     <script type="text/javascript" src="/tornado/js/models/item.js"></script>
     <script type="text/javascript" src="/tornado/js/models/label.js"></script>
     <script type="text/javascript" src="/tornado/js/models/tag.js"></script>
@@ -53,6 +55,9 @@
     <script type="text/javascript" src="/tornado/js/views/todo-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/tags-view.js"></script>
     <script type="text/javascript" src="/tornado/js/views/contexts-view.js"></script>
+	<script>	
+		Tornado.initialize();
+	</script>
 </head>
 <body>
 <?

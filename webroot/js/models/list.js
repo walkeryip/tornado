@@ -13,6 +13,7 @@ Tornado.List = Class.create(Tornado.Item, {
         var list = data.TaskList;
 
         this.id = list.id;
+		this.description = list.description;
         this.name = list.name;
 		this.parent_id = list.parent_id;
     },
@@ -20,7 +21,7 @@ Tornado.List = Class.create(Tornado.Item, {
     getSubmitData: function(compactMode) {
         var data = {"data[TaskList][name]": this.name,
             "data[TaskList][id]": this.id,
-			"data[TaskList][parent_id]": this.parent_id};
+			"data[TaskList][description]": this.description};
 
         if (compactMode){
             Object.extend(data, {"data[TaskList][tags]": this.tagsString,
@@ -28,6 +29,10 @@ Tornado.List = Class.create(Tornado.Item, {
 		} else {
             Object.extend(data, {"data[TaskList][tags]": this.getTagsString(),
                                  "data[TaskList][contexts]": this.getContextsString()});
+		}
+
+		if (this.parent_id !== null) {
+			Object.extend(data, {"data[TaskList][parent_id]": this.parent_id});
 		}
 
         return data;

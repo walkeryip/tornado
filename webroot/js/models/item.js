@@ -68,7 +68,8 @@ Tornado.Item.prototype = {
     },
 
 	move: function(parentId, callback, errorCallback) {
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + this.parent.id + "/" + parentId, 
+		var oldParentId = this.parent !== undefined ? this.parent.id : this.parent_id;
+		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + oldParentId + "/" + parentId, 
 										callback: callback, 
 										error: errorCallback,
 										post: true});
