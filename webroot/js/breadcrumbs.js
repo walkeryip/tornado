@@ -38,7 +38,7 @@ Tornado.Breadcrumbs.prototype = {
 	populateBreadcrumbs: function(list) {
 		var div = jq("<ul class=\"breadcrumbs\"></ul>");
 		list.each(function(item) {
-			div.append("<li><a href=\"/tornado/task_list/" + item.id + "\">" + item.name + "</a></li>");
+			div.append("<li><a href=\"/tornado/task_lists/view/" + item.id + "\">" + item.name + "</a></li>");
 		});
 		jq("body").append(div);
 	}
