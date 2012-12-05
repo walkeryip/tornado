@@ -1,7 +1,8 @@
 Tornado.Breadcrumbs = Class.create();
 Tornado.Breadcrumbs.prototype = {
-	initialize: function(listId) {
+	initialize: function(listId, containerId) {
 		this.maxDepth = 20;
+		this.container = jq(containerId);
 		var self = this;
 
 		Tornado.navigationTree.getNavigationTree(function(data){
@@ -36,10 +37,18 @@ Tornado.Breadcrumbs.prototype = {
 	},
 
 	populateBreadcrumbs: function(list) {
-		var div = jq("<ul class=\"breadcrumbs\"></ul>");
+		var div = jq("<ul></ul>");
+		var length = list.length;
+		var index = 0;
+		
+		div.append("<li><a href=\"/tornado/task_lists/\">Home</a><p>&gt;</p></li>");
 		list.each(function(item) {
-			div.append("<li><a href=\"/tornado/task_list/" + item.id + "\">" + item.name + "</a></li>");
+			if (index++ < length - 1) {
+				div.append("<li><a href=\"/tornado/task_lists/view/" + item.id + "\">" + item.name + "</a><p>&gt;</p></li>");
+			} else {
+				div.append("<li>" + item.name + "</li>");
+			}
 		});
-		jq("body").append(div);
+		this.container.append(div);
 	}
 };

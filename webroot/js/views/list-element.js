@@ -7,6 +7,7 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 		
 		this.tags = list.tags;
 		this.contexts = list.contexts;	
+		this.users = list.users;	
 	},
 
 	display: function($super, container) {
@@ -16,17 +17,22 @@ Tornado.ListElement = Class.create(Tornado.Element, {
         	activeClass: "ui-state-hover",
         	hoverClass: "ui-state-active",
             greedy: true,
+    		tolerance: 'touch',
             drop: function(event, ui) {
 				//event.revert = false;
 				var item = ui.draggable[0].model;
 				var destId = jq(this).attr("data-id");
-				item.move(destId, 
-					function (data) {
-						Tornado.viewManager.dataUpdated(data);
-					},
-					function () {
-						ui.draggable.revert();
-					});    		
+				if (item.id !== destId) {
+					item.move(destId, 
+						function (data) {
+							Tornado.viewManager.dataUpdated(data);
+						},
+						function () {
+        					ui.draggable.draggable('option','revert',true);
+						});    		
+				} else {
+        			ui.draggable.draggable('option','revert',true);
+				}
             }
         });
 
@@ -34,7 +40,7 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 	},
 	
 	getBody: function(){
-		return "<a href=\"/tornado/task_lists/view/" + this.model.id + "\">" + this.model.name + "</a>"
+		return "<a href=\"/tornado/task_lists/view/" + this.model.id + "\">" + this.model.name + "</a>";
 	},
 	
 	getInfoBoxContent: function() {

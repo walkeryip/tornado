@@ -82,15 +82,15 @@ Tornado.Element.prototype = {
 			});
 
 			elementContainer.append(jq("<p></p>").append(checkbox));
-		}
-		
+		}		
+
 		// Infobox
 		var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
-		elementContainer.mouseup(function() {
+		this.element.click(function() {
 			infoBox.toggle("fast");
 		});
 
-		elementContainer.append(jq("<p></p>").append(jq(body))); 
+		elementContainer.append(jq("<p></p>").append(body));
 		elementContainer.append(actions);
 		elementContainer.append(actionsBox);
 		elementContainer.append(infoBox);
@@ -100,6 +100,12 @@ Tornado.Element.prototype = {
 				this.model = self.model; 
 			}});
 		elementContainer.disableSelection();
+
+		// Prevent events when clicking a link or interacting with an input tag
+		elementContainer.find("a, input").click(function(e) {
+			e.stopPropagation();
+   			e.stopImmediatePropagation();
+		});
 
 		var existingElement = container.find(this.element);
 

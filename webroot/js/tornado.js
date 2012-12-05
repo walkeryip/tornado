@@ -27,7 +27,7 @@ Tornado = {
 		Tornado.defaultModel.list.id = list.id;
 		Tornado.defaultModel.list.name = list.name;
 
-		this.breadcrumbs = new Tornado.Breadcrumbs(list.id);
+		this.breadcrumbs = new Tornado.Breadcrumbs(list.id, "#breadcrumbs");
 	},
 
 	getDefaultTag: function() {

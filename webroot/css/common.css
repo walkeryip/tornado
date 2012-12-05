@@ -12,6 +12,7 @@ a, a:visited {
 
 .element {
 	cursor:default;
+	padding: 1px;
 }
 
 
@@ -33,6 +34,12 @@ a:hover {
 
 div.element:hover .settings-button {
 	display: block;
+}
+
+div.element:hover {
+	background-color: #aaffaa;
+	border: 1px solid #88bb88;
+	padding: 0px;
 }
 
 ul {
@@ -180,3 +187,13 @@ background-color: rgba(255, 255, 0, .5);
 #error {
 	background-color: white;
 }
+
+#breadcrumbs li {
+	display: inline;
+	font-weight: bold;
+}
+
+#breadcrumbs p {
+	margin: 0px 5px 0px 5px;
+}
+
