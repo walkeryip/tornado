@@ -2,10 +2,11 @@ Tornado.Element = Class.create();
 Tornado.Element.prototype = {
 	initialize: function(model) {
 		this.visible = false;
-		this.element = jq("<li></li>");
+		this.element = jq("<li data-model-type=\"" + model.getModelName() + "\" data-model-id=\"" + model.id + "\"></li>");
 		this.model = model;
 		this.hasCheckbox = false;
 		this.hasTags = false;
+		this.hasUsers = false;
 		this.hasContexts = false;
 	},
 
@@ -17,8 +18,8 @@ Tornado.Element.prototype = {
 	flash: function () {
 		this.element.effect("highlight", {}, 2000);
 	},
-	
-	display: function (container, loaded) {
+
+	display: function (container, loaded, after) {
 		var self = this;
 		self.visible = true;
 
@@ -29,7 +30,7 @@ Tornado.Element.prototype = {
 		if (self.hasTags){
 			var tagsString = "";
 			self.tags.each(function(tag){
-				tagsString += "<li><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+				tagsString += "<li data-model-type=\"tag\" data-model-id=\"" + tag.value.id + "\"><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
 			});
 			
 			body += "<ul class=\"tags\">" + tagsString + "</ul>"; 
@@ -38,10 +39,19 @@ Tornado.Element.prototype = {
 		if (self.hasContexts){
 			var contextsString = "";
 			self.contexts.each(function(context){
-				contextsString += "<li><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+				contextsString += "<li data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
 			});
 			
 			body += "<ul class=\"contexts\">" + contextsString + "</ul>";
+		}
+
+		if (self.hasUsers){
+			var usersString = "";
+			self.users.each(function(user){
+				usersString += "<li data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></li>";	
+			});
+			
+			body += "<ul class=\"users\">" + usersString + "</ul>";
 		}
 
 		
@@ -96,6 +106,7 @@ Tornado.Element.prototype = {
 		elementContainer.append(infoBox);
 		elementContainer.draggable(
 			{revert: "invalid",
+			 distance: 5,
 			 create: function(event, ui){ 
 				this.model = self.model; 
 			}});
@@ -113,7 +124,23 @@ Tornado.Element.prototype = {
 			existingElement.html(elementContainer);
 		} else {	
 			this.element.html(elementContainer);
-			container.append(this.element);
+	
+			// We assume that the initial item list is sorted
+			if (loaded) {
+				var foundElement = false;
+				container.children().each(function(index, item) {
+					if (compareItem(self.getModelFromElement(jq(item)), self.model) > 0){
+						foundElement = true;
+						self.element.insertBefore(item);
+						return false;
+					}
+				});
+			}
+		
+			if (!foundElement) {
+				container.append(this.element);
+			}
+
 			this.element.hide().fadeIn();
 		}
 
@@ -189,6 +216,23 @@ Tornado.Element.prototype = {
 			self.model.save(function(data) {
 				Tornado.viewManager.dataUpdated(data);
 			});
+		}
+	},
+
+	getModelFromElement: function(element) {
+		var modelType = element.attr("data-model-type");
+		var modelId = element.attr("data-model-id");
+
+		if (modelType === "task") {
+			return Tornado.tasks.get(modelId);
+		} else if (modelType === "task_list") {
+			return Tornado.lists.get(modelId);
+		} else if (modelType === "tag") {
+			return Tornado.tags.get(modelId);
+		} else if (modelType === "context") {
+			return Tornado.contexts.get(modelId);
+		} else {
+			throw new Error("Model type " + modelType + " unknown.");
 		}
 	}
 };

@@ -8,6 +8,13 @@ Tornado.MixedView = Class.create(Tornado.View, {
         this.tasksContainer = this.container.find(".tasks");
 	},
 
+	populate: function($super, data) {
+		$super(data);
+
+		//this.tasksContainer.find("li").tsort();
+		//this.listsContainer.find("li").tsort();
+	},
+
 	getAjaxUrl: function() {
 		return "/tornado/task_lists/view/" + this.id;
 	},

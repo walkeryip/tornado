@@ -8,17 +8,20 @@ Tornado.View.prototype = {
 		this.tagElements = new Hash();
         this.contextElements = new Hash();
         this.listElements = new Hash();
+        this.userElements = new Hash();
 
 		this.container = jq(containerId);
 		this.container.hide();
 		this.container.addClass("view");
 	},
+	
 
 	populate: function (data) {
-        this.populateItemElements(data.contexts);
-        this.populateItemElements(data.tags);
-        this.populateItemElements(data.tasks);
-        this.populateItemElements(data.lists);
+        this.populateItemElements(data.contexts.sort(compareItem));
+        this.populateItemElements(data.tags.sort(compareItem));
+        this.populateItemElements(data.tasks.sort(compareItem));
+        this.populateItemElements(data.lists.sort(compareItem));
+        this.populateItemElements(data.users.sort(compareItem));
     },
 
 	populateItemElement: function(item, itemElements) {
@@ -113,6 +116,8 @@ Tornado.View.prototype = {
 			return this.contextElements;
 		} else if (item instanceof Tornado.List) {
 			return this.listElements;
+		} else if (item instanceof Tornado.User) {
+			return this.userElements;
 		}
 	},
 	
@@ -125,6 +130,8 @@ Tornado.View.prototype = {
 			return new Tornado.ContextElement(item);
 		} else if (item instanceof Tornado.List) {
 			return new Tornado.ListElement(item);
+		} else if (item instanceof Tornado.User) {
+			return new Tornado.UserElement(item);
 		}
 	},
 

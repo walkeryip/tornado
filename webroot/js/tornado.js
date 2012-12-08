@@ -4,6 +4,8 @@ Tornado = {
 		this.contexts = new Hash();
 		this.tags = new Hash();
 		this.lists = new Hash();
+		this.users = new Hash();
+
 		this.defaultModel = {};
 
 		this.navigationTree = new Tornado.NavigationTree();

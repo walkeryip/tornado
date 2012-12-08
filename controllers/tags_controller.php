@@ -14,68 +14,71 @@ class TagsController extends AppController {
         $this->render('/general/json', 'ajax');
 	}
 
-	function getTagById($id){
+	function getTags($id = null){
 		$userId = $_SESSION['Auth']['User']['id'];
-		$data["Tags"] = $this->Tag->getTagById($id, $userId);
+
+		if ($id != null) {
+			$data["Tags"] = $this->Tag->getTagById($id, $userId);
+		} else {
+			$data["Tags"] = $this->Tag->getTags($userId);
+		}
 		
-		$data["TagsTasks"] = $this->Tag->getTagsTasksByTagId($id);
-		$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagId($id);
-
-		$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
-		$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
-
-		$tagIds = array();
+		$tagIds = $this->accId($data["Tags"], "Tag", "id");
 		$contextIds = array();
-		$data["Contexts"] = array();
-		
-		// TODO: dessa borde kunna göras generella och användas på flera ställen, t ex under tags
-		if (sizeof($taskListIds)>0){
+
+		// We only want to get all associated tasks and lists when providing an id
+		if ($id != null) {
+			$data["TagsTasks"] = $this->Tag->getTagsTasksByTagIds($tagIds);
+			$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagIds($tagIds);
+
+			$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
+			$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
+
+			$userIds = array();
+			$data["Users"] = array();
+		}
+
+
+		if (!empty($taskListIds)){
 			$data["TaskLists"] = $this->Tag->getTaskListsByTaskListIds($taskListIds, $userId);
-			
+
+			$data["TaskListsUsers"] = $this->Tag->getTaskListsUsersByTaskListIds($taskListIds);			
+			$userIds += $this->accId($data["TaskListsUsers"], "TaskListUser", "user_id");
+
 			$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTaskListIds($taskListIds);
 			$data["ContextsTaskLists"] = $this->Tag->getContextsTaskListsByTaskListIds($taskListIds);
 			
 			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
 			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
 		}
-		if (sizeof($taskIds)>0){
+		if (!empty($taskIds)){
 		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
-			
+
+			$data["TasksUsers"] = $this->Tag->getTasksUsersByTaskIds($taskIds);
+			$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+
 			$data["TagsTasks"] = $this->Tag->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Tag->getContextsTasksByTaskIds($taskIds);
-			
+		
 			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
 			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
 		}
-		if (sizeof($tagIds)>0){
+		if (!empty($tagIds)){
 			$data["Tags"] += $this->Tag->getTagsByTagIds($tagIds, $userId);
 		}
-		if (sizeof($contextIds)>0){
-			$data["Contexts"] += $this->Tag->getContextsByContextIds($contextIds, $userId);
+		if (!empty($contextIds)){
+			$data["Contexts"] = $this->Tag->getContextsByContextIds($contextIds, $userId);
 		}
-
-		return $data;
-	}
-
-	function getTags(){
-		$userId = $_SESSION['Auth']['User']['id'];
-		$data["Tags"] = $this->Tag->getTags($userId);
-		
-		$tagIds = $this->accId($data["Tags"], "Tag", "id");
-		$data["TagsTasks"] = $this->Tag->getTagsTasksByTagIds($tagIds);
-		$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagIds($tagIds);
-
-		$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
-		$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
-
-		if (sizeof($taskListIds)>0){
-			$data["TaskLists"] = $this->Tag->getTaskListsByTaskListIds($taskListIds, $userId);
-		}
-		if (sizeof($taskIds)>0){
-		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
+	
+		if (!empty($userIds)){
+		   	$data["Users"] = $this->Tag->getUsersByUserIds($userIds);
 		}
 				
 		return $data;
+	}
+
+	function getTagById($id){
+		return $this->getTags($id);
 	}
 
 	function view($id){		
@@ -89,7 +92,6 @@ class TagsController extends AppController {
 			}
 		}
 	}
-	
 	
 	function delete($id = null){
 		$status = false;

@@ -3,8 +3,8 @@ Tornado.List = Class.create(Tornado.Item, {
         $super(data);
     },
 
-    getModelUrlName: function(){
-        return "task_lists";
+    getModelName: function(){
+        return "task_list";
     },
 
     populate: function($super, data){

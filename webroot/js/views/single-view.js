@@ -6,6 +6,12 @@ Tornado.SingleView = Class.create(Tornado.View, {
         this.itemsContainer = this.container.find(".items");
 	},
 
+	populate: function($super, data) {
+		$super(data);
+
+		//this.itemsContainer.find("li").tsort();
+	},
+
     addItem: function(element) {
     	element.display(this.itemsContainer);
     },

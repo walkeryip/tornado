@@ -20,6 +20,8 @@
     <script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/tornado/js/lib/jquery.tinysort.min.js"></script>
+
 
     <script>
         jQuery.noConflict();
@@ -38,6 +40,7 @@
     <script type="text/javascript" src="/tornado/js/models/task.js"></script>
     <script type="text/javascript" src="/tornado/js/models/list.js"></script>
     <script type="text/javascript" src="/tornado/js/models/label.js"></script>
+    <script type="text/javascript" src="/tornado/js/models/user.js"></script>
     <script type="text/javascript" src="/tornado/js/views/element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/task-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/list-element.js"></script>
@@ -66,6 +69,7 @@ if (isset($_SESSION['Auth']['User'])) {
 	echo "Logged in as " . $_SESSION['Auth']['User']['username'];
 	echo "<br /><a href=\"/tornado/logout\">Logout</a>";
 } else {
+	echo "<a href=\"/tornado/login\">Login</a>";
 	echo "<a href=\"/tornado/register\">Register</a>";
 }
 
@@ -74,6 +78,7 @@ if (isset($_SESSION['Auth']['User'])) {
     <div id="header">
         <h1><?php echo $this->Html->link(__('t[x]rnado', true), '/'); ?></h1>
     </div>
+<? if (isset($_SESSION['Auth']['User'])) { ?>
     <div id="menu">
         <ul>
             <li><?php echo $this->Html->link('Todo', '/task_lists/todo'); ?></li>
@@ -90,6 +95,7 @@ if (isset($_SESSION['Auth']['User'])) {
         <input type="text"/>
         <button>add</button>
     </div>
+<? } ?>
     <div id="content">
         <div id="flash">
             <?php echo $this->Session->flash(); ?>

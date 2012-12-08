@@ -14,22 +14,83 @@ class ContextsController extends AppController {
         $this->render('/general/json', 'ajax');
 	}
 
-	function getContextById($id){
+	function getContexts($id = null){
 		$userId = $_SESSION['Auth']['User']['id'];
-		$data["Contexts"] = $this->Context->getContextById($id, $userId);
+
+		if ($id != null) {
+			$data["Contexts"] = $this->Context->getContextById($id, $userId);
+		} else {
+			$data["Contexts"] = $this->Context->getContexts($userId);
+		}
 		
-		$data["ContextsTasks"] = $this->Context->getContextsTasksByContextId($id);
-		$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextId($id);
-
-		$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
-		$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
-
+		$contextIds = $this->accId($data["Contexts"], "Context", "id");
 		$tagIds = array();
-		$contextIds = array();
-		$data["Tags"] = array();
+		if ($id != null) {
+			$data["ContextsTasks"] = $this->Context->getContextsTasksByContextIds($contextIds);
+			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
+
+			$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
+			$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
+
+			$userIds = array();
+			$data["Users"] = array();
+		}
+
+
+		if (!empty($taskListIds)){
+			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
+
+			$data["TaskListsUsers"] = $this->Context->getTaskListsUsersByTaskListIds($taskListIds);			
+			$userIds += $this->accId($data["TaskListsUsers"], "TaskListUser", "user_id");
+			
+			$data["TagsTaskLists"] = $this->Context->getTagsTaskListsByTaskListIds($taskListIds);
+			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByTaskListIds($taskListIds);
+			
+			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
+			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+		}
+		if (!empty($taskIds)){
+		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
+
+			$data["TasksUsers"] = $this->Context->getTasksUsersByTaskIds($taskIds);
+			$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+			
+			$data["TagsTasks"] = $this->Context->getTagsTasksByTaskIds($taskIds);
+			$data["ContextsTasks"] = $this->Context->getContextsTasksByTaskIds($taskIds);
+			
+			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+		}
+		if (!empty($tagIds)){
+			$data["Tags"] = $this->Context->getTagsByTagIds($tagIds, $userId);
+		}
+		if (!empty($contextIds)){
+			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds, $userId);
+		}
+	
+		if (!empty($userIds)){
+		   	$data["Users"] = $this->Context->getUsersByUserIds($userIds);
+		}
+				
+		return $data;
+	}
+
+	function getContextById($id){
+		//$userId = $_SESSION['Auth']['User']['id'];
+		//$data["Contexts"] = $this->Context->getContextById($id, $userId);
+		
+		//$data["ContextsTasks"] = $this->Context->getContextsTasksByContextId($id);
+		//$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextId($id);
+
+		//$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
+		//$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
+
+		//$tagIds = array();
+		//$contextIds = array();
+		//$data["Tags"] = array();
 		
 		// TODO: dessa borde kunna göras generella och användas på flera ställen, t ex under tags
-		if (sizeof($taskListIds)>0){
+		/*if (!empty($taskListIds)){
 			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
 			
 			$data["TagsTaskLists"] = $this->Context->getTagsTaskListsByTaskListIds($taskListIds);
@@ -38,7 +99,7 @@ class ContextsController extends AppController {
 			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
 			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
 		}
-		if (sizeof($taskIds)>0){
+		if (!empty($taskIds)){
 		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
 			
 			$data["TagsTasks"] = $this->Context->getTagsTasksByTaskIds($taskIds);
@@ -46,37 +107,19 @@ class ContextsController extends AppController {
 			
 			$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
 			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-		}
-		if (sizeof($tagIds)>0){
+		}*/
+		/*if (!empty($tagIds)){
 			$data["Tags"] += $this->Context->getTagsByTagIds($tagIds, $userId);
 		}
-		if (sizeof($contextIds)>0){
+		if (!empty($contextIds)){
 			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds, $userId);
 		}
 		
-		return $data;
+		return $data;*/
+		return $this->getContexts($id);
 	}
 	
-	function getContexts(){
-		$userId = $_SESSION['Auth']['User']['id'];
-		$data["Contexts"] = $this->Context->getContexts($userId, $userId);
-		
-		$contextIds = $this->accId($data["Contexts"], "Context", "id");
-		$data["ContextsTasks"] = $this->Context->getContextsTasksByContextIds($contextIds);
-		$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
-
-		$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
-		$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
-
-		if (sizeof($taskListIds)>0){
-			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
-		}
-		if (sizeof($taskIds)>0){
-		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
-		}
-				
-		return $data;
-	}
+	
 	
 	function view($id){		
 		if ($this->RequestHandler->isAjax()){

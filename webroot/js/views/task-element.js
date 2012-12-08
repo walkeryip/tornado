@@ -3,10 +3,12 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 		$super(task);
 		
 		this.hasTags = true;
+		this.hasUsers = true;
 		this.hasContexts = true;
 		this.hasCheckbox = true;
 		
 		this.tags = task.tags;
+		this.users = task.users;
 		this.contexts = task.contexts;		
 	},
 	

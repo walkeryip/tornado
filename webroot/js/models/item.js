@@ -5,6 +5,7 @@ Tornado.Item.prototype = {
         this.tags = new Hash();
         this.lists = new Hash();
         this.tasks = new Hash();
+        this.users = new Hash();
 
         this.populate(data);
 	},
@@ -30,6 +31,12 @@ Tornado.Item.prototype = {
 		if (data.TaskLists !== undefined){
 			data.TaskLists.each(function(listData){
             	self.fetchList(listData.TaskList);
+            });
+		}
+
+		if (data.Users !== undefined){
+			data.Users.each(function(userData){
+            	self.fetchUser(userData.User);
             });
 		}
 
@@ -123,6 +130,17 @@ Tornado.Item.prototype = {
         this.tasks.set(task.id, task);
     },
 
+    fetchUser: function(userData) {
+        var user = Tornado.users.get(userData.id);
+
+        if (!user || user === undefined) {
+            user = new Tornado.User(userData);
+            Tornado.users.set(user.id, user);
+        }
+
+        this.users.set(user.id, user);
+    },
+
 	getLabelsString: function(data) {
 		var result = new Array();
 	
@@ -167,7 +185,8 @@ Tornado.Item.prototype = {
         return this.getObjectSubmitString("TaskList", this.lists);
     },
 
-    getModelUrlName: function() { return ""; },
+	getModelUrlName: function() { return this.getModelName() + "s"; }, 
+    getModelName: function() { return ""; },
     getSubmitData: function() { return {}; },
 
 	hasLabelId: function(map, labelId) {

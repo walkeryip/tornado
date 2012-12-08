@@ -6,6 +6,12 @@ Tornado.TaskView = Class.create(Tornado.View, {
         this.tasksContainer = this.container.find(".tasks");
 	},
 
+	populate: function($super, data) {
+		$super(data);
+
+		//this.tasksContainer.find("li").tsort();
+	},
+
 	getAjaxUrl: function() {
 		return "/tornado/tasks/all/true";
 	},

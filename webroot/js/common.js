@@ -27,6 +27,23 @@ var deleteModel = function (id, model, name){
 	jq("#message-confirm-box").modal();
 };
 
+
+var compareItem = function(a, b, field) {
+		if (field === undefined) {
+			field = "name";
+		}
+
+		var nameA=a[field].toLowerCase();
+		var nameB=b[field].toLowerCase();
+ 		if (nameA < nameB) {
+ 			return -1; 
+		} else if (nameA > nameB) {
+  			return 1;
+		} else {
+	 		return 0;
+		}
+	};
+
 var deleteTask = function (id, name) {
 	deleteModel(id, "task", name);
 };

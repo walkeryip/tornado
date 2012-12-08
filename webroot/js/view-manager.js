@@ -62,13 +62,15 @@ Tornado.ViewManager.prototype = {
 	populateModels: function(data) {
         var contextModels = this.populateContextModels(data);
         var tagModels = this.populateTagModels(data);
+        var userModels = this.populateUserModels(data);
         var taskModels = this.populateTaskModels(data);
         var listModels = this.populateListModels(data);
 
 		return {contexts: contextModels,
 				tags: tagModels,
 				tasks: taskModels,
-				lists: listModels};
+				lists: listModels,
+				users: userModels};
 	},
 
 	//loadData: function(dataURL, callback, data, post) {
@@ -211,6 +213,24 @@ Tornado.ViewManager.prototype = {
 				}
 			});
 		}
+
+		var listsUsers = data.TaskListsUsers;
+		if (listsUsers !== undefined){
+			listsUsers.each(function(listUserData) {
+				var listUser = listUserData.TaskListUser;
+
+				if (listUserData !== undefined && listUserData.TaskListUser.deleted) {
+					//self.itemDeleted(list);
+					// TODO: REMOVE RELATION
+				} else {
+					var list = Tornado.lists.get(listUser.task_list_id);
+					var user = Tornado.users.get(listUser.user_id);
+					if (list !== undefined && user !== undefined){
+						list.users.set(listUser.user_id, user); 
+					}
+				}
+			});
+		}
 		
 		return lists;
     },
@@ -277,6 +297,24 @@ Tornado.ViewManager.prototype = {
 			});
 		}
 
+		var tasksUsers = data.TasksUsers;
+		if (tasksUsers !== undefined){
+			tasksUsers.each(function(taskUserData) {
+				var taskUser = taskUserData.TaskUser;
+
+				if (taskUser !== undefined && taskUser.deleted) {
+					//self.itemDeleted(list);
+					// TODO: REMOVE RELATION
+				} else {
+					var task = Tornado.tasks.get(taskUser.task_id);
+					var user = Tornado.users.get(taskUser.user_id);
+					if (task !== undefined && user !== undefined){
+						task.users.set(taskUser.user_id, user); 
+					}
+				}
+			});
+		}
+
 		return tasks;
 	},
 
@@ -332,5 +370,32 @@ Tornado.ViewManager.prototype = {
 		}
 
 		return contexts;
+	},
+
+	populateUserModels: function(data) {
+		var users = Array();
+
+		var usersData = data.Users;
+		if (usersData !== undefined){
+			usersData.each(function(userData) {
+				var user = Tornado.users.get(userData.User.id);
+
+				if (user !== undefined && user.deleted) {
+					self.itemDeleted(user);
+					//context.deleteModel();	
+				} else {
+					if (!user) {
+						user = new Tornado.User(userData);
+						Tornado.users.set(user.id, user);
+					} else {
+						user.populate(userData);
+					}
+
+					users.push(user);			
+				}
+			});
+		}
+
+		return users;
 	}
 };

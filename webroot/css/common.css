@@ -158,17 +158,17 @@ background-color: rgba(255, 255, 0, .5);
 	width: 50%;
 }	
 
-.tags, .contexts {
+.tags, .contexts, .users {
 	display: inline;
 	font-size: 11px;
 }
 
-.tags li, .contexts li{
+.tags li, .contexts li, .users li{
 	display: inline;	
 	margin: 2px;
 }
 
-.tags a, .contexts a{	
+.tags a, .contexts a, .users a{	
 	text-decoration: none;
 }
 
@@ -178,6 +178,10 @@ background-color: rgba(255, 255, 0, .5);
 
 .contexts a{
 	color: red;
+}
+
+.users a{
+	color: green;
 }
 
 .tags a:hover, .contexts a:hover {

@@ -3,7 +3,7 @@ Tornado.Context = Class.create(Tornado.Item, {
 		$super(data);
 	},
 
-    getModelUrlName: function(){
+    getModelName: function(){
         return "contexts";
     },
 

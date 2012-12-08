@@ -80,32 +80,33 @@ class TasksController extends AppController {
 
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
 
-		if (sizeof($taskIds) > 0){
+		if (!empty($taskIds)){
 			$data["TaskListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
 			$taskListIds = $this->accId($data["TaskListsTasks"], "TaskListTask", "id");
 
-			if (sizeof($taskListIds) > 0){
+			if (!empty($taskListIds)){
 				$data["TaskLists"] = $this->Task->getTaskListsByTaskListIds($taskListIds, $userId);
 			}
-			$data["TasksUsers"] = $this->Task->getUsersTasksByTaskIds($taskIds);
 
+			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
 
 			$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-
-			if (sizeof($tagIds) > 0){
-				$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
-			}		
-	
 			$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+			$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
 
-			if (sizeof($contextIds) > 0){
+			if (!empty($tagIds)){
+				$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
+			}			
+			
+			if (!empty($contextIds)){
 				$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds, $userId);
 			}
-
-			$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
-			$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+			
+			if (!empty($userIds)) {
+				$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+			}
 
 		}
 		return $data;
@@ -121,17 +122,24 @@ class TasksController extends AppController {
 		$data["TaskLists"] = $this->Task->getTaskListsByTasksIds($taskIds);
 		$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
 		$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
-		$data["TasksUsers"] = $this->Task->getUsersTasksByTaskIds($taskIds);
+		$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
 
 		$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-		$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
-
 		$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-		$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds, $userId);
-		
 		$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
-		$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
 		
+		if (!empty($tagIds)){
+			$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
+		}
+
+		if (!empty($contextIds)){
+			$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds, $userId);
+		}
+
+		if (!empty($userIds)) {
+			$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+		}
+
 		return $data;
 	}
 			
@@ -199,7 +207,6 @@ class TasksController extends AppController {
 	function delete($id){
 		$status = false;
 
-
 		$data["Tasks"] = array();
 		$data["Tasks"][0] = array();
 		$data["Tasks"][0]["Task"] = array();
@@ -209,7 +216,6 @@ class TasksController extends AppController {
 		if ($this->Task->delete($id)){
 			$status = true;
 		} 
-
 
         $this->set('data', $data);
         $this->render('/general/json', 'ajax');

@@ -3,7 +3,7 @@ Tornado.Tag = Class.create(Tornado.Label, {
 		$super(data);
 	},
 
-    getModelUrlName: function(){
+    getModelName: function(){
         return "tags";
     },
 

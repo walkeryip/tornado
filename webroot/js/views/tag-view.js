@@ -12,6 +12,8 @@ Tornado.TagView = Class.create(Tornado.MixedView, {
 			if (item.checked == "0" && item.hasTagId(this.id)){
 				return true;
 			}
+		} else if (item instanceof Tornado.List){
+			return item.tags.get(this.id) !== undefined;
 		}
 
 		return false;

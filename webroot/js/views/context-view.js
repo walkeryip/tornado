@@ -12,6 +12,8 @@ Tornado.ContextView = Class.create(Tornado.MixedView, {
 			if (item.checked == "0" && item.hasContextId(this.id)){
 				return true;
 			}
+		} else if (item instanceof Tornado.List){
+			return item.contexts.get(this.id) !== undefined;
 		}
 
 		return false;
