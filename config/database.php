@@ -5,9 +5,9 @@ class DATABASE_CONFIG {
 		'driver' => 'mysql',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'root',
-		'password' => 'rassepasse',
-		'database' => 'todo',
+		'login' => 'admin',
+		'password' => 'admin',
+		'database' => 'tornado',
 		'encoding' => 'utf8',
 	);
 }
