@@ -24,6 +24,12 @@ Tornado.ViewManager.prototype = {
 		});
 	},
 
+	itemAttributeDeleted: function(item) {
+		this.views.each(function(view){
+			view.itemAttributeDeleted(item);
+		});
+	},
+
 	/*itemMoved: function(item) {
 		this.views.each(function(view){
 			view.itemDeleted(item);
@@ -320,15 +326,15 @@ Tornado.ViewManager.prototype = {
 
 	populateTagModels: function(data) {
 		var tags = Array();
+		var self = this;
 
 		var tagsData = data.Tags;
 		if (tagsData !== undefined){
 			tagsData.each(function(tagData) {
 				var tag = Tornado.tags.get(tagData.Tag.id);
 
-				if (tag !== undefined && tag.deleted) {
-					self.itemDeleted(tag);
-					//Tornado.tasks.unset(this.model.id);
+				if (tagData !== undefined && tagData.Tag.deleted) {
+					self.itemAttributeDeleted(tag);
 				} else {
 					if (!tag) {
 						tag = new Tornado.Tag(tagData);
@@ -347,15 +353,15 @@ Tornado.ViewManager.prototype = {
 
 	populateContextModels: function(data) {
 		var contexts = Array();
+		var self = this;
 
 		var contextsData = data.Contexts;
 		if (contextsData !== undefined){
 			contextsData.each(function(contextData) {
 				var context = Tornado.contexts.get(contextData.Context.id);
 
-				if (context !== undefined && context.deleted) {
-					self.itemDeleted(context);
-					//context.deleteModel();	
+				if (contextData !== undefined && contextData.Context.deleted) {
+					self.itemAttributeDeleted(context);
 				} else {
 					if (!context) {
 						context = new Tornado.Context(contextData);
@@ -381,7 +387,7 @@ Tornado.ViewManager.prototype = {
 				var user = Tornado.users.get(userData.User.id);
 
 				if (user !== undefined && user.deleted) {
-					self.itemDeleted(user);
+					self.itemAttributeDeleted(user);
 					//context.deleteModel();	
 				} else {
 					if (!user) {

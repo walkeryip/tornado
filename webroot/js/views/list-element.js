@@ -5,6 +5,7 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 		this.hasTags = true;
 		this.hasContexts = true;
 		this.hasUsers = true;
+		this.hasDescription = true;
 		
 		this.tags = list.tags;
 		this.contexts = list.contexts;	

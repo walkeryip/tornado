@@ -1,14 +1,15 @@
-<?php echo "test"; ?>
 <script type="text/javascript">
 
 	jq(document).ready(function () {
 		var listView = new Tornado.ListView(5, "#tasks");
-		var tagView = new Tornado.TagView(22, "#tag-tasks");
-		var tagView2 = new Tornado.TagView(41, "#tag-tasks2");
+		var tagsView = new Tornado.TagsView("#tags");
+		var contextsView = new Tornado.ContextsView("#contexts");
+		var tagView2 = new Tornado.TagView(40, "#tag-tasks2");
 		var contextView = new Tornado.ContextView(6, "#context-tasks");
 		var taskView = new Tornado.TaskView("#task-view");
 		Tornado.viewManager.addView(listView);
-		Tornado.viewManager.addView(tagView);
+		Tornado.viewManager.addView(tagsView);
+		Tornado.viewManager.addView(contextsView);
 		Tornado.viewManager.addView(tagView2);
 		Tornado.viewManager.addView(contextView);
 		Tornado.viewManager.addView(taskView);
@@ -16,7 +17,6 @@
 		var defaultContext = {};
 
 		defaultList.id = 5;
-		
 		
 		Tornado.setDefaultList(defaultList);
 	});
@@ -27,7 +27,8 @@
 	<div id="task-view"></div>
 </div>
 <div class="column">
-	<div id="tag-tasks"></div>
+	<div id="tags"></div>
+	<div id="contexts"></div>
 	<div id="tag-tasks2"></div>
 	<div id="context-tasks"></div>
 </div>

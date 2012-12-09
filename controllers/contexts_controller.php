@@ -135,12 +135,27 @@ class ContextsController extends AppController {
 	
 	function delete($id = null){
 		$status = false;
+
+		$data["Contexts"] = array();
+		$data["Contexts"][0] = array();
+		$data["Contexts"][0]["Context"] = array();
+		$data["Contexts"][0]["Context"]["id"] = $id;
+		$data["Contexts"][0]["Context"]["deleted"] = true;
+
+		if ($this->Context->delete($id)){
+			$status = true;
+		} 
+
+        $this->set('data', $data);
+        $this->render('/general/json', 'ajax');
+/*
+		$status = false;
 		if ($this->Context->delete($id)){
 			$status = true;
 		} 
 
         $this->set('data', $status);
-        $this->render('/general/json', 'ajax');
+        $this->render('/general/json', 'ajax');*/
 	}
 	
 	function edit($id = null){
@@ -149,9 +164,9 @@ class ContextsController extends AppController {
 			//print_r($this->data);
 			$this->set('data', $this->data);
 		} else {
-        	$this->set('data', "false");
+			$this->set('data', "false");
 		}
-	
+
 	   	$this->render('/general/json', 'ajax');
 	}	
 }

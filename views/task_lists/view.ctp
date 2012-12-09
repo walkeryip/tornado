@@ -1,4 +1,3 @@
-<?php echo "test"; ?>
 <script type="text/javascript">
 
 	jq(document).ready(function () {

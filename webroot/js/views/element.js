@@ -7,6 +7,7 @@ Tornado.Element.prototype = {
 		this.hasCheckbox = false;
 		this.hasTags = false;
 		this.hasUsers = false;
+		this.hasDescription = false;
 		this.hasContexts = false;
 	},
 
@@ -94,16 +95,21 @@ Tornado.Element.prototype = {
 			elementContainer.append(jq("<p></p>").append(checkbox));
 		}		
 
-		// Infobox
-		var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
-		this.element.click(function() {
-			infoBox.toggle("fast");
-		});
+	
 
 		elementContainer.append(jq("<p></p>").append(body));
 		elementContainer.append(actions);
 		elementContainer.append(actionsBox);
-		elementContainer.append(infoBox);
+
+		// Infobox
+		if (self.hasDescription) {
+			var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
+			this.element.click(function() {
+				infoBox.toggle("fast");
+			});
+			elementContainer.append(infoBox);
+		}
+
 		elementContainer.draggable(
 			{revert: "invalid",
 			 distance: 5,

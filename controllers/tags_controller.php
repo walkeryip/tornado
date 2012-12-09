@@ -94,12 +94,27 @@ class TagsController extends AppController {
 	}
 	
 	function delete($id = null){
-		$status = false;
+		/*$status = false;
 		if ($this->Tag->delete($id)){
 			$status = true;
 		} 
 
         $this->set('data', $status);
+        $this->render('/general/json', 'ajax');*/
+
+		$status = false;
+
+		$data["Tags"] = array();
+		$data["Tags"][0] = array();
+		$data["Tags"][0]["Tag"] = array();
+		$data["Tags"][0]["Tag"]["id"] = $id;
+		$data["Tags"][0]["Tag"]["deleted"] = true;
+
+		if ($this->Tag->delete($id)){
+			$status = true;
+		} 
+
+        $this->set('data', $data);
         $this->render('/general/json', 'ajax');
 	}
 	

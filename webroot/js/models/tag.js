@@ -1,10 +1,10 @@
-Tornado.Tag = Class.create(Tornado.Label, {
+Tornado.Tag = Class.create(Tornado.Item, {
 	initialize: function($super, data) {
 		$super(data);
 	},
 
     getModelName: function(){
-        return "tags";
+        return "tag";
     },
 
 	populate: function($super, data) {
@@ -19,18 +19,6 @@ Tornado.Tag = Class.create(Tornado.Label, {
 			this.name = data.name;
 		}
 	},
-	
-	remove: function(callback) {
-        jq.ajax({
-            cache: false,
-            dataType: 'json',
-            url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id
-        }).done(function (data) {
-                if (data){
-                    callback();
-                }
-            });
-    },
 
 	getClass: function() {
 		return Tornado.Tag;
