@@ -59,12 +59,20 @@ class Task extends AppModel {
 		return $this->createLabels($this->Context, $contexts, $userId);
 	}
 
+	public function addUsers($users, $user){
+		return $this->getUsers($users, $user);
+	}
+
 	public function getTagsString(){
 		return $this->getLabels($this->Tag);
 	}
 
 	public function getContextsString(){
 		return $this->getLabels($this->Context);
+	}
+
+	public function getUsersString(){
+		return $this->getLabels($this->User);
 	}
 	
 	
@@ -79,4 +87,3 @@ class Task extends AppModel {
 }
 
 ?>
-

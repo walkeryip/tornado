@@ -127,19 +127,21 @@ jq(document).ready(function () {
 
 		var tagKeywordObject = extractKeywords(text, "#");
 		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
+		var userKeywordObject = extractKeywords(contextKeywordObject.text, "~");
 
 		if (inputMode === "task"){		
 		    data.Task = {}
-		    data.Task.name = contextKeywordObject.text;
+		    data.Task.name = userKeywordObject.text;
 		} else if (inputMode === "list"){
 			data.TaskList = {};
-			data.TaskList.name = contextKeywordObject.text;
+			data.TaskList.name = userKeywordObject.text;
 			data.TaskList.parent_id = Tornado.getDefaultListId();
 		}
 
 	    data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
 	    data.TaskLists = modelify(Tornado.getDefaultList(), "TaskList");
 	    data.Tags = modelify(tagKeywordObject.keywords, "Tag");
+	    data.Users = modelify(userKeywordObject.keywords, "User");
 
         Tornado.viewManager.addItem(data);
 

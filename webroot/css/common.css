@@ -62,7 +62,8 @@ li p {
 }
 
 .edit label {
-
+	display: inline-block;
+	width: 20%;
 }
 
 .edit p {
@@ -70,7 +71,7 @@ li p {
 }
 
 .edit input, .edit textarea {
-
+	width: 70%;
 }
 
 .infobox {

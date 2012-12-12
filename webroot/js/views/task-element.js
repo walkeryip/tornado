@@ -7,6 +7,7 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 		this.hasContexts = true;
 		this.hasCheckbox = true;
 		this.hasDescription = true;
+		this.hasUsers = true;
 		
 		this.tags = task.tags;
 		this.users = task.users;

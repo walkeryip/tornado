@@ -52,6 +52,35 @@ class AppModel extends Model {
 		return $result;
 	}
 
+	function getUsers($data, $userId){
+		$userNames = explode(',', $data);
+		$result = array();
+		$usersList = "";
+
+		$index = 0;
+		foreach ($userNames as $userName) {
+			if ($index != 0){
+				$usersList .= ",";
+			}
+
+			$usersList .= '"' . strtolower(trim($userName)) . '"';
+
+			$index++;
+		}
+
+
+		$users = $this->query("select User.id from users as User where User.username in (" . $usersList . ")");
+
+		foreach ($users as $user) {
+			array_push($result, $user['User']['id']);
+		}
+
+		if ($user) {
+			array_push($result, $userId);
+		}
+
+		return $result;
+	}
 
 	function createLabels($model, $data, $userId){
 		$labels = explode(',', $data);

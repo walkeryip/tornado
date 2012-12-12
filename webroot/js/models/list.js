@@ -25,10 +25,12 @@ Tornado.List = Class.create(Tornado.Item, {
 
         if (compactMode){
             Object.extend(data, {"data[TaskList][tags]": this.tagsString,
-                                 "data[TaskList][contexts]": this.contextsString});
+                                 "data[TaskList][contexts]": this.contextsString,
+                                 "data[TaskList][users]": this.usersString});
 		} else {
             Object.extend(data, {"data[TaskList][tags]": this.getTagsString(),
-                                 "data[TaskList][contexts]": this.getContextsString()});
+                                 "data[TaskList][contexts]": this.getContextsString(),
+                                 "data[TaskList][users]": this.getUsersString()});
 		}
 
 		if (this.parent_id !== null) {

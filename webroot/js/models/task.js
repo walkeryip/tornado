@@ -37,10 +37,12 @@ Tornado.Task = Class.create(Tornado.Item, {
 
         if (compactMode){
             Object.extend(data, {"data[Task][tags]": this.tagsString,
-                                 "data[Task][contexts]": this.contextsString});
+                                 "data[Task][contexts]": this.contextsString,
+                                 "data[Task][users]": this.usersString});
 		} else {
             Object.extend(data, {"data[Task][tags]": this.getTagsString(),
-                                 "data[Task][contexts]": this.getContextsString()});
+                                 "data[Task][contexts]": this.getContextsString(),
+                                 "data[Task][users]": this.getUsersString()});
 		}
         
         Object.extend(data, this.getListsSubmitString());

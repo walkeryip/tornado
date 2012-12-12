@@ -10,15 +10,15 @@ Tornado.User = Class.create(Tornado.Item, {
 	populate: function($super, data) {
         $super(data);
 
-		var user;
-		if (data.User !== undefined){
-			user = data.User;
-		} else if (data.Users[0].User !== undefined) {
-			user = data.Users[0].User;
+		var user = data.User;
+
+		if (user) {
+			this.id = user.id;
+			this.name = user.name;
+		} else {
+			this.name = data.name;
 		}
 
-		this.name = user.name;
-		this.id = user.id;
 	},
 
 	getSubmitData: function(compactMode) {

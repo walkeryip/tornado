@@ -9,6 +9,7 @@ Tornado.Element.prototype = {
 		this.hasUsers = false;
 		this.hasDescription = false;
 		this.hasContexts = false;
+		this.hasUsers = false;
 	},
 
 	remove: function() {
@@ -95,14 +96,12 @@ Tornado.Element.prototype = {
 			elementContainer.append(jq("<p></p>").append(checkbox));
 		}		
 
-	
-
 		elementContainer.append(jq("<p></p>").append(body));
 		elementContainer.append(actions);
 		elementContainer.append(actionsBox);
 
 		// Infobox
-		if (self.hasDescription) {
+		if (self.hasDescription && this.model.description) {
 			var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
 			this.element.click(function() {
 				infoBox.toggle("fast");
@@ -166,17 +165,14 @@ Tornado.Element.prototype = {
 		var saveButton = jq("<button>Save</button>");
 			saveButton.click(function() {
 				submit();
+				return false;
 			});
 
 		var cancelButton = jq("<button>Cancel</button>");
 			cancelButton.click(function() {
 				self.display(container);
+				return false;
 			});
-		
-		if (self.hasCheckbox){
-			var checkbox = jq("<input type=\"checkbox\" />");
-			elementContainer.append(jq("<p></p>").append(checkbox));
-		}
 		
 		elementContainer.append(jq("<p><label>Name:</label></p>").append(input.name)); 
 		
@@ -190,6 +186,12 @@ Tornado.Element.prototype = {
 			var contextsArray = Tornado.Label.arrayToLabelString(self.model.contexts);
 			input.contexts = jq("<input type=\"text\" value=\"" + contextsArray + "\" name=\"contexts\" />");
 			elementContainer.append(jq("<p><label>Contexts:</label></p>").append(input.contexts)); 
+		}
+		
+		if (self.hasUsers){
+			var usersArray = Tornado.Label.arrayToLabelString(self.model.users);
+			input.users = jq("<input type=\"text\" value=\"" + usersArray + "\" name=\"users\" />");
+			elementContainer.append(jq("<p><label>Users:</label></p>").append(input.users)); 
 		}
 		
 		input.description = jq("<textarea name=\"description\">" + this.model.description + "</textarea>");
@@ -217,6 +219,10 @@ Tornado.Element.prototype = {
 			
 			if (self.hasContexts){
 				self.model.contextsString = jq(input.contexts).val();
+			}
+			
+			if (self.hasUsers){
+				self.model.usersString = jq(input.users).val();
 			}
 
 			self.model.save(function(data) {

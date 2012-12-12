@@ -135,10 +135,10 @@ Tornado.Item.prototype = {
 
         if (!user || user === undefined) {
             user = new Tornado.User(userData);
-            Tornado.users.set(user.id, user);
+            Tornado.users.set(user.name, user);
         }
 
-        this.users.set(user.id, user);
+        this.users.set(user.name, user);
     },
 
 	getLabelsString: function(data) {
@@ -157,6 +157,10 @@ Tornado.Item.prototype = {
 
 	getTagsString: function() {
 		return this.getLabelsString(this.tags);
+	},
+
+	getUsersString: function() {
+		return this.getLabelsString(this.users);
 	},
 
     getObjectSubmitString: function(name, data){

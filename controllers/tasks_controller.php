@@ -17,6 +17,9 @@ class TasksController extends AppController {
 		$userId = $_SESSION['Auth']['User']['id'];
 
 		if (!empty($this->data)){
+			$this->data["User"] = array();
+			$this->data["User"]["User"] = $userId;
+
 			if (isset($this->data["Task"]["tags"])){
 				$test = $this->Task->addTags($this->data["Task"]['tags'], $userId);
 				//print_r($test);
@@ -29,11 +32,16 @@ class TasksController extends AppController {
 				//print_r($test);
 				$this->data["Context"] = array();
 				$this->data["Context"]["Context"] = $test;
+			} 
+
+			if (isset($this->data["Task"]["users"])){
+				$test = $this->Task->addUsers($this->data["Task"]['users'], $userId);
+				//print_r($test);
+				$this->data["User"] = array();
+				$this->data["User"]["User"] = $test;
 			}
 		
 
-			$this->data["User"] = array();
-			$this->data["User"]["User"] = $userId;
 
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
@@ -60,6 +68,10 @@ class TasksController extends AppController {
 		
 		if (isset($this->data["Task"]["contexts"])){
 			$this->data["Context"] = $this->Task->addContexts($this->data['Task']['contexts'], $userId);
+		}
+		
+		if (isset($this->data["Task"]["contexts"])){
+			$this->data["User"] = $this->Task->addUsers($this->data['Task']['users'], $userId);
 		}
 					
 		if ($this->Task->save($this->data)){
