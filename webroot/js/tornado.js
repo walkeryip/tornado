@@ -24,6 +24,11 @@ Tornado = {
 		Tornado.defaultModel.context.name = context.name;
 	},
 
+	setDefaultUser: function(user){
+		Tornado.defaultModel.user = {};
+		Tornado.defaultModel.user.id = user.id;
+	},
+
 	setDefaultList: function(list){
 		Tornado.defaultModel.list = {};
 		Tornado.defaultModel.list.id = list.id;
@@ -40,11 +45,17 @@ Tornado = {
 		}
 	},
 
+	getDefaultUser: function() {
+		if (Tornado.defaultModel.user){
+			return Tornado.defaultModel.user;
+		} else {
+			return null;
+		}
+	},
+
     getDefaultContext: function() {
         if (Tornado.defaultModel.context){
-            var result = new Array();
-            result.push(Tornado.defaultModel.context);
-            return result;
+            return Tornado.defaultModel.context;
         } else {
             return null;
         }

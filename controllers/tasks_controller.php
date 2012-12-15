@@ -7,8 +7,9 @@ class TasksController extends AppController {
     var $components = array('RequestHandler'); 
 
 	function view($id){
+			$userId = $_SESSION['Auth']['User']['id'];
 			$this->data = $this->Task->getTaskById($id);
-
+			$this->set("user_id", $userId);
         	$this->set('data', $this->data);
         	$this->render('/general/json', 'ajax');
 	}
@@ -156,7 +157,9 @@ class TasksController extends AppController {
 	}
 			
 	function all($checked = false){
+		$userId = $_SESSION['Auth']['User']['id'];
         $this->set('data', $this->getTasks($checked));
+		$this->set("user_id", $userId);
         $this->render('/general/json', 'ajax');
 	}
 
@@ -225,7 +228,8 @@ class TasksController extends AppController {
 		$data["Tasks"][0]["Task"]["id"] = $id;
 		$data["Tasks"][0]["Task"]["deleted"] = true;
 
-		if ($this->Task->delete($id)){
+		$this->Task->set("deleted",true);
+		if ($this->Task->save()){
 			$status = true;
 		} 
 

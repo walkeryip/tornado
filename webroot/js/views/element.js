@@ -31,8 +31,11 @@ Tornado.Element.prototype = {
 		
 		if (self.hasTags){
 			var tagsString = "";
+			var defaultTag = Tornado.getDefaultTag();
 			self.tags.each(function(tag){
-				tagsString += "<li data-model-type=\"tag\" data-model-id=\"" + tag.value.id + "\"><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+				if (defaultTag === null || tag.value.id != defaultTag.id) {
+					tagsString += "<li data-model-type=\"tag\" data-model-id=\"" + tag.value.id + "\"><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+				}
 			});
 			
 			body += "<ul class=\"tags\">" + tagsString + "</ul>"; 
@@ -40,8 +43,11 @@ Tornado.Element.prototype = {
 		
 		if (self.hasContexts){
 			var contextsString = "";
+			var defaultContext = Tornado.getDefaultContext();
 			self.contexts.each(function(context){
-				contextsString += "<li data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+				if (defaultContext === null || context.value.id != defaultContext.id) {
+					contextsString += "<li data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+				}
 			});
 			
 			body += "<ul class=\"contexts\">" + contextsString + "</ul>";
@@ -49,8 +55,11 @@ Tornado.Element.prototype = {
 
 		if (self.hasUsers){
 			var usersString = "";
+			var defaultUser = Tornado.getDefaultUser();
 			self.users.each(function(user){
-				usersString += "<li data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></li>";	
+				if (defaultUser === null || user.value.id != defaultUser.id) {
+					usersString += "<li data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></li>";	
+				}
 			});
 			
 			body += "<ul class=\"users\">" + usersString + "</ul>";

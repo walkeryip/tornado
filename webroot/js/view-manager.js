@@ -148,7 +148,7 @@ Tornado.ViewManager.prototype = {
 		    listsData.each(function(listData) {
 		        var list = Tornado.lists.get(listData.TaskList.id);
 
-				if (listData !== undefined && listData.TaskList.deleted) {
+				if (listData !== undefined && listData.TaskList.deleted == true) {
 					self.itemDeleted(list);
 				} else {
 				    if (!list) {
@@ -168,7 +168,7 @@ Tornado.ViewManager.prototype = {
 			contextsLists.each(function(contextListData) {
 				var contextList = contextListData.ContextTaskList;
 			
-				if (contextListData !== undefined && contextListData.ContextTaskList.deleted) {
+				if (contextListData !== undefined && contextListData.ContextTaskList.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -186,7 +186,7 @@ Tornado.ViewManager.prototype = {
 			tagsLists.each(function(tagListData) {
 				var tagList = tagListData.TagTaskList;
 
-				if (tagListData !== undefined && tagListData.TagTaskList.deleted) {
+				if (tagListData !== undefined && tagListData.TagTaskList.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -204,7 +204,7 @@ Tornado.ViewManager.prototype = {
 			listsTasks.each(function(taskListData) {
 				var listTask = taskListData.TaskListTask;
 
-				if (taskListData !== undefined && taskListData.TaskListTask.deleted) {
+				if (taskListData !== undefined && taskListData.TaskListTask.deleted == true) {
 					var list = Tornado.lists.get(listTask.task_list_id);
 					var task = Tornado.tasks.get(listTask.task_id);
 					list.tasks.unset(task.id);
@@ -225,7 +225,7 @@ Tornado.ViewManager.prototype = {
 			listsUsers.each(function(listUserData) {
 				var listUser = listUserData.TaskListUser;
 
-				if (listUserData !== undefined && listUserData.TaskListUser.deleted) {
+				if (listUserData !== undefined && listUserData.TaskListUser.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -250,7 +250,7 @@ Tornado.ViewManager.prototype = {
 			tasksData.each(function(taskData) {
 				var task = Tornado.tasks.get(taskData.Task.id);
 
-				if (task !== undefined && taskData.Task.deleted) {
+				if (task !== undefined && taskData.Task.deleted == true) {
 					self.itemDeleted(task);
 					Tornado.tasks.unset(task.id);
 				} else {
@@ -272,7 +272,7 @@ Tornado.ViewManager.prototype = {
 			contextsTasks.each(function(contextTaskData) {
 				var contextTask = contextTaskData.ContextTask;
 
-				if (contextTask !== undefined && contextTask.deleted) {
+				if (contextTask !== undefined && contextTask.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -290,7 +290,7 @@ Tornado.ViewManager.prototype = {
 			tagsTasks.each(function(tagTaskData) {
 				var tagTask = tagTaskData.TagTask;
 
-				if (tagTask !== undefined && tagTask.deleted) {
+				if (tagTask !== undefined && tagTask.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -308,7 +308,7 @@ Tornado.ViewManager.prototype = {
 			tasksUsers.each(function(taskUserData) {
 				var taskUser = taskUserData.TaskUser;
 
-				if (taskUser !== undefined && taskUser.deleted) {
+				if (taskUser !== undefined && taskUser.deleted == true) {
 					//self.itemDeleted(list);
 					// TODO: REMOVE RELATION
 				} else {
@@ -333,7 +333,7 @@ Tornado.ViewManager.prototype = {
 			tagsData.each(function(tagData) {
 				var tag = Tornado.tags.get(tagData.Tag.id);
 
-				if (tagData !== undefined && tagData.Tag.deleted) {
+				if (tagData !== undefined && tagData.Tag.deleted == true) {
 					self.itemAttributeDeleted(tag);
 				} else {
 					if (!tag) {
@@ -360,7 +360,7 @@ Tornado.ViewManager.prototype = {
 			contextsData.each(function(contextData) {
 				var context = Tornado.contexts.get(contextData.Context.id);
 
-				if (contextData !== undefined && contextData.Context.deleted) {
+				if (contextData !== undefined && contextData.Context.deleted == true) {
 					self.itemAttributeDeleted(context);
 				} else {
 					if (!context) {
@@ -386,7 +386,7 @@ Tornado.ViewManager.prototype = {
 			usersData.each(function(userData) {
 				var user = Tornado.users.get(userData.User.id);
 
-				if (user !== undefined && user.deleted) {
+				if (user !== undefined && user.deleted == true) {
 					self.itemAttributeDeleted(user);
 					//context.deleteModel();	
 				} else {

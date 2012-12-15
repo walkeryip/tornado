@@ -7,10 +7,14 @@ class TagsController extends AppController {
 
 	function index($id = null){
 		
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->set("user_id", $userId);
 	}
 	
 	function all(){
+		$userId = $_SESSION['Auth']['User']['id'];
 		$this->set("data", $this->getTags());
+		$this->set('user_id', $userId);
         $this->render('/general/json', 'ajax');
 	}
 
@@ -81,7 +85,10 @@ class TagsController extends AppController {
 		return $this->getTags($id);
 	}
 
-	function view($id){		
+	function view($id){	
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->set('user_id', $userId);
+	
 		if ($this->RequestHandler->isAjax()){
 			$this->set("data", $this->getTagById($id));
         	$this->render('/general/json', 'ajax');
@@ -110,7 +117,8 @@ class TagsController extends AppController {
 		$data["Tags"][0]["Tag"]["id"] = $id;
 		$data["Tags"][0]["Tag"]["deleted"] = true;
 
-		if ($this->Tag->delete($id)){
+		$this->Tag->set("deleted",true);
+		if ($this->Tag->save()){
 			$status = true;
 		} 
 

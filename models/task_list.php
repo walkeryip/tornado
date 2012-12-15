@@ -52,6 +52,10 @@ class TaskList extends AppModel {
 	public function getContextsString(){
 		return $this->getLabels($this->Context);
 	}
+
+	public function addUsers($users, $user){
+		return $this->getUsers($users, $user);
+	}
 	
 }
 

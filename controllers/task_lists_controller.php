@@ -6,6 +6,8 @@ class TaskListsController extends AppController {
     var $components = array('RequestHandler'); 
 	
 	function index($id = null){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->set("user_id", $userId);
 	}
 	
 	function todo(){
@@ -115,6 +117,8 @@ class TaskListsController extends AppController {
 	}
 
 	function view($id = null){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->set('user_id', $userId);
 		if ($this->RequestHandler->isAjax()){
 	        $this->set('data', $this->getTaskListById($id));
 	        $this->render('/general/json', 'ajax');
@@ -186,7 +190,8 @@ class TaskListsController extends AppController {
 		$data["TaskLists"][0]["TaskList"]["id"] = $id;
 		$data["TaskLists"][0]["TaskList"]["deleted"] = true;
 
-		if ($this->TaskList->delete($id)){
+		$this->TaskList->set("deleted",true);
+		if ($this->TaskList->save()){
 			$status = true;
 		} 
 
@@ -218,7 +223,9 @@ class TaskListsController extends AppController {
 	}
 	
 	function all(){
+		$userId = $_SESSION['Auth']['User']['id'];
 		$this->set("data", $this->getTaskLists());
+		$this->set('user_id', $userId);
         $this->render('/general/json', 'ajax');
 	}
 }

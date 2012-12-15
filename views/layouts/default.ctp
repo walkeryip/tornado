@@ -81,13 +81,13 @@ if (isset($_SESSION['Auth']['User'])) {
 <? if (isset($_SESSION['Auth']['User'])) { ?>
     <div id="menu">
         <ul>
-            <li><?php echo $this->Html->link('Todo', '/task_lists/todo'); ?></li>
             <li><?php echo $this->Html->link('Lists', '/task_lists/'); ?></li>
             <li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
             <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
             <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
-            <li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
-            <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>
+            <li><?php echo $this->Html->link('Shared', '/shared/'); ?></li>
+            <!--<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
+            <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>-->
         </ul>
     </div>
     <div id="inputbar">

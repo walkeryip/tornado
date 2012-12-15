@@ -129,6 +129,26 @@ jq(document).ready(function () {
 		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
 		var userKeywordObject = extractKeywords(contextKeywordObject.text, "~");
 
+		var listObj = Tornado.getDefaultList();
+		var list = Tornado.lists.get(listObj[0].id);
+
+		if (list) {
+			list.tags.each(function(item) {
+				tagKeywordObject.keywords.push(item.value);
+			});
+			list.contexts.each(function(item) {
+				contextKeywordObject.keywords.push(item.value);
+			});
+			list.users.each(function(item) {
+				userKeywordObject.keywords.push(item.value);
+			});
+		}
+
+		/*var defaultUser = Tornado.getDefaultTag();
+		if (defaultUser) {
+			tagKeywordObject.push(defaultTag.name);
+		}*/
+
 		if (inputMode === "task"){		
 		    data.Task = {}
 		    data.Task.name = userKeywordObject.text;
@@ -165,93 +185,6 @@ var printTree = function(trees, treeChildren, node, object) {
 	}
 	return list;
 }
-
-/*var getNavigationTree2 = function(data, listId) {
-	var trees = {};
-	var treeParents = {};
-
-	data.each(function(obj) {
-		var item = obj["TaskList"];
-		var parent_id = item.parent_id == null ? "root" : item.parent_id;
-		var parents = treeParents[item.id];
- 
-		trees[item.id] = item;
-
-		if (parents == undefined) {
-			parents = {};
-		}
-
-		parents[parent_id] = item;
-		treeParents[item.id] = parents;
-	});
-
-	var result = new Array();
-
-	var currentId = listId;
-	while (currentId !== null && currentId !== undefined && currentId !== "root") {
-		var item = trees[currentId];
-
-		if (item === undefined) {
-			break;
-		}
-
-		result.push({id: item.id, name: item.name});
-		currentId = item.parent_id;
-	}
-
-	return result.reverse();
-};*/
-
-/*var displayNavigationTree = function(data) {
-	var trees = {}
-	var treeChildren = {};
-
-	data.each(function(obj) {
-		var item = obj["TaskList"];
-		var parent_id = item.parent_id == null ? "root" : item.parent_id;
-		var children = treeChildren[parent_id];
- 
-		trees[item.id] = item;
-
-		if (children == undefined) {
-			children = {};
-		}
-
-		children[item.id] = item;
-		treeChildren[parent_id] = children;
-	});
-
-	jq("body").append(printTree(trees, treeChildren, treeChildren.root));
-
-	var test = getNavigationTree2(data, 65);
-
-	test.each(function(item) {
-		jq("body").append("<p>" + item.name + "</p>");
-	});
-};*/
-
-/*var displayBreadCrumbs = function(data) {
-	
-};*/
-
-/*var getNavigationTree = function () {
-	var self = this;
-	
-	jq.ajax({			
-        type: "get",
-	  	cache: false,
-		dataType: "json",
-		error: function(data){
-			Tornado.error(data);
-		}, 
-	  	url: "/tornado/task_lists/tree"
-	}).done(function (data) {
-		if (data){
-			displayNavigationTree(data);
-		} 
-	});
-
-};*/
 
 var extractKeywords = function (text, keywordCharacter) {
 	var result = {};
