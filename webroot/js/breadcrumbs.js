@@ -44,7 +44,16 @@ Tornado.Breadcrumbs.prototype = {
 		div.append("<li><a href=\"/tornado/task_lists/\">Home</a><p>&gt;</p></li>");
 		list.each(function(item) {
 			if (index++ < length - 1) {
-				div.append("<li><a href=\"/tornado/task_lists/view/" + item.id + "\">" + item.name + "</a><p>&gt;</p></li>");
+				var element = jq("<li><a href=\"/tornado/task_lists/view/" + item.id + "\">" + item.name + "</a><p>&gt;</p></li>");
+				element.attr("data-id", item.id);
+				element.droppable({
+					activeClass: "ui-state-hover",
+					hoverClass: "ui-state-active",
+					greedy: true,
+					tolerance: 'pointer',
+					drop: Tornado.listDropFunction
+				});
+				div.append(element);
 			} else {
 				div.append("<li>" + item.name + "</li>");
 			}

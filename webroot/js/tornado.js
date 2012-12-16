@@ -77,7 +77,24 @@ Tornado = {
 
 	error: function(data) {
 		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
-	}
+	},
+
+	listDropFunction: function(event, ui) {
+		//event.revert = false;
+		var item = ui.draggable[0].model;
+		var destId = jq(this).attr("data-id");
+		if (item.id !== destId) {
+			item.move(destId, 
+				function (data) {
+					Tornado.viewManager.dataUpdated(data);
+				},
+				function () {
+					ui.draggable.draggable('option','revert',true);
+				});    		
+		} else {
+			ui.draggable.draggable('option','revert',true);
+		}
+    }
 };
 
 (function() { 

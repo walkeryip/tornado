@@ -20,23 +20,8 @@ Tornado.ListElement = Class.create(Tornado.Element, {
         	activeClass: "ui-state-hover",
         	hoverClass: "ui-state-active",
             greedy: true,
-    		tolerance: 'touch',
-            drop: function(event, ui) {
-				//event.revert = false;
-				var item = ui.draggable[0].model;
-				var destId = jq(this).attr("data-id");
-				if (item.id !== destId) {
-					item.move(destId, 
-						function (data) {
-							Tornado.viewManager.dataUpdated(data);
-						},
-						function () {
-        					ui.draggable.draggable('option','revert',true);
-						});    		
-				} else {
-        			ui.draggable.draggable('option','revert',true);
-				}
-            }
+			tolerance: 'pointer',
+            drop: Tornado.listDropFunction
         });
 
 		$super(container);
