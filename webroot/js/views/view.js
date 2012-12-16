@@ -1,14 +1,21 @@
 // Abstract class
 Tornado.View = Class.create();
 Tornado.View.prototype = {
-	initialize: function (id, containerId) {
+	initialize: function (id, containerId, parameters) {
 		this.id = id;
+
+		this.parameters = parameters;
+		if (this.parameters === undefined) {
+			this.parameters = {};
+		}
 
 		this.taskElements = new Hash();
 		this.tagElements = new Hash();
         this.contextElements = new Hash();
         this.listElements = new Hash();
         this.userElements = new Hash();
+
+		this.loaded = false;
 
 		this.container = jq(containerId);
 		this.container.hide();

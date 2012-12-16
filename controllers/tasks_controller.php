@@ -7,11 +7,16 @@ class TasksController extends AppController {
     var $components = array('RequestHandler'); 
 
 	function view($id){
-			$userId = $_SESSION['Auth']['User']['id'];
-			$this->data = $this->Task->getTaskById($id);
-			$this->set("user_id", $userId);
-        	$this->set('data', $this->data);
-        	$this->render('/general/json', 'ajax');
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->data = $this->Task->getTaskById($id);
+		$this->set("user_id", $userId);
+    	$this->set('data', $this->data);
+    	$this->render('/general/json', 'ajax');
+	}
+
+	function index($id = null){
+		$userId = $_SESSION['Auth']['User']['id'];
+		$this->set("user_id", $userId);
 	}
 
 	function add($id = null){
@@ -126,21 +131,24 @@ class TasksController extends AppController {
 	}
 	
 	/* TODO: ADD PARENT */
-	function getTasks($checked){
+	function getTasks($checked = "false", $shared = false){
 		$userId = $_SESSION['Auth']['User']['id'];
 		$data = array();
-		$data["Tasks"] = $this->Task->getTasks($userId, $checked);
+		$data["Tasks"] = $this->Task->getTasks($userId, $checked, $shared);
 		
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
-		$data["TaskLists"] = $this->Task->getTaskListsByTasksIds($taskIds);
-		$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
-		$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
-		$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
 
-		$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-		$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-		$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
-		
+		if (!empty($taskIds)) {
+			$data["TaskLists"] = $this->Task->getTaskListsByTasksIds($taskIds);
+			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
+			$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
+			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
+
+			$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+			$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+			$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+		}		
+
 		if (!empty($tagIds)){
 			$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
 		}
@@ -156,10 +164,16 @@ class TasksController extends AppController {
 		return $data;
 	}
 			
-	function all($checked = false){
+	function all($checked = "false"){
 		$userId = $_SESSION['Auth']['User']['id'];
         $this->set('data', $this->getTasks($checked));
 		$this->set("user_id", $userId);
+        $this->render('/general/json', 'ajax');
+	}
+
+	function shared() {
+		$userId = $_SESSION['Auth']['User']['id'];
+        $this->set('data', $this->getTasks(false, true));
         $this->render('/general/json', 'ajax');
 	}
 

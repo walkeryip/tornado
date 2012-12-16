@@ -1,4 +1,3 @@
-<h2>Tags</h2>
 <script type="text/javascript">
 
 	jq(document).ready(function () {

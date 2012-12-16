@@ -14,5 +14,4 @@
 	});
 </script>
 
-<h3>Tasks</h3>
 <div id="context-tasks"></div>

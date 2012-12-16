@@ -1,4 +1,3 @@
-<h2>Lists</h2>
 <script type="text/javascript">
 
 	jq(document).ready(function () {

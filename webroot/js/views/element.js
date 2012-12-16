@@ -92,7 +92,7 @@ Tornado.Element.prototype = {
 		
 		if (self.hasCheckbox){
 			var checkboxString = "<input type=\"checkbox\" ";
-			if(this.model.checked === "1"){
+			if(this.model.checked){
 				checkboxString += "checked=\"yes\"";
 			}
 			checkboxString += " />";

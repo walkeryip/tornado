@@ -1,30 +1,39 @@
 Tornado.TaskView = Class.create(Tornado.View, {
-	initialize: function($super, containerId){
-		$super(containerId, containerId);
-
+	initialize: function($super, containerId, parameters){
+		$super(containerId, containerId, parameters);
+		this.defaultParameters(this.parameters);
         this.container.append("<ul class=\"tasks\"></ul>");
         this.tasksContainer = this.container.find(".tasks");
 	},
 
+	defaultParameters: function(parameters) {
+		parameters.checked = parameters.checked || false; 
+		parameters.shared = parameters.shared || false; 
+		parameters.title = parameters.title || "Tasks";
+	},
+
 	populate: function($super, data) {
 		$super(data);
-
-		//this.tasksContainer.find("li").tsort();
 	},
 
 	getAjaxUrl: function() {
-		return "/tornado/tasks/all/true";
+		var mode = this.parameters.shared ? "shared" : "all";
+		if (this.parameters.checked === false) {
+			return "/tornado/tasks/" + mode + "/false";
+		} else {
+			return "/tornado/tasks/" + mode + "/true";
+		}
 	},
 
     addItem: function(element) {
         if (element.model && this.includeItem){
-            element.display(this.tasksContainer);
+            element.display(this.tasksContainer, this.loaded);
         }
     },
 
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
-			if (item.checked == "1"){
+			if (item.checked == this.parameters.checked){
 				return true;
 			}
 		}
@@ -33,8 +42,7 @@ Tornado.TaskView = Class.create(Tornado.View, {
 	},
 
 	getTitle: function() {
-		var tag = this.model;
-		return "Done tasks";
+		return this.parameters.title;
 	},
 
 	updateItem: function(item) {

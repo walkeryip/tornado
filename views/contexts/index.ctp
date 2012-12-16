@@ -1,4 +1,3 @@
-<h2>Contexts</h2>
 <script type="text/javascript">
 
 	jq(document).ready(function () {

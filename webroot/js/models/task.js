@@ -17,7 +17,7 @@ Tornado.Task = Class.create(Tornado.Item, {
 			task = data.Tasks[0].Task;
 		}
 
-		this.checked = task.checked;
+		this.checked = task.checked === "1";
 		this.created = task.created;
 		this.deadline = task.deadline;
 		this.description = task.description;
