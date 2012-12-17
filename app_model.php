@@ -275,7 +275,7 @@ class AppModel extends Model {
 
 	public function getTaskListAndParentByTaskListId($id, $userId) {
 		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false and TaskList.id = " . $id . " or TaskList.parent_id = " . $id . " group by TaskList.id");
+					  	    "and task_lists_users.user_id = " . $userId . " and (TaskList.id = " . $id . " or TaskList.parent_id = " . $id . ") and TaskList.deleted = false group by TaskList.id");
 	}
 
 	public function getTaskLists($userId) {
