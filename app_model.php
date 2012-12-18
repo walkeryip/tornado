@@ -283,7 +283,6 @@ class AppModel extends Model {
 	
 		$query .= " group by TaskList.id";
 		return $this->query($query);
-
 	}
 
 	public function getTaskLists($userId) {
