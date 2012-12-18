@@ -51,11 +51,11 @@ class TaskListsController extends AppController {
 		}
 	}
 
-	function getTaskLists($id = null){
+	function getTaskLists($id = null, $shared = false){
 		$userId = $_SESSION['Auth']['User']['id'];
 
 		if ($id != null) {
-			$data["TaskLists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId);
+		  $data["TaskLists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId, $shared);
 		} else {
 			$data["TaskLists"] = $this->TaskList->getRootTaskLists($userId);
 		}
@@ -227,6 +227,13 @@ class TaskListsController extends AppController {
 		$this->set("data", $this->getTaskLists());
 		$this->set('user_id', $userId);
         $this->render('/general/json', 'ajax');
+	}
+
+	function shared(){
+		$userId = $_SESSION['Auth']['User']['id'];
+	  	$this->set("data", $this->getTaskLists(null, true));
+		$this->set('user_id', $userId);
+		$this->render('/general/json', 'ajax');
 	}
 }
 

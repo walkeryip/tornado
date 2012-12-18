@@ -76,7 +76,11 @@ Tornado = {
 	},
 
 	error: function(data) {
+	    if (data.status === 403) {
+		jq.modal("<div id=\"error\">You have been logged out. Click <a href=\"/tornado/\">here</a> to log in.</div>");
+	    } else {
 		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
+	    }
 	},
 
 	listDropFunction: function(event, ui) {

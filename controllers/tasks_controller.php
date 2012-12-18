@@ -173,7 +173,7 @@ class TasksController extends AppController {
 
 	function shared() {
 		$userId = $_SESSION['Auth']['User']['id'];
-        $this->set('data', $this->getTasks(false, true));
+        $this->set('data', $this->getTasks("false", true));
         $this->render('/general/json', 'ajax');
 	}
 

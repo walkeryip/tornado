@@ -16,13 +16,6 @@ a, a:visited {
 }
 
 
-.ui-state-hover {
-	background-color: red;
-}
-
-.ui-state-active {
-	background-color: blue;
-}
 
 a:hover {
 	color: red;
@@ -36,11 +29,22 @@ div.element:hover .settings-button {
 	display: block;
 }
 
-div.element:hover {
+
+.ui-draggable-dragging.ui-draggable.element .settings-button { 
+                                                               display: none;
+ }
+
+div.element:hover, .ui-state-active .element {
 	background-color: #aaffaa;
 	border: 1px solid #88bb88;
 	padding: 0px;
 }
+
+div.ui-draggable-dragging.element:hover { 
+                                          background: transparent;
+border: none;
+padding: 1px;
+                                          }
 
 ul {
 	padding: 0px;
@@ -86,6 +90,14 @@ li .expandable-div-button + div {
 	display: inline;
 }
 
+.item { 
+        text-transform:capitalize;
+}
+
+.actions { 
+           margin-right: 3px;
+ }
+
 .lists, .tasks, .items {
 	width: 600px;
 }
@@ -95,20 +107,18 @@ li .expandable-div-button + div {
 	position: relative;
 }
 
-.lists li {
-	margin-left: 22px;
-}
 
 li .expandable-div-button {
-	position: relative;
-	float: right;
+	position: absolute;
+        top: 0px;
+        right: 0px;
 	margin: 0px 5px;
 }
 
 li .expandable-div {
 	position: absolute;
 	right: 0px;
-	margin-top: 25px;
+        top: 20px;
 	padding: 10px;
 	background-color: grey;
 	z-index: 10;
@@ -206,3 +216,19 @@ background-color: rgba(255, 255, 0, .5);
 	z-index: 1000;
 }
 
+.ui-draggable-dragging .tags, .ui-draggable-dragging .contexts, .ui-draggable-dragging .users, .ui-draggable-dragging .description-link, .ui-draggable-dragging .infobox, .ui-draggable-dragging .settings, .ui-draggable-dragging .settings-button {    
+                                                                                                                display: none;
+ }
+
+.handle { 
+          background-color: #777;
+          margin: 0 4px 0 0;
+          height: 20px;
+          float: left;
+          display: block;
+          width: 14px;          
+}
+
+.description-link { 
+          margin: 4px;
+ }

@@ -15,7 +15,7 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 	},
 	
 	getBody: function() {
-		return "<span>" + this.model.name + "</span>";
+		return "<span class=\"item task\">" + this.model.name + "</span>";
 	},
 
 	toggle: function() {

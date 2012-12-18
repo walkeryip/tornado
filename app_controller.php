@@ -48,6 +48,7 @@ class AppController extends Controller {
 
 		return $result;
 	}
+
 	
 	public function beforeFilter() {
         $this->Auth->allow("register", "login", "logout");
@@ -57,6 +58,11 @@ class AppController extends Controller {
             ),
             'Form'
         );
+	$this->Auth->fields = array(
+				    'username' => 'username',
+				    'password' => 'password'
+				      );
+
     }
     
     public function beforeRender(){

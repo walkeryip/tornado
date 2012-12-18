@@ -1,11 +1,20 @@
 Tornado.ListsView = Class.create(Tornado.SingleView, {
-	initialize: function($super, containerId){
-		$super("lists-view", containerId);
+    initialize: function($super, containerId, parameters){
+	    $super("lists-view", containerId);		
+	    this.defaultParameters(this.parameters);
+
+	},
+
+	defaultParameters: function(parameters) {
+		parameters.shared = parameters.shared || false; 
+		parameters.title = parameters.title || "Lists";
 	},
 
 	getAjaxUrl: function() {
-		return "/tornado/task_lists/all";
+	    var mode = this.parameters.shared ? "shared" : "all";
+	    return "/tornado/task_lists/" + mode;
 	},
+
 	
 	includeItem: function(item) {
 		if (item instanceof Tornado.List){

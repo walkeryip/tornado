@@ -130,7 +130,13 @@ jq(document).ready(function () {
 		var userKeywordObject = extractKeywords(contextKeywordObject.text, "~");
 
 		var listObj = Tornado.getDefaultList();
-		var list = Tornado.lists.get(listObj[0].id);
+	var list;
+
+	if (listObj !== null) {
+		list = Tornado.lists.get(listObj[0].id);
+	} else {
+	    list = null;
+	}
 
 		if (list) {
 			list.tags.each(function(item) {

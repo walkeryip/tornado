@@ -6,7 +6,7 @@
 
 		var defaultUser = {};
 		defaultUser.id = <?php echo $user_id ?>;
-		defaultUser.name = <?php echo $_SESSION['Auth']['User']['username']; ?>;
+		defaultUser.name = "<?php echo $_SESSION['Auth']['User']['username']; ?>";
 		Tornado.setDefaultUser(defaultUser);
 	});
 </script>

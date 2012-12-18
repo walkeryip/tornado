@@ -75,7 +75,7 @@ class AppModel extends Model {
 			array_push($result, $user['User']['id']);
 		}
 
-		if ($user) {
+		if ($userId) {
 			array_push($result, $userId);
 		}
 
@@ -273,9 +273,17 @@ class AppModel extends Model {
 					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.deleted = false and TaskList.id in (" . implode(",", array_unique($ids)) . ") group by TaskList.id");
 	}
 
-	public function getTaskListAndParentByTaskListId($id, $userId) {
-		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false and TaskList.id = " . $id . " or TaskList.parent_id = " . $id . " group by TaskList.id");
+	public function getTaskListAndParentByTaskListId($id, $userId, $shared = false) {
+		$query = "select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
+				    "and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false and TaskList.id = " . $id . " or TaskList.parent_id = " . $id;
+
+		if ($shared) {
+			$query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id != " . $userId . ")";
+		}
+	
+		$query .= " group by TaskList.id";
+		return $this->query($query);
+
 	}
 
 	public function getTaskLists($userId) {
