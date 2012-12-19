@@ -90,9 +90,6 @@ li .expandable-div-button + div {
 	display: inline;
 }
 
-.item { 
-        text-transform:capitalize;
-}
 
 .actions { 
            margin-right: 3px;
@@ -168,17 +165,37 @@ background-color: rgba(255, 255, 0, .5);
 	float: left;
 	width: 50%;
 }	
-
-.tags, .contexts, .users, .description-link {
-    display: none;
+.tags a{
 }
 
-.element:hover .tags, .elements:hover .users, .element:hover .contexts, .element:hover .description-link {
-    display: inline;
+.contexts a{
+}
+
+.users a{
+}
+
+.tags a, .contexts a, .users a, .description-link {
+    color: #bbb;
+}
+
+.element:hover .tags a {
+	color: blue;
+}
+.elements:hover .users a {
+	color: green;
+
+}
+.element:hover .contexts a{
+	color: red;
+
+}
+.element:hover .description-link {
+
 }
 
 .tags, .contexts, .users {
 	font-size: 11px;
+    display: inline;
 }
 
 .tags li, .contexts li, .users li{
@@ -190,17 +207,7 @@ background-color: rgba(255, 255, 0, .5);
 	text-decoration: none;
 }
 
-.tags a{
-	color: blue;
-}
 
-.contexts a{
-	color: red;
-}
-
-.users a{
-	color: green;
-}
 
 .tags a:hover, .contexts a:hover {
 	text-decoration: underline;
