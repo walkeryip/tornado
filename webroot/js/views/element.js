@@ -124,6 +124,7 @@ Tornado.Element.prototype = {
 	    var infoBox = jq("<div class=\"infobox\"><p>" + this.model.description + "</p></div>");
 	    descriptionLink.click(function() {
 		infoBox.toggle("fast");
+		return false;
 	    });
 	    elementContainer.append(descriptionLink);
 	    elementContainer.append(infoBox);

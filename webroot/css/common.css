@@ -169,8 +169,15 @@ background-color: rgba(255, 255, 0, .5);
 	width: 50%;
 }	
 
+.tags, .contexts, .users, .description-link {
+    display: none;
+}
+
+.element:hover .tags, .elements:hover .users, .element:hover .contexts, .element:hover .description-link {
+    display: inline;
+}
+
 .tags, .contexts, .users {
-	display: inline;
 	font-size: 11px;
 }
 
