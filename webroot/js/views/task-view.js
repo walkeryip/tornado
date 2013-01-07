@@ -34,7 +34,12 @@ Tornado.TaskView = Class.create(Tornado.View, {
 	includeItem: function(item) {
 		if (item instanceof Tornado.Task){
 			if (item.checked == this.parameters.checked){
+			    if (this.parameters.shared) {
+				// items.users.size() == 1 if the user is the only one with access to that item
+				return item.users.size() > 1;
+			    } else {
 				return true;
+			    }
 			}
 		}
 

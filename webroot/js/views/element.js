@@ -81,20 +81,23 @@ Tornado.Element.prototype = {
 	    });
 
 	    return false;
-	});	
-
+	});
+	actions.disableSelection();
 
 	editButton.click(function() {
 	    self.edit(container);
 	    return false;
 	});		
+	editButton.disableSelection();
 
 	deleteButton.click(function() {
 	    self.model.remove();
 	    return false;
 	});
+	deleteButton.disableSelection();
 
 	actionsBox.append(editButton).append(deleteButton);
+	actionsBox.disableSelection();
 	
 	elementContainer.append(jq("<p class=\"handle\"></p>"));
 	
@@ -110,7 +113,7 @@ Tornado.Element.prototype = {
 	    checkbox.click(function () {
 		self.toggle();
 	    });
-
+	    checkbox.disableSelection();
 	    elementContainer.append(jq("<p class=\"actions\"></p>").append(checkbox));
 	}		
 
@@ -139,7 +142,7 @@ Tornado.Element.prototype = {
 	     create: function(event, ui){ 
 		 this.model = self.model; 
 	     }});
-	elementContainer.disableSelection();
+	//elementContainer.disableSelection();
 
 	// Prevent events when clicking a link or interacting with an input tag
 	elementContainer.find("a, input").click(function(e) {
@@ -218,7 +221,7 @@ Tornado.Element.prototype = {
 	    elementContainer.append(jq("<p><label>Users:</label></p>").append(input.users)); 
 	}
 	
-	input.description = jq("<textarea name=\"description\">" + this.model.description + "</textarea>");
+	input.description = jq("<textarea name=\"description\">" + this.model.description || "" + "</textarea>");
 	elementContainer.append(jq("<p><label>Description:</label></p>").append(input.description)); 
 
 	elementContainer.append(saveButton); 

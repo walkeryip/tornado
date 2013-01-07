@@ -54,7 +54,7 @@ class TaskListsController extends AppController {
 	function getTaskLists($id = null, $shared = false){
 		$userId = $_SESSION['Auth']['User']['id'];
 
-		if ($id != null) {
+		if ($id != null || $shared) {
 		  $data["TaskLists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId, $shared);
 		} else {
 			$data["TaskLists"] = $this->TaskList->getRootTaskLists($userId);

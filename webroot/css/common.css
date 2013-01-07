@@ -4,10 +4,11 @@
 
 body {
 	font-family: Arial,Helvatica,sans-serif;
+	color: #222;
 }
 
 a, a:visited {
-	color: black;	
+	color: #222;	
 }
 
 .element {
@@ -34,7 +35,7 @@ div.element:hover .settings-button {
                                                                display: none;
  }
 
-div.element:hover, .ui-state-active .element {
+div.element:hover, .ui-state-active .element, #breadcrumbs .ui-state-active a {
 	background-color: #aaffaa;
 	border: 1px solid #88bb88;
 	padding: 0px;
@@ -174,15 +175,15 @@ background-color: rgba(255, 255, 0, .5);
 .users a{
 }
 
-.tags a, .contexts a, .users a, .description-link {
+.tags a, .contexts a, .users a, .element .description-link {
     color: #bbb;
 }
 
 .element:hover .tags a {
 	color: blue;
 }
-.elements:hover .users a {
-	color: green;
+.element:hover .users a {
+	color: orange;
 
 }
 .element:hover .contexts a{
@@ -190,7 +191,7 @@ background-color: rgba(255, 255, 0, .5);
 
 }
 .element:hover .description-link {
-
+    color: black;
 }
 
 .tags, .contexts, .users {
@@ -209,7 +210,7 @@ background-color: rgba(255, 255, 0, .5);
 
 
 
-.tags a:hover, .contexts a:hover {
+.tags a:hover, .contexts a:hover, .users a:hover {
 	text-decoration: underline;
 }
 
@@ -246,3 +247,16 @@ background-color: rgba(255, 255, 0, .5);
 .description-link { 
           margin: 4px;
  }
+
+#user-menu {
+    position: absolute;
+    right: 20px;
+}
+
+#user-menu p {
+    display: inline;
+}
+
+.auth-actions {
+    margin-left: 5px;
+}

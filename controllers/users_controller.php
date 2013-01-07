@@ -17,7 +17,10 @@ class UsersController extends AppController {
 	}
 		
 	public function login() {
-	
+	  if (isset($_SESSION['Auth']['User'])) {
+	    
+	    $this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+	  }
 	}
 	
 	public function logout() {

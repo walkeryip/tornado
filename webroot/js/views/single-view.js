@@ -1,6 +1,6 @@
 Tornado.SingleView = Class.create(Tornado.View, {
-	initialize: function($super, id, containerId){
-		$super(id, containerId);
+    initialize: function($super, id, containerId, parameters){
+	$super(id, containerId, parameters);
 
         this.container.append("<ul class=\"items\"></ul>");
         this.itemsContainer = this.container.find(".items");

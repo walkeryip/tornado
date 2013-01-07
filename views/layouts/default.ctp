@@ -63,17 +63,20 @@
 	</script>
 </head>
 <body>
-<?
+<div id="user-menu">
+<? if (isset($_SESSION['Auth']['User'])) {?>
 
-if (isset($_SESSION['Auth']['User'])) {
-	echo "Logged in as " . $_SESSION['Auth']['User']['username'];
-	echo "<br /><a href=\"/tornado/logout\">Logout</a>";
-} else {
-	echo "<a href=\"/tornado/login\">Login</a>";
-	echo "<a href=\"/tornado/register\">Register</a>";
-}
+<p class="user-logged-in">Logged in as <? echo $_SESSION['Auth']['User']['username']; ?></p>
+<p class="auth-actions"><a href="/tornado/logout">Logout</a></p>
 
-?>
+<? } else { ?>
+<p class="auth-actions">
+<a href="/tornado/login">Login</a>
+<a href="/tornado/register">Register</a>
+</p>
+<? } ?>
+</div>
+
 <div id="container">
     <div id="header">
         <h1><?php echo $this->Html->link(__('t[x]rnado', true), '/'); ?></h1>

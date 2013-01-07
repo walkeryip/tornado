@@ -28,7 +28,8 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 	},
 	
 	getBody: function(){
-		return "<a class=\"item list\" href=\"/tornado/task_lists/view/" + this.model.id + "\">" + this.model.name + "</a>";
+	    var name = this.model.name.slice(0, 1).toUpperCase() + this.model.name.slice(1);
+		return "<a class=\"item list\" href=\"/tornado/task_lists/view/" + this.model.id + "\">" + name + "</a>";
 	},
 	
 	getInfoBoxContent: function() {

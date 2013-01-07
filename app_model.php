@@ -56,18 +56,15 @@ class AppModel extends Model {
 		$userNames = explode(',', $data);
 		$result = array();
 		$usersList = "";
-
 		$index = 0;
 		foreach ($userNames as $userName) {
-			if ($index != 0){
-				$usersList .= ",";
-			}
-
+		  if ($index != 0) {
+			$usersList .= ",";
+		  }
 			$usersList .= '"' . strtolower(trim($userName)) . '"';
 
 			$index++;
 		}
-
 
 		$users = $this->query("select User.id from users as User where User.username in (" . $usersList . ")");
 
@@ -274,11 +271,13 @@ class AppModel extends Model {
 	}
 
 	public function getTaskListAndParentByTaskListId($id, $userId, $shared = false) {
-		$query = "select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-				    "and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false and (TaskList.id = " . $id . " or TaskList.parent_id = " . $id . ") ";
+		$query = "select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id" .
+				    " and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false";
 
 		if ($shared) {
 			$query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id != " . $userId . ")";
+		} else {
+		  $query .= " and (TaskList.id = " . $id . " or TaskList.parent_id = " . $id . ")";
 		}
 	
 		$query .= " group by TaskList.id";

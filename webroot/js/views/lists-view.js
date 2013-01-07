@@ -1,6 +1,6 @@
 Tornado.ListsView = Class.create(Tornado.SingleView, {
     initialize: function($super, containerId, parameters){
-	    $super("lists-view", containerId);		
+	$super("lists-view", containerId, parameters);		
 	    this.defaultParameters(this.parameters);
 
 	},
@@ -19,7 +19,11 @@ Tornado.ListsView = Class.create(Tornado.SingleView, {
 	includeItem: function(item) {
 		if (item instanceof Tornado.List){
 			if (item.parent_id == null) {
+			    if (this.parameters.shared) {
+				return item.users.size() > 1;
+			    } else {
 				return true;
+			    }
 			}
 		}
 		
@@ -31,6 +35,6 @@ Tornado.ListsView = Class.create(Tornado.SingleView, {
 	},
 
 	getTitle: function() {
-		return "Lists";
+		return this.parameters.title;
 	}
 });
