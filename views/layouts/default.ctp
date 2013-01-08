@@ -100,16 +100,12 @@
     </div>
 <? } ?>
     <div id="content">
-        <div id="flash">
-            <?php echo $this->Session->flash(); ?>
-        </div>
 		<div id="breadcrumbs"></div>
         <?php echo $content_for_layout; ?>
     </div>
     <div id="footer">
     </div>
 </div>
-<?php echo $this->element('sql_dump'); ?>
 <div id="message-confirm-box" style="display: none">
     <p class="message"></p>
     <button class="yes">Yes</button>

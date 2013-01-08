@@ -99,6 +99,10 @@ jq(document).ready(function () {
 		}
     });
 
+    container.find("span").click(function() {
+	changeInputBarIndex(--inputModeIndex);
+    });
+
 	button.click(function() {
         submit();
         return false;

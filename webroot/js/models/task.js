@@ -20,7 +20,7 @@ Tornado.Task = Class.create(Tornado.Item, {
 		this.checked = task.checked === "1";
 		this.created = task.created;
 		this.deadline = task.deadline;
-		this.description = task.description || null;
+		this.description = task.description;
 		this.id = task.id;
 		this.name = task.name;
 		this.priority = task.priority;

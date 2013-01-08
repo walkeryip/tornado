@@ -13,7 +13,7 @@ a, a:visited {
 
 .element {
 	cursor:default;
-	padding: 1px;
+	padding: 1px 15px 1px 1px;
 }
 
 
@@ -38,13 +38,12 @@ div.element:hover .settings-button {
 div.element:hover, .ui-state-active .element, #breadcrumbs .ui-state-active a {
 	background-color: #aaffaa;
 	border: 1px solid #88bb88;
-	padding: 0px;
+	padding: 0px 15px 0px 0px;
 }
 
 div.ui-draggable-dragging.element:hover { 
                                           background: transparent;
 border: none;
-padding: 1px;
                                           }
 
 ul {
@@ -175,18 +174,18 @@ background-color: rgba(255, 255, 0, .5);
 .users a{
 }
 
-.tags a, .contexts a, .users a, .element .description-link {
+.tag a, .context a, .user a, .element .description-link {
     color: #bbb;
 }
 
-.element:hover .tags a {
+.element:hover .tag a {
 	color: blue;
 }
-.element:hover .users a {
+.element:hover .user a {
 	color: orange;
 
 }
-.element:hover .contexts a{
+.element:hover .context a{
 	color: red;
 
 }
@@ -194,23 +193,22 @@ background-color: rgba(255, 255, 0, .5);
     color: black;
 }
 
-.tags, .contexts, .users {
-	font-size: 11px;
-    display: inline;
+.tag, .context, .user {
 }
 
-.tags li, .contexts li, .users li{
-	display: inline;	
+.tag, .context, .user{
 	margin: 2px;
+	font-size: 11px;
+        display: inline-block;
 }
 
-.tags a, .contexts a, .users a{	
+.tag a, .context a, .user a{	
 	text-decoration: none;
 }
 
 
 
-.tags a:hover, .contexts a:hover, .users a:hover {
+.tag a:hover, .context a:hover, .user a:hover {
 	text-decoration: underline;
 }
 
@@ -231,17 +229,18 @@ background-color: rgba(255, 255, 0, .5);
 	z-index: 1000;
 }
 
-.ui-draggable-dragging .tags, .ui-draggable-dragging .contexts, .ui-draggable-dragging .users, .ui-draggable-dragging .description-link, .ui-draggable-dragging .infobox, .ui-draggable-dragging .settings, .ui-draggable-dragging .settings-button {    
+.ui-draggable-dragging .tag, .ui-draggable-dragging .context, .ui-draggable-dragging .user, .ui-draggable-dragging .description-link, .ui-draggable-dragging .infobox, .ui-draggable-dragging .settings, .ui-draggable-dragging .settings-button {    
                                                                                                                 display: none;
  }
 
 .handle { 
-          background-color: #777;
+          background-color: rgba(100, 100, 100, .4);
           margin: 0 4px 0 0;
           height: 20px;
           float: left;
           display: block;
-          width: 14px;          
+          width: 9px;          
+          cursor: move;
 }
 
 .description-link { 
@@ -259,4 +258,12 @@ background-color: rgba(255, 255, 0, .5);
 
 .auth-actions {
     margin-left: 5px;
+}
+
+#inputbar span { 
+    border: 1px solid red;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: #ff8888;
+    cursor: pointer;
 }

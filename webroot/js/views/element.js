@@ -34,11 +34,11 @@ Tornado.Element.prototype = {
 	    var defaultTag = Tornado.getDefaultTag();
 	    self.tags.each(function(tag){
 		if (defaultTag === null || tag.value.id != defaultTag.id) {
-		    tagsString += "<li data-model-type=\"tag\" data-model-id=\"" + tag.value.id + "\"><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></li>";	
+		    tagsString += "<span class=\"tag\" data-model-type=\"tag\" data-model-id=\"" + tag.value.id + "\"><a href=\"/tornado/tags/view/" + tag.value.id + "\">#" + tag.value.name + "</a></span>";	
 		}
 	    });
 
-	    body += "<ul class=\"tags\">" + tagsString + "</ul>"; 
+	    body += tagsString; 
 	}
 
 	if (self.hasContexts){
@@ -46,11 +46,11 @@ Tornado.Element.prototype = {
 	    var defaultContext = Tornado.getDefaultContext();
 	    self.contexts.each(function(context){
 		if (defaultContext === null || context.value.id != defaultContext.id) {
-		    contextsString += "<li data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></li>";	
+		    contextsString += "<span class=\"context\" data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></span>";	
 		}
 	    });
 
-	    body += "<ul class=\"contexts\">" + contextsString + "</ul>";
+	    body += contextsString;
 	}
 
 	if (self.hasUsers){
@@ -58,11 +58,11 @@ Tornado.Element.prototype = {
 	    var defaultUser = Tornado.getDefaultUser();
 	    self.users.each(function(user){
 		if (defaultUser === null || user.value.id != defaultUser.id) {
-		    usersString += "<li data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></li>";	
+		    usersString += "<span class=\"user\" data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></span>";	
 		}
 	    });
 
-	    body += "<ul class=\"users\">" + usersString + "</ul>";
+	    body += usersString;
 	}
 
 
@@ -221,7 +221,7 @@ Tornado.Element.prototype = {
 	    elementContainer.append(jq("<p><label>Users:</label></p>").append(input.users)); 
 	}
 	
-	input.description = jq("<textarea name=\"description\">" + this.model.description || "" + "</textarea>");
+	input.description = jq("<textarea name=\"description\">" + self.model.description + "</textarea>");
 	elementContainer.append(jq("<p><label>Description:</label></p>").append(input.description)); 
 
 	elementContainer.append(saveButton); 
