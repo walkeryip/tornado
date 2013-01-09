@@ -199,7 +199,7 @@ class TaskListsController extends AppController {
         $this->render('/general/json', 'ajax');
 	}
 
-	function move($listId, $fromListId, $toListId) {
+	function move($listId, $fromListId, $toListId = null) {
 		$this->TaskList->id = $listId;
 		$this->data["TaskList"]["parent_id"] = $toListId;
 		

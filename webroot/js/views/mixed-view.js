@@ -2,6 +2,7 @@ Tornado.MixedView = Class.create(Tornado.View, {
 	initialize: function($super, id, containerId){
 		$super(id, containerId);
 
+
         this.container.append("<ul class=\"lists\"></ul>");
         this.listsContainer = this.container.find(".lists");
         this.container.append("<ul class=\"tasks\"></ul>");
@@ -29,7 +30,9 @@ Tornado.MixedView = Class.create(Tornado.View, {
         } else if (element.model instanceof Tornado.List) {
 			// We don't want to list the current list again
 			if (element.model.id != this.id){
-	            element.display(this.listsContainer, this.loaded);
+			    element.display(this.listsContainer, this.loaded);
+			} else {
+			    this.container.prepend("<p>" + element.model.description + "</p>");
 			}
         }
     },

@@ -95,6 +95,10 @@ li .expandable-div-button + div {
            margin-right: 3px;
  }
 
+.item { 
+        margin-right: 4px;
+ }
+
 .lists, .tasks, .items {
 	width: 600px;
 }

@@ -75,11 +75,17 @@ Tornado.Item.prototype = {
     },
 
 	move: function(parentId, callback, errorCallback) {
-		var oldParentId = this.parent !== undefined ? this.parent.id : this.parent_id;
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + oldParentId + "/" + parentId, 
-										callback: callback, 
-										error: errorCallback,
-										post: true});
+	    var oldParentId = this.parent !== undefined ? this.parent.id : this.parent_id;
+	    var url = "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + oldParentId;
+	    
+	    if (parentId !== undefined) {
+		url += + "/" + parentId;
+	    }
+
+	    Tornado.viewManager.loadData(	{url:  url, 
+						 callback: callback, 
+						 error: errorCallback,
+						 post: true});
 	},
 
 	fetchContext: function(contextData) {
