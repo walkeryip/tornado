@@ -13,8 +13,8 @@ Tornado.List = Class.create(Tornado.Item, {
         var list = data.TaskList;
 
         this.id = list.id;
-		this.description = list.description;
-        this.name = list.name;
+	this.description = escapeString(list.description);
+        this.name = escapeString(list.name);
 		this.parent_id = list.parent_id;
     },
 

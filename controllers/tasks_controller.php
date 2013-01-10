@@ -21,7 +21,6 @@ class TasksController extends AppController {
 
 	function add($id = null){
 		$userId = $_SESSION['Auth']['User']['id'];
-
 		if (!empty($this->data)){
 			$this->data["User"] = array();
 			$this->data["User"]["User"] = $userId;

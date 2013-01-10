@@ -240,3 +240,11 @@ jq.fn.animateHighlight = function(highlightColor, duration) {
     var originalBg = this.css("backgroundColor");
     this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
 };
+
+var escapeString = function(text) {
+    if (text) {
+	return text.replace(/"/g, "&quot;");
+    } else {
+	return text;
+    }
+};

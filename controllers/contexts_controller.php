@@ -6,7 +6,7 @@ class ContextsController extends AppController {
     var $components = array('RequestHandler'); 
 
 	function index($id = null){
-		
+	        
 		$userId = $_SESSION['Auth']['User']['id'];
 		$this->set("user_id", $userId);
 	}
