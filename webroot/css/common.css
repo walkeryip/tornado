@@ -35,11 +35,16 @@ div.element:hover .settings-button {
                                                                display: none;
  }
 
-div.element:hover, .ui-state-active .element, #breadcrumbs .ui-state-active a {
+div.element:hover, .ui-state-active .element, #breadcrumbs .ui-state-active a, #tree-view .ui-state-active a {
 	background-color: #aaffaa;
 	border: 1px solid #88bb88;
 	padding: 0px 15px 0px 0px;
 }
+
+#breadcrumbs .ui-state-active a, #tree-view .ui-state-active a { 
+
+                                  padding: 0;
+ }
 
 div.ui-draggable-dragging.element:hover { 
                                           background: transparent;
@@ -225,6 +230,10 @@ background-color: rgba(255, 255, 0, .5);
 	font-weight: bold;
 }
 
+#breadcrumbs li a { 
+                    padding: 1px;
+ }
+
 #breadcrumbs p {
 	margin: 0px 5px 0px 5px;
 }
@@ -271,3 +280,25 @@ background-color: rgba(255, 255, 0, .5);
     background-color: #ff8888;
     cursor: pointer;
 }
+
+#tree-view { 
+             display: block;
+ }
+
+#tree-view > ul { 
+                float: left;
+                }
+
+#tree-view ul { 
+                margin: 0;
+ }
+
+#tree-view li { 
+                margin-left: 10px;
+                margin-bottom: 3px;
+                margin-top: 3px;
+                }
+
+#tree-view li a { 
+                  padding: 1px;
+ } 

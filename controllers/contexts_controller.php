@@ -128,7 +128,7 @@ class ContextsController extends AppController {
 	
 	function edit($id = null){
 		if ($this->Context->save($this->data)){
-			$this->data = $this->Context->find(array('id' => $id));
+		  $this->data = $this->getContextById($id);
 			//print_r($this->data);
 			$this->set('data', $this->data);
 		} else {

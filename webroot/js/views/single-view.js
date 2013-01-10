@@ -13,7 +13,7 @@ Tornado.SingleView = Class.create(Tornado.View, {
 	},
 
     addItem: function(element) {
-    	element.display(this.itemsContainer);
+    	element.display(this.itemsContainer, this.loaded);
     },
     
     updateItem: function(item) {

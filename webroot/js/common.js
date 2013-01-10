@@ -180,21 +180,7 @@ jq(document).ready(function () {
 
 });
 
-var printTree = function(trees, treeChildren, node, object) {
-	var list = jq("<ul></ul>");
-	for (i in node) {
-		var listItem = jq("<li><span>" + node[i].name + "</span></li>");
-		listItem.attr("data-id",node[i].id);
 
-		var children = treeChildren[node[i].id];
-		if (children !== undefined) {
-			listItem.append(printTree(trees, treeChildren, children));
-		}
-
-		list.append(listItem);
-	}
-	return list;
-}
 
 var extractKeywords = function (text, keywordCharacter) {
 	var result = {};

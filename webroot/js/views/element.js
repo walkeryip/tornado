@@ -220,9 +220,11 @@ Tornado.Element.prototype = {
 	    input.users = jq("<input type=\"text\" value=\"" + usersArray + "\" name=\"users\" />");
 	    elementContainer.append(jq("<p><label>Users:</label></p>").append(input.users)); 
 	}
-	
-	input.description = jq("<textarea name=\"description\">" + self.model.description + "</textarea>");
-	elementContainer.append(jq("<p><label>Description:</label></p>").append(input.description)); 
+
+	if (self.hasDescription) {
+	    input.description = jq("<textarea name=\"description\">" + self.model.description + "</textarea>");
+	    elementContainer.append(jq("<p><label>Description:</label></p>").append(input.description)); 
+	}
 
 	elementContainer.append(saveButton); 
 	elementContainer.append(cancelButton); 

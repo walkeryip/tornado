@@ -77,9 +77,9 @@ Tornado.Item.prototype = {
 	move: function(parentId, callback, errorCallback) {
 	    var oldParentId = this.parent !== undefined ? this.parent.id : this.parent_id;
 	    var url = "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + oldParentId;
-	    
+
 	    if (parentId !== undefined) {
-		url += + "/" + parentId;
+		url += "/" + parentId;
 	    }
 
 	    Tornado.viewManager.loadData(	{url:  url, 

@@ -128,7 +128,7 @@ class TagsController extends AppController {
 	
 	function edit($id = null){
 		if ($this->Tag->save($this->data)){
-			$this->data = $this->Tag->find(array('id' => $id));
+		  $this->data = $this->getTagById($id);
 			//print_r($this->data);
 			$this->set('data', $this->data);
 		} else {
