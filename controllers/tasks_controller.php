@@ -99,7 +99,7 @@ class TasksController extends AppController {
 
 		if (!empty($taskIds)){
 			$data["ListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
-			$listIds = $this->accId($data["ListsTasks"], "ListTask", "id");
+			$listIds = $this->accId($data["ListsTasks"], "ListTask", "list_id");
 
 			if (!empty($listIds)){
 				$data["Lists"] = $this->Task->getTaskListsByTaskListIds($listIds, $userId);
@@ -205,7 +205,7 @@ class TasksController extends AppController {
 			$data["ListsTasks"][$index]["ListTask"] = array();
 			$data["ListsTasks"][$index]["ListTask"]["deleted"] = true;
 			$data["ListsTasks"][$index]["ListTask"]["task_id"] = $taskId;
-			$data["ListsTasks"][$index]["ListTask"]["task_list_id"] = $fromListId;
+			$data["ListsTasks"][$index]["ListTask"]["list_id"] = $fromListId;
 			$index++;
 		}
 
@@ -216,7 +216,7 @@ class TasksController extends AppController {
 			$data["ListsTasks"][$index]["ListTask"] = array();
 			$data["ListsTasks"][$index]["ListTask"]["id"] = mysql_insert_id();
 			$data["ListsTasks"][$index]["ListTask"]["task_id"] = $taskId;
-			$data["ListsTasks"][$index]["ListTask"]["task_list_id"] = $toListId;
+			$data["ListsTasks"][$index]["ListTask"]["list_id"] = $toListId;
 		}
 
 		

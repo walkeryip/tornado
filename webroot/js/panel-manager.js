@@ -183,7 +183,7 @@ Tornado.PanelManager.prototype = {
 		var relItem = Tornado.getItem(secondaryModel, rel[secondaryModel + "_id"]);
 		
 		if (relData !== undefined && relData[relName].deleted == true) {
-		    item[secondaryModel + "s"].unset(task.id);
+		    item[secondaryModel + "s"].unset(relItem.id);
 		    
 		    if (addAsParent) {
 			relItem.parent = null;

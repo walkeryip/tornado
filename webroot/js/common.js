@@ -1,10 +1,10 @@
 // TODO: Refactor this
-/*var expandableDivButtonClick = function (element) {
+var expandableDivButtonClick = function (element) {
 	$(element).next("div").toggle();
 
 	return false;
 };
-
+/*
 var modalDivButtonClick = function (element) {
 	jq(element).next("div").modal();
 };*/

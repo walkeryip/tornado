@@ -231,6 +231,9 @@ class TaskListsController extends AppController {
 	function move($listId, $fromListId, $toListId = null) {
 		$this->TaskList->id = $listId;
 		$this->data["List"]["parent_id"] = $toListId;
+
+		$this->data["TaskList"] = $this->data["List"];
+		unset($this->data["List"]);
 		
 		if ($this->TaskList->save($this->data)){
 			$this->data = $this->getTaskListById($listId);
