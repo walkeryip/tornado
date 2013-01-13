@@ -1,18 +1,18 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var listView = new Tornado.ListView(5, "#tasks");
-		var tagsView = new Tornado.TagsView("#tags");
-		var contextsView = new Tornado.ContextsView("#contexts");
-		var tagView2 = new Tornado.TagView(40, "#tag-tasks2");
-		var contextView = new Tornado.ContextView(6, "#context-tasks");
-		var taskView = new Tornado.TaskView("#task-view");
-		Tornado.viewManager.addView(listView);
-		Tornado.viewManager.addView(tagsView);
-		Tornado.viewManager.addView(contextsView);
-		Tornado.viewManager.addView(tagView2);
-		Tornado.viewManager.addView(contextView);
-		Tornado.viewManager.addView(taskView);
+		var listPanel = new Tornado.ListPanel(5, "#tasks");
+		var tagsPanel = new Tornado.TagsPanel("#tags");
+		var contextsPanel = new Tornado.ContextsPanel("#contexts");
+		var tagPanel2 = new Tornado.TagPanel(40, "#tag-tasks2");
+		var contextPanel = new Tornado.ContextPanel(6, "#context-tasks");
+		var taskPanel = new Tornado.TaskPanel("#task-panel");
+		Tornado.panelManager.addPanel(listPanel);
+		Tornado.panelManager.addPanel(tagsPanel);
+		Tornado.panelManager.addPanel(contextsPanel);
+		Tornado.panelManager.addPanel(tagPanel2);
+		Tornado.panelManager.addPanel(contextPanel);
+		Tornado.panelManager.addPanel(taskPanel);
 		var defaultList = {};
 		var defaultContext = {};
 
@@ -24,7 +24,7 @@
 
 <div class="column">
 	<div id="tasks"></div>
-	<div id="task-view"></div>
+	<div id="task-panel"></div>
 </div>
 <div class="column">
 	<div id="tags"></div>

@@ -28,9 +28,9 @@ Tornado.Item.prototype = {
             });
 		}
 
-		if (data.TaskLists !== undefined){
-			data.TaskLists.each(function(listData){
-            	self.fetchList(listData.TaskList);
+		if (data.Lists !== undefined){
+			data.Lists.each(function(listData){
+            	self.fetchList(listData.List);
             });
 		}
 
@@ -55,20 +55,20 @@ Tornado.Item.prototype = {
 	},
 
     remove: function(callback) {
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id, 
+		Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/delete/" + this.id, 
 										callback: callback, 
 										post: false});
     },
 
     create: function(callback) {
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/add/", 
+		Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/add/", 
 										callback: callback, 
 										data: this.getSubmitData(false), 
 										post: true});
     },
 
     save: function(callback) {
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/edit/" + this.id, 
+		Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/edit/" + this.id, 
 										callback: callback, 
 										data: this.getSubmitData(true), 
 										post: true});
@@ -82,7 +82,7 @@ Tornado.Item.prototype = {
 		url += "/" + parentId;
 	    }
 
-	    Tornado.viewManager.loadData(	{url:  url, 
+	    Tornado.panelManager.loadData(	{url:  url, 
 						 callback: callback, 
 						 error: errorCallback,
 						 post: true});
@@ -192,7 +192,7 @@ Tornado.Item.prototype = {
     },
 
     getListsSubmitString: function(data){
-        return this.getObjectSubmitString("TaskList", this.lists);
+        return this.getObjectSubmitString("List", this.lists);
     },
 
 	getModelUrlName: function() { return this.getModelName() + "s"; }, 

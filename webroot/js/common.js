@@ -1,12 +1,5 @@
-// TODO: split into separate files
-// TODO: support for adding tasks through javascript
-// TODO: view sorting and filtering
-// TODO: move functions and attributes up to abstract classes
-// TODO: namespacing
-// TODO: add buttons for every view
-// TODO: sorting
-
-var expandableDivButtonClick = function (element) {
+// TODO: Refactor this
+/*var expandableDivButtonClick = function (element) {
 	$(element).next("div").toggle();
 
 	return false;
@@ -14,9 +7,9 @@ var expandableDivButtonClick = function (element) {
 
 var modalDivButtonClick = function (element) {
 	jq(element).next("div").modal();
-};
+};*/
 
-var deleteModel = function (id, model, name){
+/*var deleteModel = function (id, model, name){
 	jq("#message-confirm-box p").text("Are you sure you want to delete " + name + "?");
 	jq("#message-confirm-box .yes").click(function () {
 		jq(location).attr('href',"/tornado/" + model + "/delete/" + id);
@@ -25,7 +18,7 @@ var deleteModel = function (id, model, name){
 		jq.modal.close();
 	});
 	jq("#message-confirm-box").modal();
-};
+};*/
 
 
 var compareItem = function(a, b, field) {
@@ -43,14 +36,14 @@ var compareItem = function(a, b, field) {
 	 		return 0;
 		}
 	};
-
+/*
 var deleteTask = function (id, name) {
 	deleteModel(id, "task", name);
 };
 
 var deleteList = function (id, name) {
 	deleteModel(id, "task_lists", name);
-};
+};*/
 
 jq(document).ready(function () {
     var self = this;
@@ -133,11 +126,11 @@ jq(document).ready(function () {
 		var contextKeywordObject = extractKeywords(tagKeywordObject.text, "@");
 		var userKeywordObject = extractKeywords(contextKeywordObject.text, "~");
 
-		var listObj = Tornado.getDefaultList();
+		var listObj = Tornado.state.getList();
 	var list;
 
 	if (listObj !== null) {
-		list = Tornado.lists.get(listObj[0].id);
+		list = Tornado.lists.get(listObj.id);
 	} else {
 	    list = null;
 	}
@@ -163,17 +156,17 @@ jq(document).ready(function () {
 		    data.Task = {}
 		    data.Task.name = userKeywordObject.text;
 		} else if (inputMode === "list"){
-			data.TaskList = {};
-			data.TaskList.name = userKeywordObject.text;
-			data.TaskList.parent_id = Tornado.getDefaultListId();
+			data.List = {};
+			data.List.name = userKeywordObject.text;
+		    data.List.parent_id = (Tornado.state.getList()).id;
 		}
 
 	    data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
-	    data.TaskLists = modelify(Tornado.getDefaultList(), "TaskList");
+	data.Lists = modelify([Tornado.state.getList()], "List");
 	    data.Tags = modelify(tagKeywordObject.keywords, "Tag");
 	    data.Users = modelify(userKeywordObject.keywords, "User");
 
-        Tornado.viewManager.addItem(data);
+        Tornado.panelManager.addItem(data);
 
         inputbar.val("");
     }
@@ -220,12 +213,6 @@ var extractKeywords = function (text, keywordCharacter) {
 	return result;
 };
 
-jq.fn.animateHighlight = function(highlightColor, duration) {
-    var highlightBg = highlightColor || "#FFFF9C";
-    var animateMs = duration || 1500;
-    var originalBg = this.css("backgroundColor");
-    this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
-};
 
 var escapeString = function(text) {
     if (text) {

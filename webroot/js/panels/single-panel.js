@@ -1,4 +1,4 @@
-Tornado.SingleView = Class.create(Tornado.View, {
+Tornado.SinglePanel = Class.create(Tornado.Panel, {
     initialize: function($super, id, containerId, parameters){
 	$super(id, containerId, parameters);
 

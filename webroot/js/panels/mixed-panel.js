@@ -1,4 +1,4 @@
-Tornado.MixedView = Class.create(Tornado.View, {
+Tornado.MixedPanel = Class.create(Tornado.Panel, {
 	initialize: function($super, id, containerId){
 		$super(id, containerId);
 

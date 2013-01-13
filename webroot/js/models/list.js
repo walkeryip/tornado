@@ -4,13 +4,13 @@ Tornado.List = Class.create(Tornado.Item, {
     },
 
     getModelName: function(){
-        return "task_list";
+        return "list";
     },
 
     populate: function($super, data){
         $super(data);
 
-        var list = data.TaskList;
+        var list = data.List;
 
         this.id = list.id;
 	this.description = escapeString(list.description);
@@ -19,22 +19,22 @@ Tornado.List = Class.create(Tornado.Item, {
     },
 
     getSubmitData: function(compactMode) {
-        var data = {"data[TaskList][name]": this.name,
-            "data[TaskList][id]": this.id,
-			"data[TaskList][description]": this.description};
+        var data = {"data[List][name]": this.name,
+            "data[List][id]": this.id,
+			"data[List][description]": this.description};
 
         if (compactMode){
-            Object.extend(data, {"data[TaskList][tags]": this.tagsString,
-                                 "data[TaskList][contexts]": this.contextsString,
-                                 "data[TaskList][users]": this.usersString});
+            Object.extend(data, {"data[List][tags]": this.tagsString,
+                                 "data[List][contexts]": this.contextsString,
+                                 "data[List][users]": this.usersString});
 		} else {
-            Object.extend(data, {"data[TaskList][tags]": this.getTagsString(),
-                                 "data[TaskList][contexts]": this.getContextsString(),
-                                 "data[TaskList][users]": this.getUsersString()});
+            Object.extend(data, {"data[List][tags]": this.getTagsString(),
+                                 "data[List][contexts]": this.getContextsString(),
+                                 "data[List][users]": this.getUsersString()});
 		}
 
 		if (this.parent_id !== null) {
-			Object.extend(data, {"data[TaskList][parent_id]": this.parent_id});
+			Object.extend(data, {"data[List][parent_id]": this.parent_id});
 		}
 
         return data;

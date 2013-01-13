@@ -1,6 +1,6 @@
-Tornado.TagsView = Class.create(Tornado.SingleView, {
+Tornado.TagsPanel = Class.create(Tornado.SinglePanel, {
 	initialize: function($super, containerId){
-		$super("tags-view", containerId);
+		$super("tags-panel", containerId);
 	},
 
 	getAjaxUrl: function() {

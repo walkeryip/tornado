@@ -33,7 +33,13 @@ Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home
  * ...and connect the rest of 'Pages' controller's urls.
  */
 Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
-
+Router::connect('/lists/add/*', array('controller' => 'task_lists', 'action' => 'add'));
+Router::connect('/lists/edit/*', array('controller' => 'task_lists', 'action' => 'edit'));
+Router::connect('/lists/delete/*', array('controller' => 'task_lists', 'action' => 'delete'));
+Router::connect('/lists/tree/*', array('controller' => 'task_lists', 'action' => 'tree'));
+Router::connect('/lists/shared/*', array('controller' => 'task_lists', 'action' => 'shared'));
+Router::connect('/lists/move/*', array('controller' => 'task_lists', 'action' => 'move'));
+Router::connect('/lists/', array('controller' => 'task_lists', 'action' => 'index'));
 Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
 Router::connect('/register', array('controller' => 'users', 'action' => 'register'));

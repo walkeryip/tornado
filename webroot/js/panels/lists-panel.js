@@ -1,6 +1,6 @@
-Tornado.ListsView = Class.create(Tornado.SingleView, {
+Tornado.ListsPanel = Class.create(Tornado.SinglePanel, {
     initialize: function($super, containerId, parameters){
-	$super("lists-view", containerId, parameters);		
+	$super("lists-panel", containerId, parameters);		
 	    this.defaultParameters(this.parameters);
 
 	},

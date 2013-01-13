@@ -1,39 +1,47 @@
 Tornado.NavigationTree = Class.create();
 Tornado.NavigationTree.prototype = {
-	initialize: function() {
-	    this.loaded = false;
-	    this.error = false;
-	    this.tree = new Hash();
-	    this.parents = new Hash();
-	},
+    // Constructor
+    initialize: function() {
+	this.loaded = false;
+	this.error = false;
+	this.tree = new Hash();
+	this.parents = new Hash();
 
-	populate: function (callback) {
-		var self = this;
-		this.loading = true;
+	this.templates = {
+	    listItem: "<li><a href=\"/tornado/task_lists/view/{{id}}\">{{name}}</a></li>",
+	    navigationContainer: "<div id=\"tree-view\" class=\"panel\"></div>"
+	};
+    },
 
-		jq.ajax({			
-		    type: "get",
-		  	cache: false,
-			dataType: "json",
-			error: function(data){
-				Tornado.error(data);
-				self.error = true;
-			}, 
-		  	url: "/tornado/task_lists/tree"
-		}).done(function (data) {
-			if (data){	
-				self.loaded = true;
-				self.parseTreeData(data);
+    // Get the navigation tree data
+    populate: function (callback) {
+	var self = this;
+	this.loading = true;
 
-				if (callback !== undefined) {
-					callback(self.tree);
-				}
+	jq.ajax({			
+	    type: "get",
+	    cache: false,
+	    dataType: "json",
+	    error: function(data){
+		Tornado.error(data);
+		self.error = true;
+	    }, 
+	    url: "/tornado/task_lists/tree"
+	}).done(function (data) {
+	    if (data){	
+		self.loaded = true;
+		self.parseTreeData(data);
+		
+		if (callback !== undefined) {
+		    callback(self.tree);
+		}
+		
+		self.display(jq("body"));
+	    } 
+	});
+    },
 
-			    self.display(jq("body"));
-			} 
-		});
-	},
-
+    // Get a tree from id to all its children
     getListTree: function(id) {
 	var self = this;
 	var result;
@@ -51,7 +59,7 @@ Tornado.NavigationTree.prototype = {
 	    }
 	    
 	    children.each(function(item) {
-		var listItem = jq("<li><a href=\"/tornado/task_lists/view/" + item.id + "\">" + item.name + "</a></li>");
+		var listItem = jq(Mustache.render(self.templates.listItem, {id:item.id, name:item.name}));
 		listItem.attr("data-id", item.id);
 		listItem.droppable({
 		    activeClass: "ui-state-hover",
@@ -69,56 +77,37 @@ Tornado.NavigationTree.prototype = {
 	return result;
     },
 
-	parseTreeData: function(data) {
-	    var self = this;
-	    data.each(function(obj) {
-		var item = obj["TaskList"];
-		var parent = item.parent_id || "root";
-		var parentList = self.parents.get(parent);
-		self.tree[item.id] = item;
-		if (!parentList) {
-		    parentList = new Array();
-		    self.parents.set(parent, parentList);
-		}
-
-		parentList.push(item);
-	    });
-
-	    var result = this.getListTree("root");
-	    jq("body").append(jq("<div id=\"tree-view\" class=\"view\"></div>").append(result));
-	},
-
-	getNavigationTree: function(callback) {
-		if (this.error) {
-			callback(null);
-		} else if (this.loaded) {
-			callback(this.tree);
-		} else {
-			this.populate(callback);
-		}
-	},
-
-    display: function(container) {
-	var list = jq("<ul></ul>");
-	this.tree.each(function(item){
-	    list.append("<li>" + item.value.name + "</li>");
+    // Parse the retrieved data
+    parseTreeData: function(data) {
+	var self = this;
+	data.each(function(obj) {
+	    var item = obj["List"];
+	    var parent = item.parent_id || "root";
+	    var parentList = self.parents.get(parent);
+	    self.tree[item.id] = item;
+	    if (!parentList) {
+		parentList = new Array();
+		self.parents.set(parent, parentList);
+	    }
+	    
+	    parentList.push(item);
 	});
-	container.append(list);
-    }
-
-/*var printTree = function(trees, treeChildren, node, object) {
-	var list = jq("<ul></ul>");
-	for (i in node) {
-		var listItem = jq("<li><span>" + node[i].name + "</span></li>");
-		listItem.attr("data-id",node[i].id);
-
-		var children = treeChildren[node[i].id];
-		if (children !== undefined) {
-			listItem.append(printTree(trees, treeChildren, children));
-		}
-
-		list.append(listItem);
+    },
+    
+    // Get and or load the data
+    getNavigationTree: function(callback) {
+	if (this.error) {
+	    callback(null);
+	} else if (this.loaded) {
+	    callback(this.tree);
+	} else {
+	    this.populate(callback);
 	}
-	return list;
-}*/
+    },
+    
+    // Display the tree
+    display: function(container) {
+	var result = this.getListTree("root");
+	container.append(jq(this.templates.navigationContainer).append(result));
+    }
 };

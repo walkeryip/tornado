@@ -138,7 +138,7 @@ class AppModel extends Model {
 	}
 	
 	public function getTaskListsByTasksIds($taskIds){
-		return $this->query("select * from task_lists as TaskList where TaskList.deleted = false and id in " .
+		return $this->query("select * from task_lists as List where List.deleted = false and id in " .
 								   "(select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
 	}
 	
@@ -147,9 +147,6 @@ class AppModel extends Model {
 							"tasks_users.user_id = " . $userId . " where Task.deleted = false and Task.id in (" . implode(",", array_unique($ids)) . ") group by Task.id");
 	}
 
-	/*public function getParentsByTaskIds($ids) {
-		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_id in (" . implode(",", array_unique($ids)) . ")");
-	}*/
 
 	// Contexts
 	public function getContextById($id, $userId){
@@ -197,7 +194,7 @@ class AppModel extends Model {
 	}
 	
 	public function getTaskListsUsersByTaskListIds($taskListIds) {
-		return $this->query("select * from task_lists_users as TaskListUser where task_list_id in (" . implode(",", $taskListIds) . ")");
+		return $this->query("select user_id, task_list_id as list_id from task_lists_users as ListUser where task_list_id in (" . implode(",", $taskListIds) . ")");
 	}
 	
 	public function getTagsUsersByTagIds($tagIds) {
@@ -219,19 +216,19 @@ class AppModel extends Model {
 	
 	// ContextsTaskLists
 	public function getContextsTaskListsByContextId($id) {
-		return $this->query("select * from contexts_task_lists as ContextTaskList where context_id = " . $id);
+		return $this->query("select context_id, task_list_id as list_id from contexts_task_lists as ContextList where context_id = " . $id);
 	}
 	
 	public function getContextsTaskListsByContextIds($ids) {
-		return $this->query("select * from contexts_task_lists as ContextTaskList where context_id in (" . implode(",", $ids) . ")");
+		return $this->query("select context_id, task_list_id as list_id from contexts_task_lists as ContextList where context_id in (" . implode(",", $ids) . ")");
 	}
 	
 	public function getContextsTaskListsByTaskListId($id) {
-		return $this->query("select * from contexts_task_lists as ContextTaskList where task_list_id = " . $id);	
+		return $this->query("select context_id, task_list_id as list_id from contexts_task_lists as ContextList where task_list_id = " . $id);	
 	}
 
 	public function getContextsTaskListsByTaskListIds($ids) {
-		return $this->query("select * from contexts_task_lists as ContextTaskList where task_list_id in (" . implode(",", $ids) . ")");	
+		return $this->query("select context_id, task_list_id as list_id from contexts_task_lists as ContextList where task_list_id in (" . implode(",", $ids) . ")");	
 	}
 
 	// TagsTasks
@@ -245,75 +242,75 @@ class AppModel extends Model {
 	
 	// TagsTaskLists
 	public function getTagsTaskListsByTagId($id) {
-		return $this->query("select * from tags_task_lists as TagTaskList where tag_id = " . $id);
+		return $this->query("select tag_id, task_list_id as list_id from tags_task_lists as TagList where tag_id = " . $id);
 	}
 	
 	public function getTagsTaskListsByTagIds($ids) {
-		return $this->query("select * from tags_task_lists as TagTaskList where tag_id in (" . implode(",", $ids) . ")");
+		return $this->query("select tag_id, task_list_id as list_id from tags_task_lists as TagList where tag_id in (" . implode(",", $ids) . ")");
 	}
 	
 	public function getTagsTaskListsByTaskListId($id) {
-		return $this->query("select * from tags_task_lists as TagTaskList where task_list_id = " . $id);	
+		return $this->query("select tag_id, task_list_id as list_id from tags_task_lists as TagList where task_list_id = " . $id);	
 	}
 
 	public function getTagsTaskListsByTaskListIds($ids) {
-		return $this->query("select * from tags_task_lists as TagTaskList where task_list_id in (" . implode(",", $ids) . ")");	
+		return $this->query("select tag_id, task_list_id as list_id from tags_task_lists as TagList where task_list_id in (" . implode(",", $ids) . ")");	
 	}
 	
 	// TaskLists
 	public function getTaskListByTaskListId($id, $userId) {
-		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.deleted = false and TaskList.id = " . $id  . " group by TaskList.id");
+		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+					  	    "and task_lists_users.user_id = " . $userId . " where List.deleted = false and List.id = " . $id  . " group by List.id");
 	}
 	public function getTaskListsByTaskListIds($ids, $userId) {
-		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and task_lists_users.user_id = " . $userId . " where TaskList.deleted = false and TaskList.id in (" . implode(",", array_unique($ids)) . ") group by TaskList.id");
+		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+					  	    "and task_lists_users.user_id = " . $userId . " where List.deleted = false and List.id in (" . implode(",", array_unique($ids)) . ") group by List.id");
 	}
 
 	public function getTaskListAndParentByTaskListId($id, $userId, $shared = false) {
-		$query = "select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id" .
-				    " and task_lists_users.user_id = " . $userId . " and TaskList.deleted = false";
+		$query = "select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id" .
+				    " and task_lists_users.user_id = " . $userId . " and List.deleted = false";
 
 		if ($shared) {
-			$query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = TaskList.id and task_lists_users.user_id != " . $userId . ")";
+			$query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = List.id and task_lists_users.user_id != " . $userId . ")";
 		} else {
-		  $query .= " and (TaskList.id = " . $id . " or TaskList.parent_id = " . $id . ")";
+		  $query .= " and (List.id = " . $id . " or List.parent_id = " . $id . ")";
 		}
 	
-		$query .= " group by TaskList.id";
+		$query .= " group by List.id";
 		return $this->query($query);
 	}
 
 	public function getTaskLists($userId) {
-		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and TaskList.deleted = false and task_lists_users.user_id = " . $userId . " group by TaskList.id");
+		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+					  	    "and List.deleted = false and task_lists_users.user_id = " . $userId . " group by List.id");
 	}
 
 	public function getRootTaskLists($userId) {
-		return $this->query("select TaskList.* from task_lists as TaskList inner join task_lists_users on task_lists_users.task_list_id = TaskList.id " .
-					  	    "and TaskList.deleted = false and task_lists_users.user_id = " . $userId . " where TaskList.parent_id is null group by TaskList.id");
+		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+					  	    "and List.deleted = false and task_lists_users.user_id = " . $userId . " where List.parent_id is null group by List.id");
 	}
 
 	public function getNavigationTree($userId) {
-		return $this->query("select TaskList.id, TaskList.name, TaskList.parent_id from task_lists as TaskList inner join task_lists_users on " .
-							"task_lists_users.task_list_id = TaskList.id and TaskList.deleted = false and task_lists_users.user_id = " . $userId . " group by TaskList.id");
+		return $this->query("select List.id, List.name, List.parent_id from task_lists as List inner join task_lists_users on " .
+							"task_lists_users.task_list_id = List.id and List.deleted = false and task_lists_users.user_id = " . $userId . " group by List.id");
 	}
 
 	// TaskListsTasks
 	public function getTaskListsTasksByTaskListId($id) {
-		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id = " . $id);
+		return $this->query("select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_list_id = " . $id);
 	}
 
 	public function getTaskListsTasksByTaskListIds($ids) {
-		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id in (" . implode(",", array_unique($ids)) . ")");
+		return $this->query("select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_list_id in (" . implode(",", array_unique($ids)) . ")");
 	}
 
 	public function getTaskListsTasksByTaskIds($ids) {
-		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_id in (" . implode(",", array_unique($ids)) . ")");
+		return $this->query("select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_id in (" . implode(",", array_unique($ids)) . ")");
 	}
 
 	public function getTaskListsTasksByTaskListTaskId($id) {
-		return $this->query("select TaskListTask.* from task_lists_tasks as TaskListTask where TaskListTask.task_list_id = " . $id);
+		return $this->query("select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_list_id = " . $id);
 	}
 
 	public function deleteTaskListTaskByTaskIdAndTaskListId($taskId, $listId) {
@@ -322,5 +319,28 @@ class AppModel extends Model {
 	
 	public function addTaskListTask($taskId, $listId) {
 		return $this->query("insert into task_lists_tasks (task_id, task_list_id) values (" . $taskId . "," . $listId . ")");
+	}
+
+
+
+
+	public function addTags($tags, $userId){
+		return $this->createLabels($this->Tag, $tags, $userId);
+	}
+
+	public function addContexts($contexts, $userId){
+		return $this->createLabels($this->Context, $contexts, $userId);
+	}
+
+	public function getTagsString(){
+		return $this->getLabels($this->Tag);
+	}
+
+	public function getContextsString(){
+		return $this->getLabels($this->Context);
+	}
+
+	public function addUsers($users, $user){
+		return $this->getUsers($users, $user);
 	}
 }

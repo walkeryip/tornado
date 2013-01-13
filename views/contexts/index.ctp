@@ -1,12 +1,8 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var contextsView = new Tornado.ContextsView("#contexts-view");
-		Tornado.viewManager.addView(contextsView);
-
-		var defaultUser = {};
-		defaultUser.id = <?php echo $user_id ?>;
-		Tornado.setDefaultUser(defaultUser);
+		var contextsPanel = new Tornado.ContextsPanel("#contexts-panel");
+		Tornado.panelManager.addPanel(contextsPanel);
 	});
 </script>
-<div id="contexts-view"></div>
+<div id="contexts-panel"></div>

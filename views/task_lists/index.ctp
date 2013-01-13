@@ -1,13 +1,8 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var listsView = new Tornado.ListsView("#lists-view");
-		Tornado.viewManager.addView(listsView);
-
-		var defaultUser = {};
-		defaultUser.id = <?php echo $user_id ?>;
-		defaultUser.name = "<?php echo $_SESSION['Auth']['User']['username']; ?>";
-		Tornado.setDefaultUser(defaultUser);
+		var listsPanel = new Tornado.ListsPanel("#lists-panel");
+		Tornado.panelManager.addPanel(listsPanel);
 	});
 </script>
-<div id="lists-view"></div>
+<div id="lists-panel"></div>

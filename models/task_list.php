@@ -6,16 +6,16 @@
 class TaskList extends AppModel {
 	var $name = 'TaskList';
 
-	var $validate = array(
-		'name' => 'notEmpty');
+	/*var $validate = array(
+	  'name' => 'notEmpty');*/
 
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
 		'Task' => array('className'=>'Task'),
 		'User' => array('className' => 'User'),
 		'Context' => array('className' => 'Context')); 
-
 	
+	/*
 
 	public function getTaskListsByContextId($id){
 		$conditions = array('ContextsTaskLists.context_id' => $id);
@@ -37,26 +37,8 @@ class TaskList extends AppModel {
 		return $this->find('all', array('recursive' => 1, 'conditions' => $conditions));
 	}
 
-	public function addTags($tags, $userId){
-		return $this->createLabels($this->Tag, $tags, $userId);
-	}
-
-	public function addContexts($contexts, $userId){
-		return $this->createLabels($this->Context, $contexts, $userId);
-	}
-
-	public function getTagsString(){
-		return $this->getLabels($this->Tag);
-	}
-
-	public function getContextsString(){
-		return $this->getLabels($this->Context);
-	}
-
-	public function addUsers($users, $user){
-		return $this->getUsers($users, $user);
-	}
 	
+	*/	
 }
 
 ?>

@@ -1,4 +1,4 @@
-Tornado.TagView = Class.create(Tornado.MixedView, {
+Tornado.TagPanel = Class.create(Tornado.MixedPanel, {
     initialize: function($super, id, containerId){
         $super(id, containerId);
     },

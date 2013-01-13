@@ -1,110 +1,114 @@
 Tornado = {
-	initialize: function() {
-		this.tasks = new Hash();
-		this.contexts = new Hash();
-		this.tags = new Hash();
-		this.lists = new Hash();
-		this.users = new Hash();
+    // Constructor
+    initialize: function() {
+	this.tasks = new Hash();
+	this.contexts = new Hash();
+	this.tags = new Hash();
+	this.lists = new Hash();
+	this.users = new Hash();
+	
+	this.state = new Tornado.State();
+	this.navigationTree = new Tornado.NavigationTree();
+	this.panelManager = new Tornado.PanelManager();
 
-		this.defaultModel = {};
+	this.templates = {
+	    errorBox: "<div id=\"error\">{{{message}}}</div>",
+	    loginMessage: "Click <a href=\"/tornado/\">here</a> to log in."
+	};
 
-		this.navigationTree = new Tornado.NavigationTree();
-		this.viewManager = new Tornado.ViewManager();
-	},
-
-	setDefaultTag: function(tag){
-		Tornado.defaultModel.tag = {};
-		Tornado.defaultModel.tag.id = tag.id;
-		Tornado.defaultModel.tag.name = tag.name;
-	},
-
-	setDefaultContext: function(context){
-		Tornado.defaultModel.context = {};
-		Tornado.defaultModel.context.id = context.id;
-		Tornado.defaultModel.context.name = context.name;
-	},
-
-	setDefaultUser: function(user){
-		Tornado.defaultModel.user = {};
-		Tornado.defaultModel.user.id = user.id;
-	},
-
-	setDefaultList: function(list){
-		Tornado.defaultModel.list = {};
-		Tornado.defaultModel.list.id = list.id;
-		Tornado.defaultModel.list.name = list.name;
-
-		this.breadcrumbs = new Tornado.Breadcrumbs(list.id, "#breadcrumbs");
-	},
-
-	getDefaultTag: function() {
-		if (Tornado.defaultModel.tag){
-			return Tornado.defaultModel.tag;
-		} else {
-			return null;
-		}
-	},
-
-	getDefaultUser: function() {
-		if (Tornado.defaultModel.user){
-			return Tornado.defaultModel.user;
-		} else {
-			return null;
-		}
-	},
-
-    getDefaultContext: function() {
-        if (Tornado.defaultModel.context){
-            return Tornado.defaultModel.context;
-        } else {
-            return null;
-        }
+	this.HTTPStatus = {
+	    forbidden: 403
+	};
     },
 
-    getDefaultList: function() {
-        if (Tornado.defaultModel.list){
-            var result = new Array();
-            result.push(Tornado.defaultModel.list);
-            return result;
-        } else {
-            return null;
-        }
+    // Error function
+    error: function(data) {
+	if (data.status === Tornado.HTTPStatus.forbidden) {
+	    jq.modal(Mustache.render(this.templates.errorBox, {message: "You have been logged out. " + this.templates.loginMessage}));
+	} else {
+	    jq.modal(Mustache.render(this.templates.errorBox, {message: data.responseText}));
+	}
     },
 
-	getDefaultListId: function() {
-		return Tornado.defaultModel.list !== undefined ? Tornado.defaultModel.list.id : null;
-	},
+    // Function called when an item is dropped on a list
+    listDropFunction: function(event, ui) {
+	var item = ui.draggable[0].model;
+	var destId = jq(this).attr("data-id");
+	if (item.id !== destId) {
+	    item.move(destId, 
+		      function (data) {
+			  Tornado.panelManager.dataUpdated(data);
+		      },
+		      function () {
+			  ui.draggable.draggable('option','revert',true);
+		      });    		
+	} else {
+	    ui.draggable.draggable('option','revert',true);
+	}
+    },
 
-	error: function(data) {
-	    if (data.status === 403) {
-		jq.modal("<div id=\"error\">You have been logged out. Click <a href=\"/tornado/\">here</a> to log in.</div>");
-	    } else {
-		jq.modal("<div id=\"error\">" + data.responseText + "</div>");
-	    }
-	},
+    // Get an item based on model name
+    getItem: function(modelName, id) {
+	return Tornado[modelName + "s"].get(id);
+    },
 
-	listDropFunction: function(event, ui) {
-		//event.revert = false;
-		var item = ui.draggable[0].model;
-		var destId = jq(this).attr("data-id");
-		if (item.id !== destId) {
-			item.move(destId, 
-				function (data) {
-					Tornado.viewManager.dataUpdated(data);
-				},
-				function () {
-					ui.draggable.draggable('option','revert',true);
-				});    		
-		} else {
-			ui.draggable.draggable('option','revert',true);
-		}
+    // Unset an item based on model name
+    unsetItem: function(modelName, id) {
+	return Tornado[modelName + "s"].unset(id);
+    },
+
+    // Set an item based on model name
+    setItem: function(modelName, id, value) {
+	return Tornado[modelName + "s"].set(id, value);
+    },
+
+    // TODO: this should not be used
+    getItemDataTag: function(modelName) {
+	return modelName.charAt(0).toUpperCase() + modelName.slice(1);
+    },
+
+    // TODO: this should not be used
+    getItemClass: function(modelName) {
+	return Tornado[modelName.charAt(0).toUpperCase() + modelName.slice(1)];
     }
 };
 
+/**
+ * Extend Hash to include clear, isEmpty and size
+ **/
 (function() { 
-	function Hash_clear() { 
-		this._object = {}; 
-	} 
+    // Clear a hash
+    function Hash_clear() { 
+	this._object = {}; 
+    }
 
-	Hash.prototype.clear = Hash_clear;
+    // Get hash size
+    function Hash_size(obj) {
+	var size = 0, key;
+	for (key in obj) {
+            if (obj.hasOwnProperty(key)) size++;
+	}
+	return size;
+    }
+
+    // Find out if the hash is empty
+    function Hash_isEmpty(obj) {
+	for (key in obj) {
+            if (obj.hasOwnProperty(key)) 
+		return false;
+	}
+	return true;
+    }
+    
+    Hash.prototype.clear = Hash_clear;
+    Hash.prototype.size = Hash_size;
+    Hash.prototype.isEmpty = Hash_isEmpty;
 })(); 
+
+// jQuery plugin to highlight an element
+jq.fn.animateHighlight = function(highlightColor, duration) {
+    var highlightBg = highlightColor || "#FFFF9C";
+    var animateMs = duration || 1500;
+    var originalBg = this.css("backgroundColor");
+    this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
+};

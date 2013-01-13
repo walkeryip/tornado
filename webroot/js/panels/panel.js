@@ -1,6 +1,6 @@
 // Abstract class
-Tornado.View = Class.create();
-Tornado.View.prototype = {
+Tornado.Panel = Class.create();
+Tornado.Panel.prototype = {
 	initialize: function (id, containerId, parameters) {
 		this.id = id;
 
@@ -19,7 +19,7 @@ Tornado.View.prototype = {
 
 		this.container = jq(containerId);
 		this.container.hide();
-		this.container.addClass("view");
+		this.container.addClass("panel");
 	},
 	
 
@@ -59,9 +59,9 @@ Tornado.View.prototype = {
 
 	dataUpdated: function (data) {
 		var self = this;
-		var emptyView = false;
-		if (this.taskElements.size() == 0 && this.tagElements.size() == 0 && this.contextElements.size() == 0 && this.listElements.size() == 0){
-			emptyView = true;
+		var emptyPanel = false;
+	    if (this.taskElements.isEmpty() && this.tagElements.isEmpty() && this.contextElements.isEmpty() && this.listElements.isEmpty()){
+			emptyPanel = true;
 		}
 		
         this.populate(data);
@@ -102,12 +102,6 @@ Tornado.View.prototype = {
 			$(this).remove();
 		});
 		this.unsetItemElement(item);
-	},
-
-	itemAttributeDeleted: function(item) {
-		this.container.find("li[data-model-type=" + item.getModelName() + "][data-model-id=" + item.id + "]").fadeOut("fast", function() {
-			$(this).remove();
-		});
 	},
 
 	itemAdded: function(item) {

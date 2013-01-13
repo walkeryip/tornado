@@ -1,12 +1,8 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var tagsView = new Tornado.TagsView("#tags-view");
-		Tornado.viewManager.addView(tagsView);
-
-		var defaultUser = {};
-		defaultUser.id = <?php echo $user_id ?>;
-		Tornado.setDefaultUser(defaultUser);
+		var tagsPanel = new Tornado.TagsPanel("#tags-panel");
+		Tornado.panelManager.addPanel(tagsPanel);
 	});
 </script>
-<div id="tags-view"></div>
+<div id="tags-panel"></div>

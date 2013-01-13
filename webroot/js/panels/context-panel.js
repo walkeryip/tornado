@@ -1,4 +1,4 @@
-Tornado.ContextView = Class.create(Tornado.MixedView, {
+Tornado.ContextPanel = Class.create(Tornado.MixedPanel, {
 	initialize: function($super, id, containerId){
 		$super(id, containerId);
 	},

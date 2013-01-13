@@ -1,4 +1,4 @@
-Tornado.TaskView = Class.create(Tornado.View, {
+Tornado.TaskPanel = Class.create(Tornado.Panel, {
 	initialize: function($super, containerId, parameters){
 		$super(containerId, containerId, parameters);
 		this.defaultParameters(this.parameters);

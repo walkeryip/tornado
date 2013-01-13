@@ -1,16 +1,8 @@
 <script type="text/javascript">
 	jq(document).ready(function () {
-		var contextView = new Tornado.ContextView(<?php echo $context_id; ?>, "#context-tasks");
-		Tornado.viewManager.addView(contextView);
-
-        var defaultContext = {};
-		var defaultUser = {};
-
-     	defaultContext.id = <?php echo $context_id; ?>;
-		defaultUser.id = <?php echo $user_id ?>;
-
-     	Tornado.setDefaultContext(defaultContext);
-		Tornado.setDefaultUser(defaultUser);
+		var contextPanel = new Tornado.ContextPanel(<?php echo $context_id; ?>, "#context-tasks");
+		Tornado.panelManager.addPanel(contextPanel);
+		Tornado.state.setContext({id: <?php echo $context_id; ?>});
 	});
 </script>
 

@@ -6,28 +6,18 @@
 class Task extends AppModel {
 	var $name = 'Task';
 
-	var $validate = array(
-		'name' => 'notEmpty');
+	/*var $validate = array(
+	  'name' => 'notEmpty');*/
 
 	var $hasAndBelongsToMany = array(
 		'Tag' => array('className'=>'Tag'),
 		'Context' => array('className' => 'Context'),
 		'User' => array('className' => 'User'),
 		'TaskList' => array('className' => 'TaskList')); 
-
+	/*
 	
-	/*public function getTasks($id, $conditions, $contain, $bind){
-		$this->Behaviors->attach('Containable');
-		$this->bindModel(array('hasOne' => $bind));
-		$data = $this->find('all', array(
-			'fields' => array('Task.*'),
-			'contain' => $contain,
-			'conditions' => $conditions));
 
-		return $data;
-	}*/
-
-	public function getTasksByListId($id, $checked){
+		public function getTasksByListId($id, $checked){
 		$conditions = array('Task.checked' => $checked, 'TaskListsTasks.task_list_id' => $id);
 		return $this->getTasks($id, $conditions, array('Tag', 'Context', 'TaskListsTasks'), array('TaskListsTasks'));
 	}
@@ -79,10 +69,7 @@ class Task extends AppModel {
 	
 	
 	
-	
-	
-	
-	
+    */	
 
 }
 

@@ -15,6 +15,7 @@
 
     echo $scripts_for_layout;
     ?>
+    <script type="text/javascript" src="/tornado/js/lib/mustache.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/prototype.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
@@ -30,7 +31,8 @@
 
     <script type="text/javascript" src="/tornado/js/tornado.js"></script>
     <script type="text/javascript" src="/tornado/js/common.js"></script>
-    <script type="text/javascript" src="/tornado/js/view-manager.js"></script>
+    <script type="text/javascript" src="/tornado/js/state.js"></script>
+    <script type="text/javascript" src="/tornado/js/panel-manager.js"></script>
     <script type="text/javascript" src="/tornado/js/breadcrumbs.js"></script>
     <script type="text/javascript" src="/tornado/js/navigationtree.js"></script>
     <script type="text/javascript" src="/tornado/js/models/item.js"></script>
@@ -46,20 +48,21 @@
     <script type="text/javascript" src="/tornado/js/views/list-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/tag-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/context-element.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/mixed-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/single-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/task-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/list-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/context-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/tag-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/lists-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/deadline-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/todo-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/tags-view.js"></script>
-    <script type="text/javascript" src="/tornado/js/views/contexts-view.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/mixed-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/single-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/task-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/list-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/context-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/tag-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/lists-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/deadline-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/todo-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/tags-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/contexts-panel.js"></script>
 	<script>	
 		Tornado.initialize();
+		Tornado.state.setUser({id: <? echo $_SESSION['Auth']['User']['id']; ?>, name: "<? echo $_SESSION['Auth']['User']['username']; ?>"});
 	</script>
 </head>
 <body>

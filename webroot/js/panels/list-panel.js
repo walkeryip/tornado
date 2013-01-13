@@ -1,6 +1,7 @@
-Tornado.ListView = Class.create(Tornado.MixedView, {
+Tornado.ListPanel = Class.create(Tornado.MixedPanel, {
     initialize: function($super, id, containerId){
         $super(id, containerId);
+	this.breadcrumbs = new Tornado.Breadcrumbs(id, "#breadcrumbs");
     },
 
     getAjaxUrl: function() {

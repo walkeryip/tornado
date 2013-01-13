@@ -98,11 +98,11 @@ class TasksController extends AppController {
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
 
 		if (!empty($taskIds)){
-			$data["TaskListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
-			$taskListIds = $this->accId($data["TaskListsTasks"], "TaskListTask", "id");
+			$data["ListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
+			$listIds = $this->accId($data["ListsTasks"], "ListTask", "id");
 
-			if (!empty($taskListIds)){
-				$data["TaskLists"] = $this->Task->getTaskListsByTaskListIds($taskListIds, $userId);
+			if (!empty($listIds)){
+				$data["Lists"] = $this->Task->getTaskListsByTaskListIds($listIds, $userId);
 			}
 
 			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
@@ -138,7 +138,7 @@ class TasksController extends AppController {
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
 
 		if (!empty($taskIds)) {
-			$data["TaskLists"] = $this->Task->getTaskListsByTasksIds($taskIds);
+			$data["Lists"] = $this->Task->getTaskListsByTasksIds($taskIds);
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
 			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
@@ -149,15 +149,15 @@ class TasksController extends AppController {
 		}		
 
 		if (!empty($tagIds)){
-			$data["Tags"] = $this->Task->Tag->getTagsByTagIds($tagIds, $userId);
+			$data["Tags"] = $this->Task->getTagsByTagIds($tagIds, $userId);
 		}
 
 		if (!empty($contextIds)){
-			$data["Contexts"] = $this->Task->Context->getContextsByContextIds($contextIds, $userId);
+			$data["Contexts"] = $this->Task->getContextsByContextIds($contextIds, $userId);
 		}
 
 		if (!empty($userIds)) {
-			$data["Users"] = $this->Task->User->getUsersByUserIds($userIds);
+			$data["Users"] = $this->Task->getUsersByUserIds($userIds);
 		}
 
 		return $data;
@@ -198,25 +198,25 @@ class TasksController extends AppController {
 		$index = 0;
 
 		$this->Task->deleteTaskListTaskByTaskIdAndTaskListId($taskId, $fromListId);
-		$data["TaskListsTasks"] = array();
+		$data["ListsTasks"] = array();
 
 		if (mysql_affected_rows() >= 0){
-			$data["TaskListsTasks"][$index] = array();
-			$data["TaskListsTasks"][$index]["TaskListTask"] = array();
-			$data["TaskListsTasks"][$index]["TaskListTask"]["deleted"] = true;
-			$data["TaskListsTasks"][$index]["TaskListTask"]["task_id"] = $taskId;
-			$data["TaskListsTasks"][$index]["TaskListTask"]["task_list_id"] = $fromListId;
+			$data["ListsTasks"][$index] = array();
+			$data["ListsTasks"][$index]["ListTask"] = array();
+			$data["ListsTasks"][$index]["ListTask"]["deleted"] = true;
+			$data["ListsTasks"][$index]["ListTask"]["task_id"] = $taskId;
+			$data["ListsTasks"][$index]["ListTask"]["task_list_id"] = $fromListId;
 			$index++;
 		}
 
 		$this->Task->addTaskListTask($taskId, $toListId);
 
 		if (mysql_affected_rows() > 0){
-			$data["TaskListsTasks"][$index] = array();
-			$data["TaskListsTasks"][$index]["TaskListTask"] = array();
-			$data["TaskListsTasks"][$index]["TaskListTask"]["id"] = mysql_insert_id();
-			$data["TaskListsTasks"][$index]["TaskListTask"]["task_id"] = $taskId;
-			$data["TaskListsTasks"][$index]["TaskListTask"]["task_list_id"] = $toListId;
+			$data["ListsTasks"][$index] = array();
+			$data["ListsTasks"][$index]["ListTask"] = array();
+			$data["ListsTasks"][$index]["ListTask"]["id"] = mysql_insert_id();
+			$data["ListsTasks"][$index]["ListTask"]["task_id"] = $taskId;
+			$data["ListsTasks"][$index]["ListTask"]["task_list_id"] = $toListId;
 		}
 
 		

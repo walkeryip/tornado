@@ -1,6 +1,6 @@
-Tornado.ContextsView = Class.create(Tornado.SingleView, {
+Tornado.ContextsPanel = Class.create(Tornado.SinglePanel, {
 	initialize: function($super, containerId){
-		$super("contexts-view", containerId);
+		$super("contexts-panel", containerId);
 	},
 
 	getAjaxUrl: function() {

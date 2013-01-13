@@ -32,27 +32,27 @@ class ContextsController extends AppController {
 		$tagIds = array();
 		if ($id != null) {
 			$data["ContextsTasks"] = $this->Context->getContextsTasksByContextIds($contextIds);
-			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
+			$data["ContextsLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
 
 			$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
-			$taskListIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "task_list_id");
+			$listIds = $this->accId($data["ContextsLists"], "ContextList", "task_list_id");
 
 			$userIds = array();
 			$data["Users"] = array();
 		}
 
 
-		if (!empty($taskListIds)){
-			$data["TaskLists"] = $this->Context->getTaskListsByTaskListIds($taskListIds, $userId);
+		if (!empty($listIds)){
+			$data["Lists"] = $this->Context->getTaskListsByTaskListIds($listIds, $userId);
 
-			$data["TaskListsUsers"] = $this->Context->getTaskListsUsersByTaskListIds($taskListIds);			
-			$userIds += $this->accId($data["TaskListsUsers"], "TaskListUser", "user_id");
+			$data["ListsUsers"] = $this->Context->getTaskListsUsersByTaskListIds($listIds);			
+			$userIds += $this->accId($data["ListsUsers"], "ListUser", "user_id");
 			
-			$data["TagsTaskLists"] = $this->Context->getTagsTaskListsByTaskListIds($taskListIds);
-			$data["ContextsTaskLists"] = $this->Context->getContextsTaskListsByTaskListIds($taskListIds);
+			$data["TagsLists"] = $this->Context->getTagsTaskListsByTaskListIds($listIds);
+			$data["ContextsLists"] = $this->Context->getContextsTaskListsByTaskListIds($listIds);
 			
-			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
-			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+			$tagIds += $this->accId($data["TagsLists"], "TagList", "tag_id");
+			$contextIds += $this->accId($data["ContextsLists"], "ContextList", "context_id");
 		}
 		if (!empty($taskIds)){
 		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);

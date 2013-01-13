@@ -2,16 +2,11 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var tasksView = new Tornado.TaskView("#tasks-view", {title: "Shared tasks", shared: true});
-		Tornado.viewManager.addView(tasksView);
-		var listsView = new Tornado.ListsView("#lists-view", {title: "Shared lists", shared: true});
-		Tornado.viewManager.addView(listsView);
-
-		var defaultUser = {};
-		defaultUser.id = <?php echo $user_id ?>;
-		defaultUser.name = "<?php echo $_SESSION['Auth']['User']['username']; ?>";
-		Tornado.setDefaultUser(defaultUser);
+		var tasksPanel = new Tornado.TaskPanel("#tasks-panel", {title: "Shared tasks", shared: true});
+		Tornado.panelManager.addPanel(tasksPanel);
+		var listsPanel = new Tornado.ListsPanel("#lists-panel", {title: "Shared lists", shared: true});
+		Tornado.panelManager.addPanel(listsPanel);
 	});
 </script>
-<div id="tasks-view"></div>
-<div id="lists-view"></div>
+<div id="tasks-panel"></div>
+<div id="lists-panel"></div>

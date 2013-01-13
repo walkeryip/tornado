@@ -151,7 +151,7 @@ background-color: rgba(255, 255, 0, .5);
 	background-color: white;
 }
 
-.view {
+.panel {
 	background-color: #ddffee;
 	margin: 10px;
 	padding: 10px;
@@ -160,7 +160,7 @@ background-color: rgba(255, 255, 0, .5);
 	float: left;
 }
 
-.view h2 {
+.panel h2 {
 	margin-top: 0px;
 }	
 

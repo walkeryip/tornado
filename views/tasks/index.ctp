@@ -2,18 +2,12 @@
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var tasksDoneView = new Tornado.TaskView("#tasks-done-view", {title: "Done tasks", checked: true});
-		Tornado.viewManager.addView(tasksDoneView);
+		var tasksDonePanel = new Tornado.TaskPanel("#tasks-done-panel", {title: "Done tasks", checked: true});
+		Tornado.panelManager.addPanel(tasksDonePanel);
 
-		var tasksView = new Tornado.TaskView("#tasks-view", {title: "Uncompleted tasks"});
-		Tornado.viewManager.addView(tasksView);
-
-
-		var defaultUser = {};
-		defaultUser.id = <?php echo $user_id ?>;
-		defaultUser.name = "<?php echo $_SESSION['Auth']['User']['username']; ?>";
-		Tornado.setDefaultUser(defaultUser);
+		var tasksPanel = new Tornado.TaskPanel("#tasks-panel", {title: "Uncompleted tasks"});
+		Tornado.panelManager.addPanel(tasksPanel);
 	});
 </script>
-<div id="tasks-view"></div>
-<div id="tasks-done-view"></div>
+<div id="tasks-panel"></div>
+<div id="tasks-done-panel"></div>

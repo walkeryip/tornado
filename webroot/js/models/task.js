@@ -77,7 +77,7 @@ Tornado.Task = Class.create(Tornado.Item, {
 			checkFunction = "un" + checkFunction;
 		}
 
-		Tornado.viewManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id, 
+		Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/" + checkFunction + "/" + this.id, 
 										callback: callback,  
 										post: true});
     },

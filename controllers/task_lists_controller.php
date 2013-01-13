@@ -15,31 +15,39 @@ class TaskListsController extends AppController {
 
 	function add($id = null){
 		$userId = $_SESSION['Auth']['User']['id'];
-
+		//echo "<pre><code>";
+		//print_r($this->data);
+		//$this->mapData($this->data);
+		//print_r($this->data);
+		//echo "</code></pre>";
+		
 		if (!empty($this->data)){
 			$this->data["User"] = array();
 			$this->data["User"]["User"] = $userId;
 
-			if (isset($this->data["TaskList"]["tags"])){
-				$test = $this->TaskList->addTags($this->data["TaskList"]["tags"], $userId);
+			if (isset($this->data["List"]["tags"])){
+				$test = $this->TaskList->addTags($this->data["List"]["tags"], $userId);
 				$this->data["Tag"] = array();
 				$this->data["Tag"]["Tag"] = $test;
 			} 
 
-			if (isset($this->data["TaskList"]["contexts"])){
-				$test = $this->TaskList->addContexts($this->data["TaskList"]["contexts"], $userId);
+			if (isset($this->data["List"]["contexts"])){
+				$test = $this->TaskList->addContexts($this->data["List"]["contexts"], $userId);
 				//print_r($test);
 				$this->data["Context"] = array();
 				$this->data["Context"]["Context"] = $test;
 			}
 
-			if (isset($this->data["TaskList"]["users"])){
-				$test = $this->TaskList->addUsers($this->data["TaskList"]["users"], $userId);
+			if (isset($this->data["List"]["users"])){
+				$test = $this->TaskList->addUsers($this->data["List"]["users"], $userId);
 				//print_r($test);
 				$this->data["User"] = array();
 				$this->data["User"]["User"] = $test;
 			}
 
+
+		$this->data["TaskList"] = $this->data["List"];
+		unset($this->data["List"]);
 
 			$this->TaskList->create();
 
@@ -55,31 +63,31 @@ class TaskListsController extends AppController {
 		$userId = $_SESSION['Auth']['User']['id'];
 
 		if ($id != null || $shared) {
-		  $data["TaskLists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId, $shared);
+		  $data["Lists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId, $shared);
 		} else {
-			$data["TaskLists"] = $this->TaskList->getRootTaskLists($userId);
+			$data["Lists"] = $this->TaskList->getRootTaskLists($userId);
 		}
 
-		$taskListIds = $this->accId($data["TaskLists"], "TaskList", "id");
+		$taskListIds = $this->accId($data["Lists"], "List", "id");
 
 		if (!empty($taskListIds)) {
 			if ($id != null) {
-				$data["TaskListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
+				$data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
 		
-				$taskIds = $this->accId($data["TaskListsTasks"], "TaskListTask", "task_id");
+				$taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
 			}
 
-			$data["TagsTaskLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
-			$data["ContextsTaskLists"] = $this->TaskList->getContextsTaskListsByTaskListIds($taskListIds);
+			$data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
+			$data["ContextsLists"] = $this->TaskList->getContextsTaskListsByTaskListIds($taskListIds);
 
-			$tagIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
-			$contextIds = $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+			$tagIds = $this->accId($data["TagsLists"], "TagList", "tag_id");
+			$contextIds = $this->accId($data["ContextsLists"], "ContextList", "context_id");
 
 			$data["Tags"] = array();
 			$data["Contexts"] = array();
 
-			$data["TaskListsUsers"] = $this->TaskList->getTaskListsUsersByTaskListIds($taskListIds);			
-			$userIds = $this->accId($data["TaskListsUsers"], "TaskListUser", "user_id");
+			$data["ListsUsers"] = $this->TaskList->getTaskListsUsersByTaskListIds($taskListIds);			
+			$userIds = $this->accId($data["ListsUsers"], "ListUser", "user_id");
 
 			$data["Users"] = array();
 
@@ -125,7 +133,7 @@ class TaskListsController extends AppController {
 		} else {
 			$taskList = $this->TaskList->getTaskListByTaskListId($id, $_SESSION['Auth']['User']['id']);
 			if ($taskList != null){
-				$this->set('task_list_id', $taskList[0]["TaskList"]["id"]);
+				$this->set('task_list_id', $taskList[0]["List"]["id"]);
 			}
 		}
 	}
@@ -149,26 +157,47 @@ class TaskListsController extends AppController {
 		}
 	}
 
-	function edit($id = null){
-		$userId = $_SESSION['Auth']['User']['id'];
+	function mapData($data) {
+	  foreach ($data as $k=>$v) {
+	    if ($k == "List") {
+	      $row["List"] = $row[$k];
+	      unset($row[$k]);
 
-		if (isset($this->data["TaskList"]["tags"])){
-			$test = $this->TaskList->addTags($this->data['TaskList']['tags'], $userId); 
+	      /*	      foreach ($data["Lists"] as $nk=>$nv) {
+		if ($k == "List") {
+		  $data["Lists"]["List"] = $data["Lists"][$k];
+		  unset($data["Lists"][$k]);
+		}
+		}*/
+	    }
+	  }
+	}
+
+	function edit($id = null){
+	  $userId = $_SESSION['Auth']['User']['id'];
+
+
+
+		if (isset($this->data["List"]["tags"])){
+			$test = $this->TaskList->addTags($this->data['List']['tags'], $userId); 
 			$this->data["Tag"] = array();
 			$this->data["Tag"]["Tag"] = $test;
 		}
 		
-		if (isset($this->data["TaskList"]["contexts"])){
-			$test = $this->TaskList->addContexts($this->data['TaskList']['contexts'], $userId);
+		if (isset($this->data["List"]["contexts"])){
+			$test = $this->TaskList->addContexts($this->data['List']['contexts'], $userId);
 			$this->data["Context"] = array();
 			$this->data["Context"]["Context"] = $test;
 		}	
 		
-		if (isset($this->data["TaskList"]["users"])){
-			$test = $this->TaskList->addUsers($this->data['TaskList']['users'], $userId);
+		if (isset($this->data["List"]["users"])){
+			$test = $this->TaskList->addUsers($this->data['List']['users'], $userId);
 			$this->data["User"] = array();
 			$this->data["User"]["User"] = $test;
 		}	
+
+		$this->data["TaskList"] = $this->data["List"];
+		unset($this->data["List"]);
 					
 		if ($this->TaskList->save($this->data)){
 			$this->data = $this->getTaskListById($id);
@@ -184,11 +213,11 @@ class TaskListsController extends AppController {
 		$status = false;
 
 
-		$data["TaskLists"] = array();
-		$data["TaskLists"][0] = array();
-		$data["TaskLists"][0]["TaskList"] = array();
-		$data["TaskLists"][0]["TaskList"]["id"] = $id;
-		$data["TaskLists"][0]["TaskList"]["deleted"] = true;
+		$data["Lists"] = array();
+		$data["Lists"][0] = array();
+		$data["Lists"][0]["List"] = array();
+		$data["Lists"][0]["List"]["id"] = $id;
+		$data["Lists"][0]["List"]["deleted"] = true;
 
 		$this->TaskList->set("deleted",true);
 		if ($this->TaskList->save()){
@@ -201,7 +230,7 @@ class TaskListsController extends AppController {
 
 	function move($listId, $fromListId, $toListId = null) {
 		$this->TaskList->id = $listId;
-		$this->data["TaskList"]["parent_id"] = $toListId;
+		$this->data["List"]["parent_id"] = $toListId;
 		
 		if ($this->TaskList->save($this->data)){
 			$this->data = $this->getTaskListById($listId);
