@@ -48,6 +48,8 @@ class TasksController extends AppController {
 		
 
 
+			$this->data["TaskList"] = $this->data["List"];
+
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
 
