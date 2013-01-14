@@ -18,25 +18,33 @@ Tornado.Item.prototype = {
 
 		if (data.Contexts !== undefined){
 			data.Contexts.each(function(contextData){
-            	self.fetchContext(contextData.Context);
+			    if (contextData.Context){
+            			self.fetchContext(contextData.Context);
+			    }
             });
 		}
 
 		if (data.Tags !== undefined){
             data.Tags.each(function(tagData){
-            	self.fetchTag(tagData.Tag);
+		if (tagData.Tag) {
+            	    self.fetchTag(tagData.Tag);
+		}
             });
 		}
 
 		if (data.Lists !== undefined){
 			data.Lists.each(function(listData){
-            	self.fetchList(listData.List);
+			    if (listData.List) {
+            			self.fetchList(listData.List);
+			    }
             });
 		}
 
 		if (data.Users !== undefined){
 			data.Users.each(function(userData){
-            	self.fetchUser(userData.User);
+			    if (userData.User) {
+            			self.fetchUser(userData.User);
+			    }
             });
 		}
 
