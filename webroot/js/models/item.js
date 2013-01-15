@@ -31,6 +31,7 @@ Tornado.Item.prototype = {
 		if (itemData[dataTag]) {
 		    var item = self.fetchItem(itemData[dataTag], modelName, identifier);
 		    map.set(item[identifier], item);
+
 		}
             });
 	}

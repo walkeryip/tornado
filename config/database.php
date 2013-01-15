@@ -6,7 +6,7 @@ class DATABASE_CONFIG {
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
-		'password' => 'rassepasse',
+		'password' => '',
 		'database' => 'tornado',
 		'encoding' => 'utf8',
 	);

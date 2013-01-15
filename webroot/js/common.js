@@ -158,7 +158,7 @@ jq(document).ready(function () {
 		} else if (inputMode === "list"){
 			data.List = {};
 			data.List.name = userKeywordObject.text;
-		    data.List.parent_id = (Tornado.state.getList()).id;
+		    data.List.parent_id = list ? list.id : null;
 		}
 
 	    data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
