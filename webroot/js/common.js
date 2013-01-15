@@ -104,7 +104,7 @@ jq(document).ready(function () {
 	var modelify = function(list, name) {
 		var result = new Array();
 
-		if (list !== null) {
+		if (list) {
 		list.each(function(item){
 			var n = new Array();
 			n[name] = item;
@@ -129,7 +129,7 @@ jq(document).ready(function () {
 		var listObj = Tornado.state.getList();
 	var list;
 
-	if (listObj !== null) {
+	if (listObj) {
 		list = Tornado.lists.get(listObj.id);
 	} else {
 	    list = null;

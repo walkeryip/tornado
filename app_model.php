@@ -138,7 +138,7 @@ class AppModel extends Model {
 	}
 	
 	public function getTaskListsByTasksIds($taskIds){
-		return $this->query("select * from task_lists as List where List.deleted = false and id in " .
+		 $this->query("select * from task_lists as List where List.deleted = false and id in " .
 								   "(select task_list_id from task_lists_tasks where task_id in (" . implode(",", $taskIds) . "))");
 	}
 	

@@ -73,7 +73,7 @@ Tornado.PanelManager.prototype = {
 	    error: function(data){
 		Tornado.error(data);
 		
-		if (args.error !== undefined) {
+		if (args.error) {
 		    args.error(data);
 		}
 	    }, 
@@ -83,11 +83,11 @@ Tornado.PanelManager.prototype = {
 	    if (self.containsData(data)){
 		var models = self.populateModels(data);
 		
-		if (args.callback !== undefined) {
+		if (args.callback) {
 		    args.callback(models);
 		}
 	    } else {
-		if (args.error !== undefined) {
+		if (args.error) {
 		    args.error(data);
 		}
 	    }
@@ -150,11 +150,11 @@ Tornado.PanelManager.prototype = {
 	var dataTag = Tornado.getItemDataTag(modelName);
 	var itemsData = data[dataTag + "s"];
 
-	if (itemsData !== undefined){
+	if (itemsData){
 	    itemsData.each(function(itemData) {
 		var item = Tornado.getItem(modelName, itemData[dataTag].id);
 		
-		if (item !== undefined && itemData[dataTag].deleted == true) {
+		if (item && itemData[dataTag].deleted == true) {
 		    self.itemDeleted(item);
 		    Tornado.unsetItem(modelName, item.id);
 		} else {
@@ -176,20 +176,20 @@ Tornado.PanelManager.prototype = {
 
     // General function for relating items with each other
     populateItemModelRelation: function(mainModel, secondaryModel, relName, data, addAsParent) {
-	if (data !== undefined){
+	if (data){
 	    data.each(function(relData) {
 		var rel = relData[relName];
 		var item = Tornado.getItem(mainModel, rel[mainModel + "_id"]);
 		var relItem = Tornado.getItem(secondaryModel, rel[secondaryModel + "_id"]);
 		
-		if (relData !== undefined && relData[relName].deleted == true) {
+		if (relData && relData[relName].deleted == true) {
 		    item[secondaryModel + "s"].unset(relItem.id);
 		    
 		    if (addAsParent) {
 			relItem.parent = null;
 		    }
 		} else {
-		    if (item !== undefined && relItem !== undefined){
+		    if (item && relItem){
 			item[secondaryModel + "s"].set(rel[secondaryModel + "_id"], relItem); 
 			
 			if (addAsParent) {

@@ -35,7 +35,7 @@ class ContextsController extends AppController {
 			$data["ContextsLists"] = $this->Context->getContextsTaskListsByContextIds($contextIds);
 
 			$taskIds = $this->accId($data["ContextsTasks"], "ContextTask", "task_id");
-			$listIds = $this->accId($data["ContextsLists"], "ContextList", "task_list_id");
+			$listIds = $this->accId($data["ContextsLists"], "ContextList", "list_id");
 
 			$userIds = array();
 			$data["Users"] = array();

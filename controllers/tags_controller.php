@@ -33,27 +33,27 @@ class TagsController extends AppController {
 		// We only want to get all associated tasks and lists when providing an id
 		if ($id != null) {
 			$data["TagsTasks"] = $this->Tag->getTagsTasksByTagIds($tagIds);
-			$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTagIds($tagIds);
+			$data["TagsLists"] = $this->Tag->getTagsTaskListsByTagIds($tagIds);
 
 			$taskIds = $this->accId($data["TagsTasks"], "TagTask", "task_id");
-			$taskListIds = $this->accId($data["TagsTaskLists"], "TagTaskList", "task_list_id");
+			$listIds = $this->accId($data["TagsLists"], "TagList", "list_id");
 
 			$userIds = array();
 			$data["Users"] = array();
 		}
 
 
-		if (!empty($taskListIds)){
-			$data["TaskLists"] = $this->Tag->getTaskListsByTaskListIds($taskListIds, $userId);
+		if (!empty($listIds)){
+			$data["Lists"] = $this->Tag->getTaskListsByTaskListIds($listIds, $userId);
 
-			$data["TaskListsUsers"] = $this->Tag->getTaskListsUsersByTaskListIds($taskListIds);			
-			$userIds += $this->accId($data["TaskListsUsers"], "TaskListUser", "user_id");
+			$data["ListsUsers"] = $this->Tag->getTaskListsUsersByTaskListIds($listIds);			
+			$userIds += $this->accId($data["ListsUsers"], "ListUser", "user_id");
 
-			$data["TagsTaskLists"] = $this->Tag->getTagsTaskListsByTaskListIds($taskListIds);
-			$data["ContextsTaskLists"] = $this->Tag->getContextsTaskListsByTaskListIds($taskListIds);
+			$data["TagsLists"] = $this->Tag->getTagsTaskListsByTaskListIds($listIds);
+			$data["ContextsLists"] = $this->Tag->getContextsTaskListsByTaskListIds($listIds);
 			
-			$tagIds += $this->accId($data["TagsTaskLists"], "TagTaskList", "tag_id");
-			$contextIds += $this->accId($data["ContextsTaskLists"], "ContextTaskList", "context_id");
+			$tagIds += $this->accId($data["TagsLists"], "TagList", "tag_id");
+			$contextIds += $this->accId($data["ContextsLists"], "ContextList", "context_id");
 		}
 		if (!empty($taskIds)){
 		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
