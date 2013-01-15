@@ -11,9 +11,9 @@ Tornado.Task = Class.create(Tornado.Item, {
         $super(data);
 
 	var task;
-	if (data.Task !== undefined){
+	if (data.Task){
 	    task = data.Task;
-	} else if (data.Tasks[0].Task !== undefined) {
+	} else if (data.Tasks[0].Task) {
 	    task = data.Tasks[0].Task;
 	}
 	

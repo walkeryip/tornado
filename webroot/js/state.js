@@ -2,10 +2,10 @@ Tornado.State = Class.create();
 Tornado.State.prototype = {
     // Constructor
     initialize: function() {
-	var list = {};
-	var tag = {};
-	var context = {};
-	var user = {};
+	this.list = {id: null};
+	this.tag = {id: null};
+	this.context = {id: null};
+	this.user = {id: null};
     },
 
     // Set the current list

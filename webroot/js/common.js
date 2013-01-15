@@ -22,7 +22,7 @@ var modalDivButtonClick = function (element) {
 
 
 var compareItem = function(a, b, field) {
-		if (field === undefined) {
+		if (!field) {
 			field = "name";
 		}
 

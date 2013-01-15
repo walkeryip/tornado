@@ -26,10 +26,10 @@ Tornado.Breadcrumbs.prototype = {
 	var currentId = listId;
 	var counter = 0;
 
-	while (currentId !== null && currentId !== undefined && currentId !== "root") {
+	while (currentId !== null && currentId && currentId !== "root") {
 	    var item = data[currentId];
 	    
-	    if (item === undefined) {
+	    if (!item) {
 		break;
 	    }
 	    

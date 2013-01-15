@@ -13,7 +13,7 @@ Tornado.TagPanel = Class.create(Tornado.MixedPanel, {
 				return true;
 			}
 		} else if (item instanceof Tornado.List){
-			return item.tags.get(this.id) !== undefined;
+			return item.tags.get(this.id);
 		}
 
 		return false;

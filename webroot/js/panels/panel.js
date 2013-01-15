@@ -5,7 +5,7 @@ Tornado.Panel.prototype = {
 		this.id = id;
 
 		this.parameters = parameters;
-		if (this.parameters === undefined) {
+		if (!this.parameters) {
 			this.parameters = {};
 		}
 
@@ -33,13 +33,13 @@ Tornado.Panel.prototype = {
 
 	populateItemElement: function(item, itemElements) {
 		if (this.includeItem(item)){
-			if (itemElements.get(item.id) == undefined){
+			if (!itemElements.get(item.id)){
 				this.itemAdded(item);
 			} else {
 				this.itemChanged(item);
 			}
 		} else {
-			if (itemElements.get(item.id) !== undefined){
+			if (itemElements.get(item.id)){
 				this.itemDeleted(item);
 			}
 		}
@@ -48,7 +48,7 @@ Tornado.Panel.prototype = {
 	populateItemElements: function(items) {
 		var self = this;
 
-		if (items !== undefined){
+		if (items){
 			var itemElements = this.getModelElementMatrix(items);
 
 			items.each(function(item) {
@@ -112,7 +112,7 @@ Tornado.Panel.prototype = {
 		var item = o;
 
 		// If list
-		if (o[0] !== undefined){
+		if (o[0]){
 			item = o[0];
 		}
 

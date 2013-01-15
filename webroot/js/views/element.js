@@ -48,7 +48,7 @@ Tornado.Element.prototype = {
 	    var tagsString = "";
 	    var defaultTag = Tornado.state.getTag();
 	    self.tags.each(function(tag){
-		if (defaultTag === undefined || tag.value.id != defaultTag.id) {
+		if (!defaultTag || tag.value.id != defaultTag.id) {
 		    tagsString += Mustache.render(self.templates.elementLabel, {model:"tag", id: tag.value.id, name: "#" + tag.value.name});	
 		}
 	    });
@@ -60,7 +60,7 @@ Tornado.Element.prototype = {
 	    var contextsString = "";
 	    var defaultContext = Tornado.state.getContext();
 	    self.contexts.each(function(context){
-		if (defaultContext === undefined || context.value.id != defaultContext.id) {
+		if (!defaultContext || context.value.id != defaultContext.id) {
 		    contextsString += Mustache.render(self.templates.elementLabel, {model:"context", id:context.value.id, name: "@" + context.value.name}); //"<span class=\"context\" data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></span>";	
 		}
 	    });
@@ -72,7 +72,7 @@ Tornado.Element.prototype = {
 	    var usersString = "";
 	    var defaultUser = Tornado.state.getUser();
 	    self.users.each(function(user){
-		if (defaultUser === undefined || user.value.id != defaultUser.id) {
+		if (!defaultUser || user.value.id != defaultUser.id) {
 		    usersString += Mustache.render(self.templates.elementLabel, {model:"user", id:user.value.id, name: "~" + user.value.name}); //"<span class=\"user\" data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></span>";	
 		}
 	    });
@@ -190,7 +190,7 @@ Tornado.Element.prototype = {
 	    this.element.hide().fadeIn();
 	}
 
-	if (loaded !== undefined && loaded == true) {
+	if (loaded && loaded == true) {
 	    this.flash();
 	}
     },

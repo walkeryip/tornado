@@ -62,7 +62,7 @@ Tornado.PanelManager.prototype = {
     loadData: function(args) {
 	var self = this;
 	
-	if (args === undefined) {
+	if (!args) {
 	    args = {};
 	}
 	

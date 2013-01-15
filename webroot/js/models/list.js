@@ -10,8 +10,15 @@ Tornado.List = Class.create(Tornado.Item, {
     populate: function($super, data){
         $super(data);
 	
-        var list = data.List;
-	
+        var list;
+	if (data.List) {
+	    list = data.List;
+	} else if (data.Lists) {
+	    list = data.Lists[0].List;
+	} else {
+	    list = data;
+	}
+
         this.id = list.id;
 	this.description = escapeString(list.description);
         this.name = escapeString(list.name);

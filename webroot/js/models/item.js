@@ -80,10 +80,10 @@ Tornado.Item.prototype = {
     },
 
     move: function(parentId, callback, errorCallback) {
-	var oldParentId = this.parent !== undefined ? this.parent.id : this.parent_id;
+	var oldParentId = this.parent ? this.parent.id : this.parent_id;
 	var url = "/tornado/" + this.getModelUrlName() + "/move/" + this.id + "/" + oldParentId;
 	
-	if (parentId !== undefined) {
+	if (parentId) {
 	    url += "/" + parentId;
 	}
 	
@@ -108,7 +108,7 @@ Tornado.Item.prototype = {
         var hashString = "data[" + name + "]";
 
         data.each(function(item, index){
-			if (item.value.id === undefined) {
+			if (!item.value.id) {
 				result[hashString + "[name]"] = item.value.name;
 			} else {
                	result[hashString + "[id]"] = item.value.id;
@@ -129,7 +129,7 @@ Tornado.Item.prototype = {
     getModelName: function() { return "item"; },
     getSubmitData: function() { return {}; },
 
-    hasLabelId: function(map, labelId) { return map.get(labelId) !== undefined; },
+    hasLabelId: function(map, labelId) { return map.get(labelId); },
     hasContextId: function(contextId) { return this.hasLabelId(this.contexts, contextId); },
     hasTagId: function(tagId) { return this.hasLabelId(this.tags, tagId); },
 };

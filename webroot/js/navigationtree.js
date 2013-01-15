@@ -32,7 +32,7 @@ Tornado.NavigationTree.prototype = {
 		self.loaded = true;
 		self.parseTreeData(data);
 		
-		if (callback !== undefined) {
+		if (callback) {
 		    callback(self.tree);
 		}
 		
