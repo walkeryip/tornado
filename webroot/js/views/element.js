@@ -28,12 +28,26 @@ Tornado.Element.prototype = {
     },
 
     remove: function() {
-	this.element.remove();
-	this.visible = false;
+	this.fadeOut("fast", function () {
+	    this.element.remove();
+	    this.visible = false; 
+	});
     },
 
     flash: function () {
 	this.element.effect("highlight", {}, 2000);
+    },
+
+    getLabelElements: function(model, labels, defaultLabel) {
+	var labelsString = "";
+	var self = this;
+	labels.each(function(label){
+	    if (!defaultLabel || label.value.id != defaultLabel.id) {
+		labelsString += Mustache.render(self.templates.elementLabel, {model:model, id: label.value.id, name: label.value.name});	
+	    }
+	});
+	
+	return labelsString;
     },
 
     display: function (container, loaded, after) {
@@ -41,51 +55,25 @@ Tornado.Element.prototype = {
 	self.visible = true;
 
 	var elementContainer = jq(Mustache.render(this.templates.elementContainer, {edit: false}));
-
 	var body = this.getBody();
 
-	if (self.hasTags){
-	    var tagsString = "";
-	    var defaultTag = Tornado.state.getTag();
-	    self.tags.each(function(tag){
-		if (!defaultTag || tag.value.id != defaultTag.id) {
-		    tagsString += Mustache.render(self.templates.elementLabel, {model:"tag", id: tag.value.id, name: "#" + tag.value.name});	
-		}
-	    });
-
-	    body += tagsString; 
+	if (self.hasTags){ 
+	    body += this.getLabelElements("tag", this.tags, Tornado.state.getTag()); 
 	}
 
-	if (self.hasContexts){
-	    var contextsString = "";
-	    var defaultContext = Tornado.state.getContext();
-	    self.contexts.each(function(context){
-		if (!defaultContext || context.value.id != defaultContext.id) {
-		    contextsString += Mustache.render(self.templates.elementLabel, {model:"context", id:context.value.id, name: "@" + context.value.name}); //"<span class=\"context\" data-model-type=\"context\" data-model-id=\"" + context.value.id + "\"><a href=\"/tornado/contexts/view/" + context.value.id + "\">@" + context.value.name + "</a></span>";	
-		}
-	    });
-
-	    body += contextsString;
+	if (self.hasContexts){ 
+	    body += this.getLabelElements("context", this.contexts, Tornado.state.getContext()); 
 	}
-
-	if (self.hasUsers){
-	    var usersString = "";
-	    var defaultUser = Tornado.state.getUser();
-	    self.users.each(function(user){
-		if (!defaultUser || user.value.id != defaultUser.id) {
-		    usersString += Mustache.render(self.templates.elementLabel, {model:"user", id:user.value.id, name: "~" + user.value.name}); //"<span class=\"user\" data-model-type=\"user\" data-model-id=\"" + user.value.id + "\"><a href=\"/tornado/users/view/" + user.value.id + "\">~" + user.value.name + "</a></span>";	
-		}
-	    });
-
-	    body += usersString;
+	
+	if (self.hasUsers){ 
+	    body += this.getLabelElements("user", this.users, Tornado.state.getUser()); 
 	}
-
 
 	// Actions
-	var actions = jq(Mustache.render(this.templates.actionsContainer)); //"<a href=\"#\" class=\"settings-button expandable-div-button\">O</a>");
-	var actionsBox = jq(Mustache.render(this.templates.actionsBox)); //"<div class=\"settings expandable-div\" style=\"display: none\"></div>");
-	var editButton = jq(Mustache.render(this.templates.button, {class:"edit", label:"Edit"}));//"<a class=\"edit\" href=\"#\">Edit</a>");
-	var deleteButton = jq(Mustache.render(this.templates.button, {class:"delete", label:"Delete"}));//"<a class=\"delete\" href=\"#\">Delete</a>");
+	var actions = jq(Mustache.render(this.templates.actionsContainer));
+	var actionsBox = jq(Mustache.render(this.templates.actionsBox));
+	var editButton = jq(Mustache.render(this.templates.button, {class:"edit", label:"Edit"}));
+	var deleteButton = jq(Mustache.render(this.templates.button, {class:"delete", label:"Delete"}));
 
 	actions.click(function () { 
 	    expandableDivButtonClick(actions); 
@@ -103,6 +91,7 @@ Tornado.Element.prototype = {
 	    self.edit(container);
 	    return false;
 	});		
+
 	editButton.disableSelection();
 
 	deleteButton.click(function() {
@@ -117,11 +106,6 @@ Tornado.Element.prototype = {
 	elementContainer.append(jq(Mustache.render(this.templates.handle)));
 	
 	if (self.hasCheckbox){
-	    /*var checkboxString = "<input type=\"checkbox\" ";
-	    if(this.model.checked){
-		checkboxString += "checked=\"yes\"";
-	    }
-	    checkboxString += " />";*/
 	    var checkbox = jq(Mustache.render(this.templates.checkbox, this.model.checked));
 	    
 	    checkbox.click(function () {
@@ -156,7 +140,6 @@ Tornado.Element.prototype = {
 	     create: function(event, ui){ 
 		 this.model = self.model; 
 	     }});
-	//elementContainer.disableSelection();
 
 	// Prevent events when clicking a link or interacting with an input tag
 	elementContainer.find("a, input").click(function(e) {
@@ -256,17 +239,9 @@ Tornado.Element.prototype = {
 	    self.model.name = jq(input.name).val();
 	    self.model.description = jq(input.description).val();
 	    
-	    if (self.hasTags){
-		self.model.tagsString = jq(input.tags).val();
-	    }
-	    
-	    if (self.hasContexts){
-		self.model.contextsString = jq(input.contexts).val();
-	    }
-	    
-	    if (self.hasUsers){
-		self.model.usersString = jq(input.users).val();
-	    }
+	    if (self.hasTags){ self.model.tagsString = jq(input.tags).val(); }
+	    if (self.hasContexts){ self.model.contextsString = jq(input.contexts).val(); }
+	    if (self.hasUsers){ self.model.usersString = jq(input.users).val(); }
 
 	    self.model.save(function(data) {
 		Tornado.panelManager.dataUpdated(data);
@@ -278,16 +253,10 @@ Tornado.Element.prototype = {
 	var modelType = element.attr("data-model-type");
 	var modelId = element.attr("data-model-id");
 
-	if (modelType === "task") {
-	    return Tornado.tasks.get(modelId);
-	} else if (modelType === "list") {
-	    return Tornado.lists.get(modelId);
-	} else if (modelType === "tag") {
-	    return Tornado.tags.get(modelId);
-	} else if (modelType === "context") {
-	    return Tornado.contexts.get(modelId);
-	} else {
-	    throw new Error("Model type " + modelType + " unknown.");
-	}
+	return Tornado.getItem(modelType, modelId);
+    },
+
+    deleteModel: function() {
+	Tornado.getItem(this.model.getModelName(), this.model.id);
     }
 };

@@ -10,6 +10,7 @@ Tornado = {
 	this.state = new Tornado.State();
 	this.navigationTree = new Tornado.NavigationTree();
 	this.panelManager = new Tornado.PanelManager();
+	//this.commandsbar = new Tornado.CommandBar();
 
 	this.templates = {
 	    errorBox: "<div id=\"error\">{{{message}}}</div>",
@@ -62,6 +63,7 @@ Tornado = {
 	return Tornado[modelName + "s"].set(id, value);
     },
 
+
     // TODO: this should not be used
     getItemDataTag: function(modelName) {
 	return modelName.charAt(0).toUpperCase() + modelName.slice(1);
@@ -70,6 +72,22 @@ Tornado = {
     // TODO: this should not be used
     getItemClass: function(modelName) {
 	return Tornado[modelName.charAt(0).toUpperCase() + modelName.slice(1)];
+    },
+
+    compareItem: function(a, b, field) {
+	if (!field) {
+	    field = "name";
+	}
+	
+	var nameA=a[field].toLowerCase();
+	var nameB=b[field].toLowerCase();
+	if (nameA < nameB) {
+ 	    return -1; 
+	} else if (nameA > nameB) {
+  	    return 1;
+	} else {
+	    return 0;
+	}
     }
 };
 
@@ -111,4 +129,18 @@ jq.fn.animateHighlight = function(highlightColor, duration) {
     var animateMs = duration || 1500;
     var originalBg = this.css("backgroundColor");
     this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
+};
+
+var escapeString = function(text) {
+    if (text) {
+	return text.replace(/"/g, "&quot;");
+    } else {
+	return text;
+    }
+};
+
+var expandableDivButtonClick = function (element) {
+    $(element).next("div").toggle();
+    
+    return false;
 };
