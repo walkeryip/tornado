@@ -10,7 +10,8 @@ Tornado = {
 	this.state = new Tornado.State();
 	this.navigationTree = new Tornado.NavigationTree();
 	this.panelManager = new Tornado.PanelManager();
-	//this.commandsbar = new Tornado.CommandBar();
+	this.commandsbar = new Tornado.CommandBar();
+	this.tpl = new Tornado.TemplateManager();
 
 	this.templates = {
 	    errorBox: "<div id=\"error\">{{{message}}}</div>",
@@ -29,6 +30,10 @@ Tornado = {
 	} else {
 	    jq.modal(Mustache.render(this.templates.errorBox, {message: data.responseText}));
 	}
+    },
+
+    populate: function() {
+	this.commandsbar.populate();
     },
 
     // Function called when an item is dropped on a list
@@ -88,8 +93,24 @@ Tornado = {
 	} else {
 	    return 0;
 	}
+    },
+
+    escapeString: function(text) {
+	if (text) {
+	    return text.replace(/"/g, "&quot;");
+	} else {
+	    return text;
+	}
+    },
+
+    capitalizeFirst: function (string) {
+	return string.slice(0, 1).toUpperCase() + string.slice(1);
     }
 };
+
+jq(document).ready(function() {
+    Tornado.populate();
+});
 
 /**
  * Extend Hash to include clear, isEmpty and size
@@ -131,16 +152,3 @@ jq.fn.animateHighlight = function(highlightColor, duration) {
     this.stop().css("background-color", highlightBg).animate({backgroundColor: originalBg}, animateMs);
 };
 
-var escapeString = function(text) {
-    if (text) {
-	return text.replace(/"/g, "&quot;");
-    } else {
-	return text;
-    }
-};
-
-var expandableDivButtonClick = function (element) {
-    $(element).next("div").toggle();
-    
-    return false;
-};

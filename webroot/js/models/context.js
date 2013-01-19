@@ -14,9 +14,9 @@ Tornado.Context = Class.create(Tornado.Item, {
 	
 	if (context) {
 	    this.id = context.id;
-	    this.name = escapeString(context.name);
+	    this.name = Tornado.escapeString(context.name);
 	} else {
-	    this.name = escapeString(data.name);
+	    this.name = Tornado.escapeString(data.name);
 	}
     },
     

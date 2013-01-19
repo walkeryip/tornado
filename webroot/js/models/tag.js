@@ -14,9 +14,9 @@ Tornado.Tag = Class.create(Tornado.Item, {
 	
 	if (tag) {
 	    this.id = tag.id;
-	    this.name = escapeString(tag.name) || "";
+	    this.name = Tornado.escapeString(tag.name) || "";
 	} else {
-	    this.name = escapeString(data.name) || "";
+	    this.name = Tornado.escapeString(data.name) || "";
 	}
     },
     

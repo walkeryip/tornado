@@ -91,7 +91,7 @@ Tornado.Panel.prototype = {
     },
     
     itemDeleted: function(item) {
-	this.container.find("li[data-model-type=" + item.getModelName() + "][data-model-id=" + item.id + "]").fadeOut("fast", function() {
+	this.container.find("tr[data-model-type=" + item.getModelName() + "][data-model-id=" + item.id + "]").fadeOut("fast", function() {
 	    $(this).remove();
 	});
 	this.unsetElement(item.getModelName(), item.id);

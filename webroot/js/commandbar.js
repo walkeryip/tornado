@@ -1,24 +1,22 @@
 Tornado.CommandBar = Class.create();
 Tornado.CommandBar.prototype = {
     initialize: function() {
+	
     },
 
     populate: function () {
-
 	var self = this;
 	var container = jq("#inputbar");
 	var button = container.find("button");
-	var inputbar = container.find("input");
-	inputbar.focus();
+	
+	this.inputbar = container.find("input");
+	this.inputbar.focus();
 	
 	var inputMode = new Array();
 	inputMode[0] = "task";
 	inputMode[1] = "list";
 	
 	var inputModeIndex = 0;
-	
-	inputbar.change(function(e){
-	});
 	
 	var changeInputBarIndex = function(index){
 	    if (index >= inputMode.length){
@@ -31,7 +29,7 @@ Tornado.CommandBar.prototype = {
 	    inputModeIndex = index;
 	}
 	
-	inputbar.keydown(function(e){
+	this.inputbar.keydown(function(e){
             if(e.keyCode == 13){
 		self.submit();
 		return false;
@@ -52,8 +50,9 @@ Tornado.CommandBar.prototype = {
             self.submit();
             return false;
 	});
-	
-	var modelify = function(list, name) {
+    },
+
+    modelify: function(list, name) {
 	    var result = new Array();
 	    
 	    if (list) {
@@ -65,8 +64,6 @@ Tornado.CommandBar.prototype = {
 	    }
 	    
 	    return result;
-	}
-	
     },
 
     extractKeywords: function (text, keywordCharacter) {
@@ -108,7 +105,7 @@ Tornado.CommandBar.prototype = {
     },
     
     submit: function() {
-        var text = inputbar.val();
+        var text = this.inputbar.val();
 	
         var data = {};
 
@@ -148,13 +145,13 @@ Tornado.CommandBar.prototype = {
 	    data.List.parent_id = list ? list.id : null;
 	}
 	
-	data.Contexts = modelify(contextKeywordObject.keywords, "Context"); 
-	data.Lists = modelify([Tornado.state.getList()], "List");
-	data.Tags = modelify(tagKeywordObject.keywords, "Tag");
-	data.Users = modelify(userKeywordObject.keywords, "User");
+	data.Contexts = this.modelify(contextKeywordObject.keywords, "Context"); 
+	data.Lists = this.modelify([Tornado.state.getList()], "List");
+	data.Tags = this.modelify(tagKeywordObject.keywords, "Tag");
+	data.Users = this.modelify(userKeywordObject.keywords, "User");
 	
         Tornado.panelManager.addItem(data);
 	
-        inputbar.val("");
+        this.inputbar.val("");
     }
 };

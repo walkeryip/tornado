@@ -20,8 +20,8 @@ Tornado.List = Class.create(Tornado.Item, {
 	}
 
         this.id = list.id;
-	this.description = escapeString(list.description);
-        this.name = escapeString(list.name);
+	this.description = Tornado.escapeString(list.description);
+        this.name = Tornado.escapeString(list.name);
 	this.parent_id = list.parent_id;
     },
     

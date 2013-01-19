@@ -14,6 +14,8 @@ Tornado.ListElement = Class.create(Tornado.Element, {
     },
 
     display: function($super, container, loaded) {	
+	$super(container, loaded);
+
 	this.element.attr("data-id", this.model.id);
 	this.element.droppable({
             activeClass: "ui-state-hover",
@@ -23,7 +25,6 @@ Tornado.ListElement = Class.create(Tornado.Element, {
             drop: Tornado.listDropFunction
         });
 	
-	$super(container, loaded);
     },
 	
     getBody: function(){

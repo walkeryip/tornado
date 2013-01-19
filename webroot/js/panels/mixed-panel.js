@@ -2,10 +2,10 @@ Tornado.MixedPanel = Class.create(Tornado.Panel, {
     initialize: function($super, id, containerId){
 	$super(id, containerId);
 
-        this.container.append("<ul class=\"lists\"></ul>");
-        this.listsContainer = this.container.find(".lists");
-        this.container.append("<ul class=\"tasks\"></ul>");
-        this.tasksContainer = this.container.find(".tasks");
+        this.container.append("<table class=\"table table-hover lists\"></table>");
+        this.listsContainer = this.container.find("table.lists");
+        this.container.append("<table class=\"table table-hover tasks\"></table>");
+        this.tasksContainer = this.container.find("table.tasks");
     },
 
     populate: function($super, data) {

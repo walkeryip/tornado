@@ -34,6 +34,7 @@ Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home
  */
 Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 Router::connect('/lists/add/*', array('controller' => 'task_lists', 'action' => 'add'));
+Router::connect('/lists/view/*', array('controller' => 'task_lists', 'action' => 'view'));
 Router::connect('/lists/edit/*', array('controller' => 'task_lists', 'action' => 'edit'));
 Router::connect('/lists/delete/*', array('controller' => 'task_lists', 'action' => 'delete'));
 Router::connect('/lists/tree/*', array('controller' => 'task_lists', 'action' => 'tree'));
