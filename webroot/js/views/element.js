@@ -3,13 +3,18 @@ Tornado.Element.prototype = {
     initialize: function(model) {
 	this.visible = false;
 	this.model = model;
-	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id}));
+	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id, active: this.model.active}));
 	this.hasCheckbox = false;
 	this.hasTags = false;
 	this.hasUsers = false;
 	this.hasDescription = false;
 	this.hasContexts = false;
 	this.hasUsers = false;
+	this.hasTime = false;
+	this.hasEnergy = false;
+	this.hasDeadline = false;
+	this.hasPriority = false;
+	this.hasActive = false;
     },
 
     remove: function() {
@@ -45,7 +50,11 @@ Tornado.Element.prototype = {
 
 	var viewElement = jq(Tornado.tpl.elementView(
 	    {model: this.model.getModelName(), id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), users: usersArray,
-	     checkbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, link: this.model.getModelName() == "list"}));
+	     hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
+	     link: this.model.getModelName() == "list", hasDeadline: this.hasDeadline && this.model.deadline, 
+	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
+	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
+	     time: this.model.time, priority: this.model.priority}));
 
 	viewElement.find(".dropdown-toggle").dropdown();
 
@@ -113,66 +122,30 @@ Tornado.Element.prototype = {
     
     edit: function(container) {
 	var self = this;
-	
-	//var elementContainer = jq(Mustache.render(this.templates.elementContainer, {edit: true}));
 
 	var tagsString = Tornado.Label.arrayToLabelString(self.model.tags);
 	var contextsString = Tornado.Label.arrayToLabelString(self.model.contexts);
 	var usersString = Tornado.Label.arrayToLabelString(self.model.users);
 
-	//this.element.hide();
 	var editElement = jq(Tornado.tpl.elementEditView(
 	    {name: this.model.name, description: this.model.description, users: usersString, 
-	     tags: tagsString, contexts: contextsString}));
+	     tags: tagsString, contexts: contextsString, hasTags: this.hasTags, hasContexts: this.hasContexts,
+	     hasUsers: this.hasUsers, hasDescription: this.hasDescription, hasDeadline: this.hasDeadline,
+	     hasEnergy: this.hasEnergy, hasTime: this.hasTime, hasPriority: this.hasPriority,
+	     energy: this.model.energy, time: this.model.time, priority: this.model.priority, deadline: this.model.priority,
+	     active: this.model.active, hasActive: this.hasActive}));
 
 	this.element.html(editElement);
 	
-	//this.element.html(jq("<tr></tr>"));
-
-	//var input = Array();
-	//input.name = jq(Mustache.render(this.templates.textBox, {name: this.model.name}));
-	
-	//var saveButton = jq(Mustache.render(this.templates.button, {label: "Save"}));
 	editElement.find(".save").click(function() {
 	    submit();
 	    return false;
 	});
 
-	//var cancelButton = jq(Mustache.render(this.templates.button, {label: "Cancel"}));
 	editElement.find(".cancel").click(function() {
 	    self.display(container);
 	    return false;
 	});
-	
-	//this.element.append(jq("<p><label>Name:</label></p>").append(input.name)); 
-	
-	/*if (self.hasTags){
-	    var tagsArray = Tornado.Label.arrayToLabelString(self.model.tags);
-	    input.tags = jq("<input type=\"text\" value=\"" + tagsArray + "\" name=\"tags\" />");	
-	    this.element.append(jq("<p><label>Tags:</label></p>").append(input.tags)); 
-	}
-	
-	if (self.hasContexts){
-	    var contextsArray = Tornado.Label.arrayToLabelString(self.model.contexts);
-	    input.contexts = jq("<input type=\"text\" value=\"" + contextsArray + "\" name=\"contexts\" />");
-	    this.element.append(jq("<p><label>Contexts:</label></p>").append(input.contexts)); 
-	}
-	
-	if (self.hasUsers){
-	    var usersArray = Tornado.Label.arrayToLabelString(self.model.users);
-	    input.users = jq("<input type=\"text\" value=\"" + usersArray + "\" name=\"users\" />");
-	    this.element.append(jq("<p><label>Users:</label></p>").append(input.users)); 
-	}
-
-	if (self.hasDescription) {
-	    input.description = jq("<textarea name=\"description\">" + self.model.description + "</textarea>");
-	    this.element.append(jq("<p><label>Description:</label></p>").append(input.description)); 
-	}
-
-	this.element.append(saveButton); 
-	this.element.append(cancelButton); 
-*/
-	//this.element.html(elementContainer);
 
 	editElement.find("input").keydown(function(e){
 	    if(e.keyCode == 13){
@@ -188,6 +161,11 @@ Tornado.Element.prototype = {
 	    if (self.hasTags){ self.model.tagsString = jq('input[name="tags"]').val(); }
 	    if (self.hasContexts){ self.model.contextsString = jq('input[name="contexts"]').val(); }
 	    if (self.hasUsers){ self.model.usersString = jq('input[name="users"]').val(); }
+	    if (self.hasDeadline){ self.model.deadline = jq('input[name="deadline"]').val(); }
+	    if (self.hasTime){ self.model.time = jq('input[name="time"]').val(); }
+	    if (self.hasEnergy){ self.model.energy = jq('input[name="energy"]').val(); }
+	    if (self.hasPriority){ self.model.priority = jq('input[name="priority"]').val(); }
+	    if (self.hasActive){ self.model.active = jq('input[name="active"]').attr("checked") === "checked" ? 1 : 0; }
 
 	    self.model.save(function(data) {
 		Tornado.panelManager.dataUpdated(data);
@@ -200,9 +178,5 @@ Tornado.Element.prototype = {
 	var modelId = element.attr("data-model-id");
 
 	return Tornado.getItem(modelType, modelId);
-    },
-
-    deleteModel: function() {
-	Tornado.getItem(this.model.getModelName(), this.model.id);
     }
 };

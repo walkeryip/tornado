@@ -26,11 +26,45 @@ td.settings {
     margin-left: 0px;
 }
 
-.tag, .context {
+.tag, .context, .deadline, .energy, .time, .priority {
     margin-right: 5px;
+    font-size: @baseFontSize * .846;
 }
 
-.task {
+.deadline, .energy, .time, .priority {
+    float: right;
+    opacity: 0.1;
+}
+
+.settings a {
+    opacity: 0.1;
+}
+
+tr:hover {
+    .deadline, .energy, .time, .priority {
+	opacity: 1;
+    }
+
+    .settings a {
+	opacity: 1;
+    }
+}
+
+.energy {
+    background-color: @yellow;
+}
+
+.priority {
+    background-color: @orange;
+}
+
+.deadline {
+    font-style: italic;
+    background-color: black;
+    font-weight: 100;
+}
+
+.item,  {
     margin-right: 5px;
 }
 

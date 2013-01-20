@@ -7,6 +7,7 @@ Tornado.ListElement = Class.create(Tornado.Element, {
 	this.hasUsers = true;
 	this.hasDescription = true;
 	this.hasUsers = true;
+	this.hasActive = true;
 	
 	this.tags = list.tags;
 	this.contexts = list.contexts;	
@@ -25,14 +26,5 @@ Tornado.ListElement = Class.create(Tornado.Element, {
             drop: Tornado.listDropFunction
         });
 	
-    },
-	
-    getBody: function(){
-	var name = this.model.name.slice(0, 1).toUpperCase() + this.model.name.slice(1);
-	return "<a class=\"item list\" href=\"/tornado/task_lists/view/" + this.model.id + "\">" + name + "</a>";
-    },
-    
-    getInfoBoxContent: function() {
-	return "<p>" + this.model.created + "</p>" + "<p>parent</p>";
     }
 });

@@ -19,7 +19,9 @@ Tornado.Task = Class.create(Tornado.Item, {
 	
 	this.checked = task.checked === "1";
 	this.created = task.created;
-	this.deadline = task.deadline;
+	this.deadline = task.deadline === "0000-00-00" ? null : task.deadline;
+	this.energy = task.energy;
+	this.time = task.time;
 	this.description = Tornado.escapeString(task.description);
 	this.id = task.id;
 	this.name = Tornado.escapeString(task.name);
@@ -33,6 +35,8 @@ Tornado.Task = Class.create(Tornado.Item, {
 		    "data[Task][id]": this.id,
 		    "data[Task][description]": this.description,
 		    "data[Task][deadline]": this.deadline,
+		    "data[Task][time]": this.time,
+		    "data[Task][energy]": this.energy,
 		    "data[Task][priority]": this.priority};
 	
         if (compactMode){

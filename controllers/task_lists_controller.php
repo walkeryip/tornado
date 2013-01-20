@@ -49,6 +49,7 @@ class TaskListsController extends AppController {
 		$this->data["TaskList"] = $this->data["List"];
 		unset($this->data["List"]);
 
+
 			$this->TaskList->create();
 
 			if ($this->TaskList->save($this->data)){

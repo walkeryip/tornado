@@ -3,8 +3,8 @@ Tornado.TaskPanel = Class.create(Tornado.Panel, {
 	$super(containerId, containerId, parameters);
 	
 	this.defaultParameters(this.parameters);
-        this.container.append("<ul class=\"tasks\"></ul>");
-        this.tasksContainer = this.container.find(".tasks");
+        this.container.append(Tornado.tpl.panelContainer({model: "task"}));
+        this.tasksContainer = this.container.find("table.tasks");
     },
     
     defaultParameters: function(parameters) {

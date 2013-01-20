@@ -2,9 +2,9 @@ Tornado.MixedPanel = Class.create(Tornado.Panel, {
     initialize: function($super, id, containerId){
 	$super(id, containerId);
 
-        this.container.append("<table class=\"table table-hover lists\"></table>");
+        this.container.append(Tornado.tpl.panelContainer({model: "list"}));
         this.listsContainer = this.container.find("table.lists");
-        this.container.append("<table class=\"table table-hover tasks\"></table>");
+        this.container.append(Tornado.tpl.panelContainer({model: "task"}));
         this.tasksContainer = this.container.find("table.tasks");
     },
 
@@ -24,7 +24,7 @@ Tornado.MixedPanel = Class.create(Tornado.Panel, {
 	    if (element.model.id != this.id){
 		element.display(this.listsContainer, this.loaded);
 	    } else {
-		this.container.prepend("<p>" + element.model.description + "</p>");
+		this.container.find(".description").text(element.model.description);
 	    }
         }
     },

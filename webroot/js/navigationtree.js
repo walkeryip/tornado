@@ -1,16 +1,14 @@
+/*
+ TODO: replace html in this file with a template
+*/
+
 Tornado.NavigationTree = Class.create();
 Tornado.NavigationTree.prototype = {
-    // Constructor
     initialize: function() {
 	this.loaded = false;
 	this.error = false;
 	this.tree = new Hash();
 	this.parents = new Hash();
-
-	this.templates = {
-	    listItem: "<li><a href=\"/tornado/task_lists/view/{{id}}\">{{name}}</a></li>",
-	    navigationContainer: "<div id=\"tree-view\" class=\"panel\"></div>"
-	};
     },
 
     // Get the navigation tree data
@@ -59,7 +57,7 @@ Tornado.NavigationTree.prototype = {
 	    }
 	    
 	    children.each(function(item) {
-		var listItem = jq(Mustache.render(self.templates.listItem, {id:item.id, name:item.name}));
+		var listItem = jq(Tornado.tpl.navigationTreeItem({id:item.id, name:item.name}));
 		listItem.attr("data-id", item.id);
 		listItem.droppable({
 		    activeClass: "ui-state-hover",
@@ -108,6 +106,6 @@ Tornado.NavigationTree.prototype = {
     // Display the tree
     display: function(container) {
 	var result = this.getListTree("root");
-	container.append(jq(this.templates.navigationContainer).append(result));
+	container.append(jq(Tornado.tpl.navigationTreeContainer).append(result));
     }
 };

@@ -20,6 +20,7 @@ Tornado.List = Class.create(Tornado.Item, {
 	}
 
         this.id = list.id;
+	this.active = list.active === "1";
 	this.description = Tornado.escapeString(list.description);
         this.name = Tornado.escapeString(list.name);
 	this.parent_id = list.parent_id;
@@ -28,6 +29,7 @@ Tornado.List = Class.create(Tornado.Item, {
     getSubmitData: function(compactMode) {
         var data = {"data[List][name]": this.name,
 		    "data[List][id]": this.id,
+		    "data[List][active]": this.active,
 		    "data[List][description]": this.description};
 	
         if (compactMode){

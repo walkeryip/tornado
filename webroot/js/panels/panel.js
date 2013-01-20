@@ -68,7 +68,7 @@ Tornado.Panel.prototype = {
 	
 	if (!this.loaded) {
 	    this.model = this.getModel();
-	    this.container.prepend("<h2>" + this.getTitle() + "</h2>");
+	    this.container.prepend(Tornado.tpl.panelHeader({title: this.getTitle()}));
 	    this.container.fadeIn("slow");
 	    this.loaded = true;
 	} else {

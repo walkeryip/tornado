@@ -8,15 +8,13 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 	this.hasCheckbox = true;
 	this.hasDescription = true;
 	this.hasUsers = true;
-	
+	this.hasEnergy = true;
+	this.hasDeadline = true;
+	this.hasTime = true;
+	this.hasPriority = true;
 	this.tags = task.tags;
 	this.users = task.users;
 	this.contexts = task.contexts;		
-    },
-    
-    getBody: function() {
-	var name = this.model.name.slice(0, 1).toUpperCase() + this.model.name.slice(1);
-	return "<span class=\"item task\">" + name + "</span>";
     },
     
     toggle: function() {
@@ -24,10 +22,5 @@ Tornado.TaskElement = Class.create(Tornado.Element, {
 	this.model.toggle(function (data){
 	    Tornado.panelManager.dataUpdated(data);
 	});
-    },
-    
-    getInfoBoxContent: function() {
-	return "<p>" + this.model.created + "</p>" +
-	    "<p>parent</p>";
     }
 });

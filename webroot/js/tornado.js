@@ -13,11 +13,6 @@ Tornado = {
 	this.commandsbar = new Tornado.CommandBar();
 	this.tpl = new Tornado.TemplateManager();
 
-	this.templates = {
-	    errorBox: "<div id=\"error\">{{{message}}}</div>",
-	    loginMessage: "Click <a href=\"/tornado/\">here</a> to log in."
-	};
-
 	this.HTTPStatus = {
 	    forbidden: 403
 	};
@@ -25,11 +20,14 @@ Tornado = {
 
     // Error function
     error: function(data) {
+	var message;
 	if (data.status === Tornado.HTTPStatus.forbidden) {
-	    jq.modal(Mustache.render(this.templates.errorBox, {message: "You have been logged out. " + this.templates.loginMessage}));
+	    message = this.tpl.logedOutMessage;
 	} else {
-	    jq.modal(Mustache.render(this.templates.errorBox, {message: data.responseText}));
+	    message = data.responseText;
 	}
+
+	jq.modal(this.tpl.error({message: message}));
     },
 
     populate: function() {

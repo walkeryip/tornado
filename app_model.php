@@ -90,7 +90,6 @@ class AppModel extends Model {
 			return Array(0 => null);
 		}
 
-
 		foreach ($labels as $_label){
 			$_label = strtolower(trim($_label));
 
@@ -292,7 +291,7 @@ class AppModel extends Model {
 	}
 
 	public function getNavigationTree($userId) {
-		return $this->query("select List.id, List.name, List.parent_id from task_lists as List inner join task_lists_users on " .
+		return $this->query("select List.id, List.active, List.name, List.parent_id from task_lists as List inner join task_lists_users on " .
 							"task_lists_users.task_list_id = List.id and List.deleted = false and task_lists_users.user_id = " . $userId . " group by List.id");
 	}
 

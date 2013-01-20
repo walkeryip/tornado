@@ -2,7 +2,7 @@ Tornado.SinglePanel = Class.create(Tornado.Panel, {
     initialize: function($super, id, containerId, parameters){
 	$super(id, containerId, parameters);
 	
-        this.container.append("<ul class=\"items\"></ul>");
+        this.container.append(Tornado.tpl.panelContainer({model: "item"}));
         this.itemsContainer = this.container.find(".items");
     },
     
