@@ -3,7 +3,7 @@ Tornado.Element.prototype = {
     initialize: function(model) {
 	this.visible = false;
 	this.model = model;
-	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id, active: this.model.active}));
+	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id}));
 	this.hasCheckbox = false;
 	this.hasTags = false;
 	this.hasUsers = false;
@@ -112,6 +112,14 @@ Tornado.Element.prototype = {
 	    }
 
 	    this.element.hide().fadeIn();
+	}
+
+	if (this.hasActive) {
+	    if (this.model.active) {
+		this.element.removeClass("inactive");
+	    } else {
+		this.element.addClass("inactive");
+	    }
 	}
 
 	// Only flash if the element is loaded
