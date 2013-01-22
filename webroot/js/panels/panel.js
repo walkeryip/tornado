@@ -24,11 +24,23 @@ Tornado.Panel.prototype = {
     
 
     populate: function (data) {
+	var self = this;
+
         this.populateItemElements(data.contexts.sort(Tornado.compareItem));
         this.populateItemElements(data.tags.sort(Tornado.compareItem));
         this.populateItemElements(data.tasks.sort(Tornado.compareItem));
         this.populateItemElements(data.lists.sort(Tornado.compareItem));
         this.populateItemElements(data.users.sort(Tornado.compareItem));
+
+	var sorter = this.container.find(".sorter");
+	var table = this.container.find("table");
+	    sorter.find(".sortByName").click(function(e){return self.tableSort(table, this, ".item")});
+	    sorter.find(".sortByDeadline").click(function(e){return self.tableSort(table, this, ".deadline")});
+	    sorter.find(".sortByPriority").click(function(e){return self.tableSort(table, this, ".priority")});
+	    sorter.find(".sortByEnergy").click(function(e){return self.tableSort(table, this, ".energy")});
+	    sorter.find(".sortByTime").click(function(e){return self.tableSort(table, this, ".time")});
+	    sorter.find(".sortByCreated").click(function(e){return self.tableSort(table, this, ".created")});
+
     },
 
     populateItemElement: function(item, itemElements) {
@@ -67,9 +79,11 @@ Tornado.Panel.prototype = {
         this.populate(data);
 	
 	if (!this.loaded) {
+	    
 	    this.model = this.getModel();
 	    this.container.prepend(Tornado.tpl.panelHeader({title: this.getTitle()}));
 	    this.container.fadeIn("slow");
+
 	    this.loaded = true;
 	} else {
 	    this.taskElements.each(function(taskElement) {
@@ -78,6 +92,18 @@ Tornado.Panel.prototype = {
 		}			
 	    });
 	}
+    },
+
+    tableSort: function(table, element, column) {
+	if(jq(element).hasClass("desc")) {
+	    options = {};
+	}
+	
+	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc"};
+	
+	table.find("tr").tsort(".item", options); 
+	jq(element).toggleClass("desc"); 
+	return false; 
     },
 
     itemChanged: function(item) {

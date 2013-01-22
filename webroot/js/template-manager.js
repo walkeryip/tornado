@@ -1,6 +1,25 @@
 Tornado.TemplateManager = Class.create();
 Tornado.TemplateManager.prototype = {
     initialize: function() {
+	this.tableSorter = Mustache.compile(['<div class="sorter">',
+					       '<a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle">O</a>',
+					       '<ul class="dropdown-menu" role="menu">',
+					         '<li class="dropdown-submenu">',
+					           '<a href="#" tabindex="-1">Sort</a>',
+					           '<ul class="dropdown-menu" role="menu">',
+					             '<li><a href="#" tabindex="-1">Sort by</a></li>',
+					             '<li class="divider"></li>',
+					             '<li><a href="#" class="sortByName">Name</a></li>',
+					             '<li><a href="#" class="sortByDeadline">Deadline</a></li>',
+					             '<li><a href="#" class="sortByPriority">Priority</a></li>',
+					             '<li><a href="#" class="sortByEnergy">Energy</a></li>',
+					             '<li><a href="#" class="sortByTime">Time</a></li>',
+					             '<li><a href="#" class="sortByCreated">Created</a></li>',
+					           '</ul>',
+					         '</li>',
+					       '</ul>',
+					     '</div>'].join(''));
+					    
 	this.elementContainer = Mustache.compile('<tr data-model-type="{{model}}" data-model-id="{{id}}">{{body}}</tr>');
 	this.elementView = Mustache.compile(
 	    ['<td class=\"handle\"><p></p></td>',
@@ -22,6 +41,8 @@ Tornado.TemplateManager.prototype = {
 	       '<ul class="dropdown-menu" role="menu" aria-labelledby="{{model}}-{{id}}-button">',
 	         '<li><a class="delete" href="#">Delete</a></li>',
 	         '<li><a class="edit" href="#">Edit</a></li>',
+	     '<li class="dropdown-submenu"><a class="move" href="#">Move</a>',
+	     '</li>',
 	       '</ul>',
 	     '</td>'].join(''));
 	this.elementEditView = Mustache.compile(
@@ -47,9 +68,9 @@ Tornado.TemplateManager.prototype = {
 	     '</ul>'].join(''));
 	this.error = Mustache.compile('<div id="error">{{{message}}}</div>');
 	this.navigationTreeItem = Mustache.compile('<li><a href="/tornado/task_lists/view/{{id}}">{{name}}</a></li>');
-	this.navigationTreeContainer = '<div id="tree-view" class="panel"></div>';
-	this.panelHeader = Mustache.compile('<h2>{{title}}</h2><p class="description">{{description}}</p>');
-	this.panelContainer = Mustache.compile('<table class="table table-hover {{model}}s"></table>');
+	this.navigationTreeContainer = '<ul id="tree-view" class="dropdown-menu"></ul>';
+	this.panelHeader = Mustache.compile(['<h2>{{title}}</h2><p class="description">{{description}}</p>'].join(''));
+	this.panelContainer = Mustache.compile('<table class="table table-hover panel {{model}}s"></table>');
 
 	this.logedOutMessage = 'You have been logged out. Click <a href="/tornado/">here</a> to log in.';
     }

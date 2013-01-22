@@ -49,10 +49,10 @@ Tornado.NavigationTree.prototype = {
 
 	    var container;
 	    if (id !== "root") {
-		result = jq("<li><ul></ul></li>");
-		container = result.find("ul");
+		result = jq('<ul class="dropdown-menu"></ul>');
+		container = result; //result.find("ul");
 	    } else {
-		result = jq("<ul></ul>");
+		result = jq('<ul id="tree-view" class="dropdown-menu" role="menu"></ul>');
 		container = result;
 	    }
 	    
@@ -66,9 +66,14 @@ Tornado.NavigationTree.prototype = {
 		    tolerance: 'pointer',
 		    drop: Tornado.listDropFunction
 		});
+		var tree = self.getListTree(item.id);
+		
+		if (tree) {
+		    listItem.addClass("dropdown-submenu");
+		}
 
-		container.append(listItem);
-		container.append(self.getListTree(item.id));
+		container.append(listItem.append(tree));
+		//container.append();
 	    });
 	}
 
@@ -106,6 +111,6 @@ Tornado.NavigationTree.prototype = {
     // Display the tree
     display: function(container) {
 	var result = this.getListTree("root");
-	container.append(jq(Tornado.tpl.navigationTreeContainer).append(result));
+	container.append(result);
     }
 };

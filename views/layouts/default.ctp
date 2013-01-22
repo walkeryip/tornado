@@ -28,7 +28,8 @@
     <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery.tinysort.min.js"></script>
-
+    <script type="text/javascript" src="/tornado/js/lib/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/tornado/js/lib/jquery.tablesorter.pager.js"></script>
     <script>
         jQuery.noConflict();
         var jq = jQuery;

@@ -32,6 +32,20 @@ Tornado = {
 
     populate: function() {
 	this.commandsbar.populate();
+
+	// Go back on backspace
+	jq(document).keydown(function(e){
+	    if (e.keyCode == 8) {
+		window.history.back();
+	    }
+	});
+
+	jq("input").live("keydown", function(e) {
+	    if (e.keyCode == 8) {
+		e.stopPropagation();
+	    }
+	});
+
     },
 
     // Function called when an item is dropped on a list

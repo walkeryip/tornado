@@ -82,10 +82,15 @@ Tornado.Element.prototype = {
 		 this.model = self.model; 
 	     }});
 
+
 	// Prevent events when clicking a link or interacting with an input tag
-	viewElement.find("a, input").click(function(e) {
+	viewElement.find("input").click(function(e) {
 	    e.stopPropagation();
    	    e.stopImmediatePropagation();
+	});
+
+	viewElement.find(".move").hover(function (e) {
+	    jq("#tree-view").appendTo(jq(this).parent());
 	});
 
 	var existingElement = container.find(this.element);

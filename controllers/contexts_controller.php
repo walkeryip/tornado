@@ -102,6 +102,12 @@ class ContextsController extends AppController {
 	function delete($id = null){
 		$status = false;
 
+		$data["Contexts"] = array();
+		$data["Contexts"][0] = array();
+		$data["Contexts"][0]["Context"] = array();
+		$data["Contexts"][0]["Context"]["id"] = $id;
+		$data["Contexts"][0]["Context"]["deleted"] = true;
+
 		if ($this->Context->delete()){
 			$status = true;
 		} 
