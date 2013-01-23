@@ -2,6 +2,8 @@ Tornado.TaskPanel = Class.create(Tornado.Panel, {
     initialize: function($super, containerId, parameters){
 	$super(containerId, containerId, parameters);
 	
+	var sorter = jq(Tornado.tpl.tableSorter());
+	this.container.append(sorter);
 	this.defaultParameters(this.parameters);
         this.container.append(Tornado.tpl.panelContainer({model: "task"}));
         this.tasksContainer = this.container.find("table.tasks");
@@ -53,5 +55,9 @@ Tornado.TaskPanel = Class.create(Tornado.Panel, {
     
     updateItem: function(item) {
 	this.updateModelItem(item, this.tasksContainer, this.taskElements);
+    },
+    
+    getModel: function() {
+	return Tornado.tasks.get(this.id);
     }
 });

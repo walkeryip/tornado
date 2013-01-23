@@ -51,7 +51,7 @@ Tornado.Element.prototype = {
 	var viewElement = jq(Tornado.tpl.elementView(
 	    {model: this.model.getModelName(), id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), users: usersArray,
 	     hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
-	     link: this.model.getModelName() == "list", hasDeadline: this.hasDeadline && this.model.deadline, 
+	     link: this.model.getModelName() != "task", hasDeadline: this.hasDeadline && this.model.deadline, 
 	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
 	     time: this.model.time, priority: this.model.priority}));
@@ -72,7 +72,7 @@ Tornado.Element.prototype = {
 	    self.toggle();
 	});
 
-	viewElement.draggable(
+	this.element.draggable(
 	    {revert: "invalid",
 	     distance: 5,
 	     handle: ".handle",
@@ -168,8 +168,8 @@ Tornado.Element.prototype = {
 	});
 
 	var submit = function (){
-	    self.model.name = jq('input[name="name"]').val();
-	    self.model.description = jq('input[name="description"]').val();
+	    self.model.name = jq.trim(jq('input[name="name"]').val());
+	    self.model.description = jq.trim(jq('textarea[name="description"]').val());
 	    
 	    if (self.hasTags){ self.model.tagsString = jq('input[name="tags"]').val(); }
 	    if (self.hasContexts){ self.model.contextsString = jq('input[name="contexts"]').val(); }

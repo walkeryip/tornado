@@ -21,5 +21,9 @@ Tornado.ListPanel = Class.create(Tornado.MixedPanel, {
     getTitle: function() {
 	var list = Tornado.lists.get(this.id);
 	return "-" + list.name;
+    },
+    
+    getModel: function() {
+	return Tornado.lists.get(this.id);
     }
 });

@@ -118,11 +118,10 @@
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              <li class="nav-header">Sidebar</li>
-              <li class="active"><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
+              <li class="nav-header">Navigation</li>
+              <li><a href="#">Lists</a></li>
+              <li><a href="#">Tags</a></li>
+              <li><a href="#">Contexts</a></li>
               <li class="nav-header">Sidebar</li>
               <li><a href="#">Link</a></li>
               <li><a href="#">Link</a></li>

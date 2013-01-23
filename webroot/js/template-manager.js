@@ -70,7 +70,7 @@ Tornado.TemplateManager.prototype = {
 	this.navigationTreeItem = Mustache.compile('<li><a href="/tornado/task_lists/view/{{id}}">{{name}}</a></li>');
 	this.navigationTreeContainer = '<ul id="tree-view" class="dropdown-menu"></ul>';
 	this.panelHeader = Mustache.compile(['<h2>{{title}}</h2><p class="description">{{description}}</p>'].join(''));
-	this.panelContainer = Mustache.compile('<table class="table table-hover panel {{model}}s"></table>');
+	this.panelContainer = Mustache.compile('<div class="panel-table"><table class="table table-hover {{model}}s"></table></div>');
 
 	this.logedOutMessage = 'You have been logged out. Click <a href="/tornado/">here</a> to log in.';
     }

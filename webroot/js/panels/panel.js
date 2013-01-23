@@ -32,14 +32,17 @@ Tornado.Panel.prototype = {
         this.populateItemElements(data.lists.sort(Tornado.compareItem));
         this.populateItemElements(data.users.sort(Tornado.compareItem));
 
-	var sorter = this.container.find(".sorter");
-	var table = this.container.find("table");
+	this.container.find(".panel-table").each(function (index, value) {
+	    var sorter = jq(this).find(".sorter");
+	    var table = jq(this).find("table");
 	    sorter.find(".sortByName").click(function(e){return self.tableSort(table, this, ".item")});
 	    sorter.find(".sortByDeadline").click(function(e){return self.tableSort(table, this, ".deadline")});
 	    sorter.find(".sortByPriority").click(function(e){return self.tableSort(table, this, ".priority")});
 	    sorter.find(".sortByEnergy").click(function(e){return self.tableSort(table, this, ".energy")});
 	    sorter.find(".sortByTime").click(function(e){return self.tableSort(table, this, ".time")});
 	    sorter.find(".sortByCreated").click(function(e){return self.tableSort(table, this, ".created")});
+	});
+
 
     },
 
@@ -81,7 +84,9 @@ Tornado.Panel.prototype = {
 	if (!this.loaded) {
 	    
 	    this.model = this.getModel();
-	    this.container.prepend(Tornado.tpl.panelHeader({title: this.getTitle()}));
+	    var title = this.model ? this.model.name : this.getTitle();
+	    var description = this.model ? this.model.description : "";
+	    this.container.prepend(Tornado.tpl.panelHeader({title: title, description: description}));
 	    this.container.fadeIn("slow");
 
 	    this.loaded = true;

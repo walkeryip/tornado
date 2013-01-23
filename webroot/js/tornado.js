@@ -134,18 +134,19 @@ jq(document).ready(function() {
     }
 
     // Get hash size
-    function Hash_size(obj) {
-	var size = 0, key;
-	for (key in obj) {
-            if (obj.hasOwnProperty(key)) size++;
+    function Hash_size() {
+	var size = 0, key, keys = this.keys();
+	for (key in keys) {
+            if (keys.hasOwnProperty(key)) size++;
 	}
 	return size;
     }
 
     // Find out if the hash is empty
-    function Hash_isEmpty(obj) {
-	for (key in obj) {
-            if (obj.hasOwnProperty(key)) 
+    function Hash_isEmpty() {
+	var keys = this.keys();
+	for (key in keys) {
+            if (keys.hasOwnProperty(key)) 
 		return false;
 	}
 	return true;

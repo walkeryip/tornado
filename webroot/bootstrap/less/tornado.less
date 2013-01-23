@@ -26,7 +26,7 @@ td.settings {
     margin-left: 0px;
 }
 
-.tag, .context, .deadline, .energy, .time, .priority {
+.tag, .context, .deadline, .energy, .time, .priority, .user {
     margin-right: 5px;
     font-size: @baseFontSize * .846;
 }
@@ -98,4 +98,20 @@ tr:hover {
 .sorter {
     position: relative;
     float: right;
+}
+
+.table-hover tbody tr.ui-draggable-dragging {
+
+    td {
+	background-color: transparent;
+	border: none;
+    }
+
+    .settings, .deadline, .energy, .time, .priority {
+	display: none;
+    }
+}
+
+.table-hover tbody tr.ui-state-active td {
+    background-color: @tableBackgroundHover;
 }
