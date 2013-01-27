@@ -1,8 +1,12 @@
 <script type="text/javascript">
-
 	jq(document).ready(function () {
-		var listsPanel = new Tornado.ListsPanel("#lists-panel");
-		Tornado.panelManager.addPanel(listsPanel);
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Lists",
+		    type: "list",
+		    parent_id: null,
+		    children: true,
+		    showLists: true,
+		    deleted: false});
+		Tornado.panelManager.addPanel(panel);
 	});
 </script>
-<div id="lists-panel"></div>

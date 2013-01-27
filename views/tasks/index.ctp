@@ -1,13 +1,22 @@
-<h2>Tasks</h2>
 <script type="text/javascript">
 
 	jq(document).ready(function () {
-		var tasksDonePanel = new Tornado.TaskPanel("#tasks-done-panel", {title: "Done tasks", checked: true});
-		Tornado.panelManager.addPanel(tasksDonePanel);
-
-		var tasksPanel = new Tornado.TaskPanel("#tasks-panel", {title: "Uncompleted tasks"});
-		Tornado.panelManager.addPanel(tasksPanel);
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Tasks",
+		    type: "task",
+		    checked: false,
+		    deleted: false,
+		    showTasks: true,
+		    });
+		Tornado.panelManager.addPanel(panel);
+		
+		var panel2 = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Done Tasks",
+		    type: "task",
+		    checked: true,
+		    deleted: false,
+		    showTasks: true,
+		    });
+		Tornado.panelManager.addPanel(panel2);
 	});
 </script>
-<div id="tasks-panel"></div>
-<div id="tasks-done-panel"></div>

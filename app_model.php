@@ -119,16 +119,48 @@ class AppModel extends Model {
 	
 	
 	// Tasks
-	public function getTasks($userId, $checked, $shared = false){
-		$query = "SELECT Task.* FROM tasks as Task inner join tasks_users as TasksUsers on TasksUsers.task_id = Task.id " .
-				 "and TasksUsers.user_id = " . $userId . " where Task.deleted = false and Task.checked = " . $checked;
+	public function getTasks($userId, $params = null){
+	  $query = "SELECT Task.* FROM tasks as Task inner join tasks_users as TasksUsers on TasksUsers.task_id = Task.id " .
+	    "and TasksUsers.user_id = " . $userId;
 
-		if ($shared) {
-			$query .= " and exists(select * from tasks_users where tasks_users.task_id = Task.id and tasks_users.user_id != " . $userId . ")";
-		}
-	
-		$query .= " group by Task.id";
-		return $this->query($query);
+	  if (isset($params)) {
+	    if (isset($params["tag"])) {
+	      $query .= " inner join tags_tasks as TagTask on TagTask.task_id = Task.id inner join tags as Tag on Tag.id = TagTask.tag_id " .
+	      " and Tag.name in ('" . $params["tag"] . "') ";
+	    }
+	    if (isset($params["context"])) {
+	      $query .= " inner join contexts_tasks as ContextTask on ContextTask.task_id = Task.id inner join contexts as Context on " . 
+		" Context.id = ContextTask.context_id and Context.name in ('" . $params["context"] . "') ";
+	    }
+
+	    $query .= " where 1=1 ";
+
+	    if (isset($params["task_id"])) {
+	      $query .= " and Task.id in (" . $params["task_id"] . ")";
+	    }
+	    if (isset($params["deleted"])) {
+	      $query .= " and Task.deleted = " . $params["deleted"];
+	    }
+	    if (isset($params["shared"])) {
+	      $query .= " and exists(select * from tasks_users where tasks_users.task_id = Task.id and tasks_users.user_id != " . $userId . ")";
+	    }
+	    if (isset($params["checked"])) {
+	      $query .= " and Task.checked = " . $params["checked"];
+	    } 
+	  }
+	  
+	  $query .= " group by Task.id";
+
+	  if (isset($params) && isset($params["limit"])) {
+	    $query .= " limit ";
+	    
+	    if (isset($params["page"])) {
+	      $query .= $params["page"] * $params["limit"] . ",";
+	    }
+
+	    $query .= $params["limit"];
+	  }
+	  return $this->query($query);
 	}
 
 	public function getTaskByTaskId($taskId, $userId){
@@ -152,13 +184,24 @@ class AppModel extends Model {
 		return $this->query("select * from contexts as Context where id = " . $id . " and Context.deleted = false and user_id = " . $userId);
 	}
 	
-	public function getContexts($userId){
-		return $this->query("select * from contexts as Context where Context.deleted = false and user_id = " . $userId);
+	public function getContexts($userId, $params){
+	  $query = "select * from contexts as Context where user_id = " . $userId;
+
+	  if (isset($params)) {
+	    if (isset($params["context_id"])) {
+	      $query .= " and Context.id in (" . $params["context_id"] . ")";
+	    }
+	    if (isset($params["deleted"])) {
+	      $query .= " and Context.deleted = false"; 
+	    }
+	  }
+	  
+	  return $this->query($query);
 	}
 	
-	public function getContextsByContextIds($contextIds, $userId){
+	/*public function getContextsByContextIds($contextIds, $userId){
 		return $this->query("select * from contexts as Context where Context.deleted = false and id in (" . 	implode(",", $contextIds) . ") and user_id = " . $userId);
-	}
+		}*/
 
 	public function getContextsTasksByTaskIds($taskIds) {
 		return $this->query("select * from contexts_tasks as ContextTask where task_id in (" . implode(",", $taskIds) . ")");
@@ -170,8 +213,20 @@ class AppModel extends Model {
 		return $this->query("select * from tags as Tag where Tag.deleted = false and id = " . $id . " and user_id = " . $userId);
 	}
 	
-	public function getTags($userId){
-		return $this->query("select * from tags as Tag where Tag.deleted = false and user_id = " . $userId);
+	public function getTags($userId, $params){
+	  //return $this->query("select * from tags as Tag where Tag.deleted = false and user_id = " . $userId);
+
+	  $query = "select * from tags as Tag where user_id = " . $userId;
+	  
+	  if (isset($params)) {
+	    if (isset($params["tag_id"])) {
+	      $query .= " and Tag.id in (" . $params["tag_id"] . ")";
+	    }
+	    if (isset($params["deleted"])) {
+	      $query .= " and Tag.deleted = false"; 
+	    }
+	  }
+	  return $this->query($query);
 	}
 
 	public function getTagsByTagIds($tagIds, $userId){
@@ -266,28 +321,114 @@ class AppModel extends Model {
 					  	    "and task_lists_users.user_id = " . $userId . " where List.deleted = false and List.id in (" . implode(",", array_unique($ids)) . ") group by List.id");
 	}
 
-	public function getTaskListAndParentByTaskListId($id, $userId, $shared = false) {
+	
+
+	/*	public function getTaskLists($userId, $params = null) {
+		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+					  	    "and List.deleted = false and task_lists_users.user_id = " . $userId . " group by List.id");
+						    }*/
+
+	public function getTaskListAndParentByTaskListId($id, $userId, $params = null) {
 		$query = "select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id" .
 				    " and task_lists_users.user_id = " . $userId . " and List.deleted = false";
 
-		if ($shared) {
+		/*if ($shared) {
 			$query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = List.id and task_lists_users.user_id != " . $userId . ")";
-		} else {
+			} else {*/
 		  $query .= " and (List.id = " . $id . " or List.parent_id = " . $id . ")";
-		}
+		  //}
+
+		  //if ($params != null) {
+		  // if ($params["active"] != null) {
+		  //	  $query .= " and List.active = 1"; // + $params["active"];
+		      // }
+		      //}
+		
 	
 		$query .= " group by List.id";
 		return $this->query($query);
 	}
 
-	public function getTaskLists($userId) {
-		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
-					  	    "and List.deleted = false and task_lists_users.user_id = " . $userId . " group by List.id");
-	}
+	public function getTaskLists($userId, $params = null) {
+	  $query = "select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
+	    "and task_lists_users.user_id = " . $userId;
 
-	public function getRootTaskLists($userId) {
-		return $this->query("select List.* from task_lists as List inner join task_lists_users on task_lists_users.task_list_id = List.id " .
-					  	    "and List.deleted = false and task_lists_users.user_id = " . $userId . " where List.parent_id is null group by List.id");
+	  if (isset($params)) {
+	    if (isset($params["tag"])) {
+	      $query .= " inner join tags_task_lists as TagList on TagList.task_list_id = List.id inner join tags as Tag on Tag.id = TagList.tag_id " .
+	      " and Tag.name in ('" . $params["tag"] . "') ";
+	    }
+	    if (isset($params["context"])) {
+	      $query .= " inner join contexts_task_lists as ContextList on ContextList.task_list_id = List.id inner join contexts as Context on " . 
+		" Context.id = ContextList.context_id and Context.name in ('" . $params["context"] . "') ";
+	    }
+
+	    $query .= " where 1=1 ";
+	    $listAndParent = isset($params["list_id"]) && isset($params["parent_id"]);
+	      
+	    if ($listAndParent) {
+	      $query .= " and ( ";
+	    }
+	    
+	    if (isset($params["list_id"])) {    
+	      if (!$listAndParent) {
+		$query .= " and ";
+	      }
+	   
+	      if ($params["list_id"] != "null") {
+		$query .= " List.id in (" . $params["list_id"] . ")";
+	      } else {
+		$query .= " List.id is null ";
+	      }
+	    }
+
+	    if (isset($params["parent_id"])) {
+	      if ($listAndParent) {
+		$query .= " or";
+	      } else {
+		$query .= " and";
+	      }
+
+	      if ($params["parent_id"] != "null") {
+		$query .= " List.parent_id in (" . $params["parent_id"] . ")";
+	      } else {
+		$query .= " List.parent_id is null ";
+	      }
+	    }
+
+	    if ($listAndParent) {
+	      $query .= ") ";
+	    }
+
+	    if (isset($params["active"])) {
+	      $query .= " and List.active = " . $params["active"];
+	    }
+	    if (isset($params["deleted"])) {
+	      $query .= " and List.deleted = " . $params["deleted"];
+	    }
+	    if (isset($params["parent"])) {
+	      if ($params["parent"] == "null") {
+		$query .= " and List.parent_id is " . $params["parent"];
+	      }else{
+		$query .= " and List.parent_id in (" . $params["parent"] . ")";
+	      }
+	    }
+	  }
+
+	  $query .= " group by List.id";
+
+	  if (isset($params) && isset($params["limit"])) {
+	    $query .= " limit ";
+	    
+	    if (isset($params["page"])) {
+	      $query .= $params["page"] * $params["limit"] . ",";
+	    }
+
+	    $query .= $params["limit"];
+	  }
+	  //echo $query;
+	  //  echo $query;
+	  return $this->query($query);
 	}
 
 	public function getNavigationTree($userId) {

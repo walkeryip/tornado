@@ -100,21 +100,23 @@ Tornado.Element.prototype = {
 	} else {
 	    this.element.html(viewElement);
 
-	    // We assume that the initial item list is sorted
 	    if (loaded) {
-		var foundElement = false;
+		/*var foundElement = false;
 		container.find("tr").each(function(index, item) {
 		    if (Tornado.compareItem(self.getItemFromElement(jq(item)), self.model) > 0){
 			foundElement = true;
 			self.element.insertBefore(item);
 			return false;
 		    }
-		});
+		});*/
+
+		container.find("tr").tsort();
 	    }
-	    
-	    if (!foundElement) {
+
+	    container.append(this.element);    
+	   /* if (!foundElement) {
 		container.append(this.element);
-	    }
+	    }*/
 
 	    this.element.hide().fadeIn();
 	}

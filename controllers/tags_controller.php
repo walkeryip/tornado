@@ -18,14 +18,20 @@ class TagsController extends AppController {
         $this->render('/general/json', 'ajax');
 	}
 
-	function getTags($id = null){
+	function getTags($id = null, $params){
 		$userId = $_SESSION['Auth']['User']['id'];
 
-		if ($id != null) {
+		/*if ($id != null) {
 			$data["Tags"] = $this->Tag->getTagById($id, $userId);
 		} else {
 			$data["Tags"] = $this->Tag->getTags($userId);
+			}*/
+		if (isset($params["tag_id"])) {
+		  $id = $params["tag_id"];
 		}
+
+		$params["tag_id"] = $id;
+		$data["Tags"] = $this->Tag->getTags($userId, $params);
 		
 		$tagIds = $this->accId($data["Tags"], "Tag", "id");
 		$contextIds = array();
@@ -44,7 +50,10 @@ class TagsController extends AppController {
 
 
 		if (!empty($listIds)){
-			$data["Lists"] = $this->Tag->getTaskListsByTaskListIds($listIds, $userId);
+		  $params["list_id"] = implode(",", $listIds);
+		  $data["Lists"] = $this->Tag->getTaskLists($userId, $params);
+
+		  //		$data["Lists"] = $this->Tag->getTaskListsByTaskListIds($listIds, $userId);
 
 			$data["ListsUsers"] = $this->Tag->getTaskListsUsersByTaskListIds($listIds);			
 			$userIds += $this->accId($data["ListsUsers"], "ListUser", "user_id");
@@ -56,7 +65,10 @@ class TagsController extends AppController {
 			$contextIds += $this->accId($data["ContextsLists"], "ContextList", "context_id");
 		}
 		if (!empty($taskIds)){
-		   	$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
+		  $params["task_id"] = implode(",", $taskIds);
+		  $data["Tasks"] = $this->Tag->getTasks($userId, $params);
+
+				  //$data["Tasks"] = $this->Tag->getTasksByTaskIds($taskIds, $userId);
 
 			$data["TasksUsers"] = $this->Tag->getTasksUsersByTaskIds($taskIds);
 			$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
@@ -68,10 +80,10 @@ class TagsController extends AppController {
 			$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
 		}
 		if (!empty($tagIds)){
-			$data["Tags"] += $this->Tag->getTagsByTagIds($tagIds, $userId);
+			$data["Tags"] += $this->Tag->getTags($userId, array("tag_id" => implode(",", $tagIds)));
 		}
 		if (!empty($contextIds)){
-			$data["Contexts"] = $this->Tag->getContextsByContextIds($contextIds, $userId);
+		  $data["Contexts"] = $this->Tag->getContexts($userId, array("context_id" => implode(",", $contextIds)));
 		}
 	
 		if (!empty($userIds)){
@@ -81,16 +93,16 @@ class TagsController extends AppController {
 		return $data;
 	}
 
-	function getTagById($id){
-		return $this->getTags($id);
+	function getTagById($id, $params){
+	  return $this->getTags($id, $params);
 	}
 
-	function view($id){	
+	function view($id = null){	
 		$userId = $_SESSION['Auth']['User']['id'];
 		$this->set('user_id', $userId);
 	
 		if ($this->RequestHandler->isAjax()){
-			$this->set("data", $this->getTagById($id));
+		  $this->set("data", $this->getTagById($id, $this->params["url"]));
         	$this->render('/general/json', 'ajax');
 		} else {
 			$tag = $this->Tag->getTagById($id, $_SESSION['Auth']['User']['id']);
@@ -119,7 +131,7 @@ class TagsController extends AppController {
 	
 	function edit($id = null){
 		if ($this->Tag->save($this->data)){
-		  $this->data = $this->getTagById($id);
+		  $this->data = $this->getTagById($id, $this->params["url"]);
 			//print_r($this->data);
 			$this->set('data', $this->data);
 		} else {

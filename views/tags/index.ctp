@@ -1,8 +1,9 @@
 <script type="text/javascript">
-
 	jq(document).ready(function () {
-		var tagsPanel = new Tornado.TagsPanel("#tags-panel");
-		Tornado.panelManager.addPanel(tagsPanel);
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Tags",
+		    type: "tag",
+		    showTags: true});
+		Tornado.panelManager.addPanel(panel);
 	});
 </script>
-<div id="tags-panel"></div>

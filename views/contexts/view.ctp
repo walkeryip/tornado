@@ -1,9 +1,15 @@
 <script type="text/javascript">
 	jq(document).ready(function () {
-		var contextPanel = new Tornado.ContextPanel(<?php echo $context_id; ?>, "#context-tasks");
-		Tornado.panelManager.addPanel(contextPanel);
-		Tornado.state.setContext({id: <?php echo $context_id; ?>});
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Context",
+		    type: "context",
+		    context_id: <?php echo $context_id ?>,
+		    //active: true,
+		    deleted: false,
+		    checked: false,
+		    //children: true,
+		    showLists: true,
+		    showTasks: true});
+		Tornado.panelManager.addPanel(panel);
 	});
 </script>
-
-<div id="context-tasks"></div>

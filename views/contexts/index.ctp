@@ -1,8 +1,9 @@
 <script type="text/javascript">
-
 	jq(document).ready(function () {
-		var contextsPanel = new Tornado.ContextsPanel("#contexts-panel");
-		Tornado.panelManager.addPanel(contextsPanel);
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Contexts",
+		    type: "context",
+		    showContexts: true});
+		Tornado.panelManager.addPanel(panel);
 	});
 </script>
-<div id="contexts-panel"></div>

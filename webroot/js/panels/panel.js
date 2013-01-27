@@ -18,7 +18,7 @@ Tornado.Panel.prototype = {
 	this.loaded = false;
 	
 	this.container = jq(containerId);
-	this.container.hide();
+	//this.container.hide();
 	this.container.addClass("panel");
     },
     
@@ -87,6 +87,7 @@ Tornado.Panel.prototype = {
 	    var title = this.model ? this.model.name : this.getTitle();
 	    var description = this.model ? this.model.description : "";
 	    this.container.prepend(Tornado.tpl.panelHeader({title: title, description: description}));
+	    this.container.find("tr").tsort();
 	    this.container.fadeIn("slow");
 
 	    this.loaded = true;

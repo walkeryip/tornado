@@ -19,15 +19,16 @@ class ContextsController extends AppController {
         $this->render('/general/json', 'ajax');
 	}
 
-	function getContexts($id = null){
+	function getContexts($id = null, $params){
 		$userId = $_SESSION['Auth']['User']['id'];
 
-		if ($id != null) {
-			$data["Contexts"] = $this->Context->getContextById($id, $userId);
-		} else {
-			$data["Contexts"] = $this->Context->getContexts($userId);
+		if (isset($params["context_id"])) {
+		  $id = $params["context_id"];
 		}
-		
+
+		$params["context_id"] = $id;
+		$data["Contexts"] = $this->Context->getContexts($userId, $params);
+		  
 		$contextIds = $this->accId($data["Contexts"], "Context", "id");
 		$tagIds = array();
 		if ($id != null) {
@@ -43,7 +44,9 @@ class ContextsController extends AppController {
 
 
 		if (!empty($listIds)){
-			$data["Lists"] = $this->Context->getTaskListsByTaskListIds($listIds, $userId);
+		  $params["list_id"] = implode(",", $listIds);
+		  //$data["Lists"] = $this->Context->getTaskListsByTaskListIds($listIds, $userId);
+		  $data["Lists"] = $this->Context->getTaskLists($userId, $params);
 
 			$data["ListsUsers"] = $this->Context->getTaskListsUsersByTaskListIds($listIds);			
 			$userIds += $this->accId($data["ListsUsers"], "ListUser", "user_id");
@@ -55,7 +58,9 @@ class ContextsController extends AppController {
 			$contextIds += $this->accId($data["ContextsLists"], "ContextList", "context_id");
 		}
 		if (!empty($taskIds)){
-		   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
+		  $params["task_id"] = implode(",", $taskIds);
+		  //   	$data["Tasks"] = $this->Context->getTasksByTaskIds($taskIds, $userId);
+		  $data["Tasks"] = $this->Context->getTasks($userId, $params);
 
 			$data["TasksUsers"] = $this->Context->getTasksUsersByTaskIds($taskIds);
 			$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
@@ -70,7 +75,8 @@ class ContextsController extends AppController {
 			$data["Tags"] = $this->Context->getTagsByTagIds($tagIds, $userId);
 		}
 		if (!empty($contextIds)){
-			$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds, $userId);
+		  //$data["Contexts"] += $this->Context->getContextsByContextIds($contextIds, $userId);
+		  $data["Contexts"] += $this->Context->getContexts($userId, array("context_id" => implode(",", $contextIds)));
 		}
 	
 		if (!empty($userIds)){
@@ -80,16 +86,16 @@ class ContextsController extends AppController {
 		return $data;
 	}
 
-	function getContextById($id){
-		return $this->getContexts($id);
+	function getContextById($id, $params){
+	  return $this->getContexts($id, $params);
 	}
 	
-	function view($id){		
+	function view($id = null){		
 		$userId = $_SESSION['Auth']['User']['id'];
 				$this->set("user_id", $userId);
 
 		if ($this->RequestHandler->isAjax()){
-			$this->set("data", $this->getContextById($id));
+		  $this->set("data", $this->getContextById($id, $this->params["url"]));
         	$this->render('/general/json', 'ajax');
 		} else {
 			$context = $this->Context->getContextById($id, $_SESSION['Auth']['User']['id']);
@@ -118,7 +124,7 @@ class ContextsController extends AppController {
 	
 	function edit($id = null){
 		if ($this->Context->save($this->data)){
-		  $this->data = $this->getContextById($id);
+		  $this->data = $this->getContextById($id, $this->params["url"]);
 			//print_r($this->data);
 			$this->set('data', $this->data);
 		} else {

@@ -56,7 +56,7 @@
     <script type="text/javascript" src="/tornado/js/views/tag-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/context-element.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/mixed-panel.js"></script>
+<!--    <script type="text/javascript" src="/tornado/js/panels/mixed-panel.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/single-panel.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/task-panel.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/list-panel.js"></script>
@@ -66,7 +66,8 @@
     <script type="text/javascript" src="/tornado/js/panels/deadline-panel.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/todo-panel.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/tags-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/contexts-panel.js"></script>
+    <script type="text/javascript" src="/tornado/js/panels/contexts-panel.js"></script>-->
+    <script type="text/javascript" src="/tornado/js/panels/general-panel.js"></script>
 
     <script>	
       Tornado.initialize();
@@ -137,7 +138,7 @@
           </div><!--/.well -->
         </div><!--/span-->
 	<div id="breadcrumbs"></div>
-	<div class="span5">
+	<div id="content" class="span5">
           <?php echo $content_for_layout; ?>
 	  
         </div><!--/span-->
