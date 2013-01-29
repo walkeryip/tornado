@@ -1,12 +1,14 @@
-<h2>Shared</h2>
 <script type="text/javascript">
-
 	jq(document).ready(function () {
-		var tasksPanel = new Tornado.TaskPanel("#tasks-panel", {title: "Shared tasks", shared: true});
-		Tornado.panelManager.addPanel(tasksPanel);
-		var listsPanel = new Tornado.ListsPanel("#lists-panel", {title: "Shared lists", shared: true});
-		Tornado.panelManager.addPanel(listsPanel);
+		var panel = new Tornado.GeneralPanel("test", "#content", 
+		    {title: "Shared",
+		    type: "list",
+		    deleted: false,
+		    checked: false,
+		    children: true,
+		    showLists: true,
+		    shared: true,
+		    showTasks: true});
+		Tornado.panelManager.addPanel(panel);
 	});
 </script>
-<div id="tasks-panel"></div>
-<div id="lists-panel"></div>

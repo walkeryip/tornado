@@ -13,7 +13,7 @@ Tornado.Context = Class.create(Tornado.Item, {
 	var context = data.Context;
 	
 	if (context) {
-	    this.id = context.id;
+	    this.id = context.id && parseInt(context.id);
 	    this.name = Tornado.escapeString(context.name);
 	} else {
 	    this.name = Tornado.escapeString(data.name);

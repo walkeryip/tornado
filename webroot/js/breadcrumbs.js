@@ -45,7 +45,7 @@ Tornado.Breadcrumbs.prototype = {
 	    }
 	}
 
-	result.push({id: null, name: "Home", link: true});
+	result.push({id: null, name: "Home", link: counter > 0, current: counter == 0});
 
 	// TODO: This is quite expensive, it could be avoided. The list is often very short, but still...
 	return result.reverse();

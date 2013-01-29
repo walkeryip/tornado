@@ -4,8 +4,11 @@
 		    {title: "Lists",
 		    type: "list",
 		    parent_id: null,
+		    list_id: null,
 		    children: true,
 		    showLists: true,
+		    showTasks: true,
+		    breadcrumbs: true,
 		    deleted: false});
 		Tornado.panelManager.addPanel(panel);
 	});

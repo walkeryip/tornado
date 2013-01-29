@@ -19,11 +19,12 @@ Tornado.List = Class.create(Tornado.Item, {
 	    list = data;
 	}
 
-        this.id = list.id;
+        this.id = list.id && parseInt(list.id);
 	this.active = list.active === "1";
 	this.description = Tornado.escapeString(list.description);
+	this.deleted = list.deleted === "1";
         this.name = Tornado.escapeString(list.name);
-	this.parent_id = list.parent_id;
+	this.parent_id = list.parent_id && parseInt(list.parent_id);
     },
     
     getSubmitData: function(compactMode) {

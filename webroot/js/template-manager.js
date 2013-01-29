@@ -20,9 +20,9 @@ Tornado.TemplateManager.prototype = {
 					       '</ul>',
 					     '</div>'].join(''));
 					    
-	this.elementContainer = Mustache.compile('<tr data-model-type="{{model}}" data-model-id="{{id}}">{{body}}</tr>');
+	this.elementContainer = Mustache.compile('<tr data-model-type="{{model}}" data-model-id="{{id}}" data-toggle="context" data-target="#context-menu">{{body}}</tr>');
 	this.elementView = Mustache.compile(
-	    ['<td class=\"handle\"><p></p></td>',
+	    [/*'<td class=\"handle\"><p></p></td>',*/
              '<td class=\"checkbox\">{{#hasCheckbox}}<input type=\"checkbox\" {{#checked}}checked=\"yes\" {{/checked}}/>{{/hasCheckbox}}</td>',
 	     '<td>',
   	       '{{#link}}<a href="/tornado/{{model}}s/view/{{id}}">{{/link}}',
@@ -46,7 +46,7 @@ Tornado.TemplateManager.prototype = {
 	       '</ul>',
 	     '</td>'].join(''));
 	this.elementEditView = Mustache.compile(
-	    ['<td colspan="4">',
+	    ['<td colspan="3">',
 	       '<p><label>Name:</label></p><input type="text" value="{{name}}" name="name" />',
 	       '{{#hasTags}}<p><label>Tags:</label></p><input type="text" value="{{tags}}" name="tags" />{{/hasTags}}',
 	       '{{#hasContexts}}<p><label>Contexts:</label></p><input type="text" value="{{contexts}}" name="contexts" />{{/hasContexts}}',

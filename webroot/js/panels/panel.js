@@ -87,7 +87,7 @@ Tornado.Panel.prototype = {
 	    var title = this.model ? this.model.name : this.getTitle();
 	    var description = this.model ? this.model.description : "";
 	    this.container.prepend(Tornado.tpl.panelHeader({title: title, description: description}));
-	    this.container.find("tr").tsort();
+	    this.container.find("tr").tsort({sortFunction: Tornado.tableSortFunction});
 	    this.container.fadeIn("slow");
 
 	    this.loaded = true;
@@ -105,9 +105,9 @@ Tornado.Panel.prototype = {
 	    options = {};
 	}
 	
-	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc"};
+	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc", sortFunction: Tornado.tableSortFunction};
 	
-	table.find("tr").tsort(".item", options); 
+	table.find("tr").tsort(column, options); 
 	jq(element).toggleClass("desc"); 
 	return false; 
     },

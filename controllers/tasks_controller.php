@@ -46,9 +46,9 @@ class TasksController extends AppController {
 				$this->data["User"]["User"] = $test;
 			}
 		
-
-
-			$this->data["TaskList"] = $this->data["List"];
+			if (isset($this->data["List"])) {
+			  $this->data["TaskList"] = $this->data["List"];
+			}
 
 			// Attach to parent
 			//$this->data['TaskList']['TaskList'][0] = $id;
@@ -58,7 +58,7 @@ class TasksController extends AppController {
 
 			//print_r($this->data);
 			if ($this->Task->save($this->data)){
-                $this->data = $this->getTaskById($this->Task->id);
+			  $this->data = $this->getTaskById($this->Task->id);
 				//print_r($this->data);
 				$this->set('data', $this->data);
 				$this->render('/general/json', 'ajax');

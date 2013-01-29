@@ -4,6 +4,8 @@ Tornado.Element.prototype = {
 	this.visible = false;
 	this.model = model;
 	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id}));
+	this.element.disableSelection();
+
 	this.hasCheckbox = false;
 	this.hasTags = false;
 	this.hasUsers = false;
@@ -75,7 +77,7 @@ Tornado.Element.prototype = {
 	this.element.draggable(
 	    {revert: "invalid",
 	     distance: 5,
-	     handle: ".handle",
+	     //handle: ".handle",
 	     opacity: 0.7, 
 	     helper: "clone",
 	     create: function(event, ui){ 
@@ -87,6 +89,7 @@ Tornado.Element.prototype = {
 	viewElement.find("input").click(function(e) {
 	    e.stopPropagation();
    	    e.stopImmediatePropagation();
+	    return false;
 	});
 
 	viewElement.find(".move").hover(function (e) {
@@ -100,23 +103,12 @@ Tornado.Element.prototype = {
 	} else {
 	    this.element.html(viewElement);
 
-	    if (loaded) {
-		/*var foundElement = false;
-		container.find("tr").each(function(index, item) {
-		    if (Tornado.compareItem(self.getItemFromElement(jq(item)), self.model) > 0){
-			foundElement = true;
-			self.element.insertBefore(item);
-			return false;
-		    }
-		});*/
-
-		container.find("tr").tsort();
-	    }
-
 	    container.append(this.element);    
-	   /* if (!foundElement) {
-		container.append(this.element);
-	    }*/
+
+	    // Only sort the list when all data is loaded
+	    if (loaded) {
+		container.find("tr").tsort({sortFunction: Tornado.tableSortFunction});
+	    }
 
 	    this.element.hide().fadeIn();
 	}
@@ -147,7 +139,7 @@ Tornado.Element.prototype = {
 	     tags: tagsString, contexts: contextsString, hasTags: this.hasTags, hasContexts: this.hasContexts,
 	     hasUsers: this.hasUsers, hasDescription: this.hasDescription, hasDeadline: this.hasDeadline,
 	     hasEnergy: this.hasEnergy, hasTime: this.hasTime, hasPriority: this.hasPriority,
-	     energy: this.model.energy, time: this.model.time, priority: this.model.priority, deadline: this.model.priority,
+	     energy: this.model.energy, time: this.model.time, priority: this.model.priority, deadline: this.model.deadline,
 	     active: this.model.active, hasActive: this.hasActive}));
 
 	this.element.html(editElement);

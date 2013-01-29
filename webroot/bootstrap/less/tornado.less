@@ -10,7 +10,7 @@ td.handle {
 
 td.checkbox {
     width: 12px;
-    padding: 8px 0 0 0;
+    padding: 8px 0 0 6px;
 }
 
 td.settings {
@@ -102,7 +102,7 @@ tr:hover {
 
 .table-hover tbody tr.ui-draggable-dragging {
 
-    td {
+    td, tr {
 	background-color: transparent;
 	border: none;
     }
@@ -114,4 +114,12 @@ tr:hover {
 
 .table-hover tbody tr.ui-state-active td {
     background-color: @tableBackgroundHover;
+}
+
+.table tbody tr.selected td {
+    background-color: fadeout(@blue, 80%);   
+}
+
+.dropdown-menu {
+    margin: 0px;
 }

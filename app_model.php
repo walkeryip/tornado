@@ -413,6 +413,9 @@ class AppModel extends Model {
 		$query .= " and List.parent_id in (" . $params["parent"] . ")";
 	      }
 	    }
+	    if (isset($params["shared"])) {
+	      $query .= " and exists(select * from task_lists_users where task_lists_users.task_list_id = List.id and task_lists_users.user_id != " . $userId . ")";
+	    }
 	  }
 
 	  $query .= " group by List.id";

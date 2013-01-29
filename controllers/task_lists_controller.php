@@ -64,20 +64,20 @@ class TaskListsController extends AppController {
 	  $shared = false;
 		$userId = $_SESSION['Auth']['User']['id'];
 
-		/*if ($id != null || $shared) {
-		  $data["Lists"] = $this->TaskList->getTaskListAndParentByTaskListId($id, $userId, $params);
-		} else {
-		  $data["Lists"] = $this->TaskList->getRootTaskLists($userId, $params);
-		  }*/
 		$data["Lists"] = $this->TaskList->getTaskLists($userId, $params);
 		  
 		$taskListIds = $this->accId($data["Lists"], "List", "id");
 		if (!empty($taskListIds)) {
 
-			if ($id != null) {
+		  	if ($id != "null" && $id != null) {
 				$data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
-		
 				$taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
+			} else {
+			  $tasks = $this->TaskList->query("select Task.id from tasks as Task where Task.deleted = false and id not in (select ListTask.task_id from task_lists_tasks as  ListTask)");
+			  $taskIds = $this->accId($tasks, "Task", "id");
+			  /* echo "<pre><code>";
+			  print_r($tasks);
+			  echo "</code></pre>";*/
 			}
 
 			$data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
@@ -96,7 +96,6 @@ class TaskListsController extends AppController {
 			if (!empty($taskIds)){
 			  
 			  $params["task_id"] = implode(",", $taskIds);
-			  //$data["Tasks"] = $this->TaskList->getTasksByTaskIds($taskIds, $userId);
 			  $data["Tasks"] = $this->TaskList->getTasks($userId, $params);
 				$data["TasksUsers"] = $this->TaskList->getTasksUsersByTaskIds($taskIds);
 				$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");

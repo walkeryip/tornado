@@ -13,8 +13,12 @@
     echo $this->Html->meta('icon');
 
     echo $scripts_for_layout;
+    $debug = isset($this->params["url"]["debug"]) && $this->params["url"]["debug"] == "true";
     ?>
 
+    <?php
+       if (!$debug) {
+       ?>
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/bootstrap.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/tornado.less" />
@@ -23,17 +27,13 @@
 
     <script type="text/javascript" src="/tornado/js/lib/mustache.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/prototype.js"></script>
-    <script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>
+  <!--  <script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>-->
     <script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery.tinysort.min.js"></script>
-    <script type="text/javascript" src="/tornado/js/lib/jquery.tablesorter.js"></script>
-    <script type="text/javascript" src="/tornado/js/lib/jquery.tablesorter.pager.js"></script>
-    <script>
-        jQuery.noConflict();
-        var jq = jQuery;
-    </script>
+    <script src="/tornado/js/lib/bootstrap.js" type="text/javascript"></script>
+    <script src="/tornado/js/lib/bootstrap-contextmenu.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="/tornado/js/tornado.js"></script>
     <script type="text/javascript" src="/tornado/js/template-manager.js"></script>
@@ -56,23 +56,21 @@
     <script type="text/javascript" src="/tornado/js/views/tag-element.js"></script>
     <script type="text/javascript" src="/tornado/js/views/context-element.js"></script>
     <script type="text/javascript" src="/tornado/js/panels/panel.js"></script>
-<!--    <script type="text/javascript" src="/tornado/js/panels/mixed-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/single-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/task-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/list-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/context-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/tag-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/lists-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/deadline-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/todo-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/tags-panel.js"></script>
-    <script type="text/javascript" src="/tornado/js/panels/contexts-panel.js"></script>-->
     <script type="text/javascript" src="/tornado/js/panels/general-panel.js"></script>
+
+    <?php } else { ?>
+    <link rel="stylesheet" type="text/css" href="/tornado/css/tornado.min.css" />
+    <script type="text/javascript" src="/tornado/js/tornado-combined.js"></script>
+
+    <?php } ?>
+
 
     <script>	
       Tornado.initialize();
       Tornado.state.setUser({id: <? echo $_SESSION['Auth']['User']['id']; ?>, name: "<? echo $_SESSION['Auth']['User']['username']; ?>"});
     </script>
+
+
   </head>
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -147,11 +145,9 @@
       <hr />
       
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>Copyleft Tornado 2013</p>
       </footer>
       
     </div><!--/.fluid-container-->
-    <script src="/tornado/bootstrap/bootstrap/js/bootstrap.js" type="text/javascript"></script>
-
   </body>
 </html>

@@ -1,3 +1,6 @@
+jQuery.noConflict();
+var jq = jQuery;
+
 Tornado = {
     // Constructor
     initialize: function() {
@@ -117,6 +120,15 @@ Tornado = {
 
     capitalizeFirst: function (string) {
 	return string.slice(0, 1).toUpperCase() + string.slice(1);
+    },
+
+    tableSortFunction: function(a,b){
+	var jqA = jq(a.e), jqB = jq(b.e);
+
+	var test = jqA.attr("data-model-type");
+	if (jqA.attr("data-model-type") === "task" && jqB.attr("data-model-type") === "list") return 1;
+	if (jqA.attr("data-model-type") === "list" && jqB.attr("data-model-type") === "task") return -1;
+	return a.s > b.s ? 1 : ( a.s === b.s ? 0 : -1);
     }
 };
 

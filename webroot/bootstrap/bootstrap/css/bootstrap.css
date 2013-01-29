@@ -6037,3 +6037,132 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
+
+body {
+  padding-top: 50px;
+}
+
+td.handle {
+  width: 10px;
+}
+
+td.checkbox {
+  width: 12px;
+  padding: 8px 0 0 0;
+}
+
+td.settings {
+  position: relative;
+  width: 20px;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.checkbox input[type="checkbox"] {
+  margin-left: 0;
+}
+
+.tag,
+.context,
+.deadline,
+.energy,
+.time,
+.priority,
+.user {
+  margin-right: 5px;
+  font-size: 11.844px;
+}
+
+.deadline,
+.energy,
+.time,
+.priority {
+  float: right;
+  opacity: 0.1;
+}
+
+.settings a {
+  opacity: 0.1;
+}
+
+tr:hover .deadline,
+tr:hover .energy,
+tr:hover .time,
+tr:hover .priority {
+  opacity: 1;
+}
+
+tr:hover .settings a {
+  opacity: 1;
+}
+
+.energy {
+  background-color: #ffc40d;
+}
+
+.priority {
+  background-color: #f89406;
+}
+
+.deadline {
+  font-style: italic;
+  font-weight: 100;
+  background-color: black;
+}
+
+.item {
+  margin-right: 5px;
+}
+
+.label a {
+  font-weight: 100;
+  color: white;
+}
+
+.label.tag {
+  background-color: #9d261d;
+}
+
+.label.context {
+  background-color: #049cdb;
+}
+
+.label.user {
+  background-color: #46a546;
+}
+
+.inactive a span {
+  color: #ccc;
+}
+
+.inactive .label {
+  background-color: #ccc;
+}
+
+.sorter {
+  position: relative;
+  float: right;
+}
+
+.table-hover tbody tr.ui-draggable-dragging td {
+  background-color: transparent;
+  border: none;
+}
+
+.table-hover tbody tr.ui-draggable-dragging .settings,
+.table-hover tbody tr.ui-draggable-dragging .deadline,
+.table-hover tbody tr.ui-draggable-dragging .energy,
+.table-hover tbody tr.ui-draggable-dragging .time,
+.table-hover tbody tr.ui-draggable-dragging .priority {
+  display: none;
+}
+
+.table-hover tbody tr.ui-state-active td {
+  background-color: #f5f5f5;
+}
+
+.table tbody tr.selected td {
+  background-color: rgba(4, 156, 219, 0.19999999999999996);
+}

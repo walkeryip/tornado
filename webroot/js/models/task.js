@@ -22,8 +22,9 @@ Tornado.Task = Class.create(Tornado.Item, {
 	this.deadline = task.deadline === "0000-00-00" ? null : task.deadline;
 	this.energy = task.energy;
 	this.time = task.time;
+	this.deleted = task.deleted === "1";
 	this.description = Tornado.escapeString(task.description);
-	this.id = task.id;
+	this.id = task.id && parseInt(task.id);
 	this.name = Tornado.escapeString(task.name);
 	this.priority = task.priority;
 	this.todo = task.todo;

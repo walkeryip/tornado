@@ -13,7 +13,7 @@ Tornado.Tag = Class.create(Tornado.Item, {
 	var tag = data.Tag;
 	
 	if (tag) {
-	    this.id = tag.id;
+	    this.id = tag.id && parseInt(tag.id);
 	    this.name = Tornado.escapeString(tag.name) || "";
 	} else {
 	    this.name = Tornado.escapeString(data.name) || "";
