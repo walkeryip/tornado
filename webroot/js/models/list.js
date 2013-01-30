@@ -48,5 +48,16 @@ Tornado.List = Class.create(Tornado.Item, {
 	}
 	
         return data;
+    },
+    
+    setActive: function(active, callback) {
+	var activateFunction = "activate";
+	if (!active){
+	    activateFunction = "de" + activateFunction;
+	}
+	
+	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/" + activateFunction + "/" + this.id, 
+					 callback: callback, 
+					 post: true});
     }
 });

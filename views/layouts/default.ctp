@@ -22,6 +22,8 @@
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/bootstrap.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/tornado.less" />
+  
+    <link rel="stylesheet" href="/tornado/css/font-awesome.min.css">
 
     <script src="/tornado/js/lib/less.js" type="text/javascript"></script>
 
@@ -81,7 +83,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">tornado</a>
+          <a class="brand" href="#">t<i class="icon-check"></i>rnado</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
 	      <? if (isset($_SESSION['Auth']['User'])) {?>
@@ -99,6 +101,7 @@
               <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
               <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
               <li><?php echo $this->Html->link('Shared', '/shared/'); ?></li>
+              <li><a href="/tornado/task_lists/deleted"><i class="icon-trash"></i></a></li>
               <!--<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
 		  <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>-->
             </ul>

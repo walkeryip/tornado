@@ -37,6 +37,9 @@ Router::connect('/lists/add/*', array('controller' => 'task_lists', 'action' => 
 Router::connect('/lists/view/*', array('controller' => 'task_lists', 'action' => 'view'));
 Router::connect('/lists/edit/*', array('controller' => 'task_lists', 'action' => 'edit'));
 Router::connect('/lists/delete/*', array('controller' => 'task_lists', 'action' => 'delete'));
+Router::connect('/lists/restore/*', array('controller' => 'task_lists', 'action' => 'restore'));
+Router::connect('/lists/activate/*', array('controller' => 'task_lists', 'action' => 'activate'));
+Router::connect('/lists/deactivate/*', array('controller' => 'task_lists', 'action' => 'deactivate'));
 Router::connect('/lists/tree/*', array('controller' => 'task_lists', 'action' => 'tree'));
 Router::connect('/lists/shared/*', array('controller' => 'task_lists', 'action' => 'shared'));
 Router::connect('/lists/move/*', array('controller' => 'task_lists', 'action' => 'move'));

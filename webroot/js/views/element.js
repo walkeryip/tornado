@@ -51,12 +51,12 @@ Tornado.Element.prototype = {
 	var usersArray = this.getLabelModels(this.model.users, Tornado.state.getUser());
 
 	var viewElement = jq(Tornado.tpl.elementView(
-	    {model: this.model.getModelName(), id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), users: usersArray,
-	     hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
+	    {model: this.model.getModelName(), deleted: this.model.deleted, id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), 
+	     users: usersArray, hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
 	     link: this.model.getModelName() != "task", hasDeadline: this.hasDeadline && this.model.deadline, 
 	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
-	     time: this.model.time, priority: this.model.priority}));
+	     time: this.model.time, priority: this.model.priority, isList: this.model.getModelName() === "list", active: this.model.active}));
 
 	viewElement.find(".dropdown-toggle").dropdown();
 
@@ -67,6 +67,21 @@ Tornado.Element.prototype = {
 
 	viewElement.find(".delete").click(function() {
 	    self.model.remove();
+	    return false;
+	});		
+
+	viewElement.find(".restore").click(function() {
+	    self.model.restore();
+	    return false;
+	});		
+
+	viewElement.find(".activate").click(function() {
+	    self.activate();
+	    return false;
+	});		
+
+	viewElement.find(".deactivate").click(function() {
+	    self.deactivate();
 	    return false;
 	});
 
@@ -89,7 +104,6 @@ Tornado.Element.prototype = {
 	viewElement.find("input").click(function(e) {
 	    e.stopPropagation();
    	    e.stopImmediatePropagation();
-	    return false;
 	});
 
 	viewElement.find(".move").hover(function (e) {

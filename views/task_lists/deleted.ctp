@@ -1,16 +1,12 @@
 <script type="text/javascript">
 	jq(document).ready(function () {
 		var panel = new Tornado.GeneralPanel("test", "#content", 
-		    {title: "Lists",
+		    {title: "Trash",
 		    type: "list",
-		    parent_id: null,
-		    list_id: null,
+		    deleted: true,
 		    children: true,
-		    checked: false,
 		    showLists: true,
-		    showTasks: true,
-		    breadcrumbs: true,
-		    deleted: false});
+		    showTasks: true});
 		Tornado.panelManager.addPanel(panel);
 	});
 </script>

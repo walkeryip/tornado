@@ -2,7 +2,7 @@ Tornado.TemplateManager = Class.create();
 Tornado.TemplateManager.prototype = {
     initialize: function() {
 	this.tableSorter = Mustache.compile(['<div class="sorter">',
-					       '<a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle">O</a>',
+					       '<a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle"><i class="icon-wrench"></i></a>',
 					       '<ul class="dropdown-menu" role="menu">',
 					         '<li class="dropdown-submenu">',
 					           '<a href="#" tabindex="-1">Sort</a>',
@@ -23,10 +23,10 @@ Tornado.TemplateManager.prototype = {
 	this.elementContainer = Mustache.compile('<tr data-model-type="{{model}}" data-model-id="{{id}}" data-toggle="context" data-target="#context-menu">{{body}}</tr>');
 	this.elementView = Mustache.compile(
 	    [/*'<td class=\"handle\"><p></p></td>',*/
-             '<td class=\"checkbox\">{{#hasCheckbox}}<input type=\"checkbox\" {{#checked}}checked=\"yes\" {{/checked}}/>{{/hasCheckbox}}</td>',
-	     '<td>',
+             '<td class="checkbox">{{#hasCheckbox}}<input type=\"checkbox\" {{#checked}}checked=\"yes\" {{/checked}}/>{{/hasCheckbox}}</td>',
+	     '<td class="{{model}}{{#deleted}} deleted{{/deleted}}">',
   	       '{{#link}}<a href="/tornado/{{model}}s/view/{{id}}">{{/link}}',
-	       '<span class="item {{model}}">{{name}}</span>',
+	       '<span class="item">{{name}}</span>',
 	       '{{#link}}</a>{{/link}}',
 	       '{{#tags}}<span class="label tag"><a href="/tornado/tags/view/{{id}}">{{name}}</a></span>{{/tags}}',
 	       '{{#contexts}}<span class="label context"><a href="/tornado/contexts/view/{{id}}">{{name}}</a></span>{{/contexts}}',
@@ -39,7 +39,12 @@ Tornado.TemplateManager.prototype = {
   	     '<td class="settings">',
 	       '<a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle" id="{{model}}-{{id}}-button"><i class="icon-wrench"></i></a>',
 	       '<ul class="dropdown-menu" role="menu" aria-labelledby="{{model}}-{{id}}-button">',
-	         '<li><a class="delete" href="#">Delete</a></li>',
+	         '{{^deleted}}<li><a class="delete" href="#">Delete</a></li>{{/deleted}}',
+	         '{{#deleted}}<li><a class="restore" href="#">Restore</a></li>{{/deleted}}',
+	        '{{#isList}}',
+		  '{{^active}}<li><a class="activate" href="#">Activate</a></li>{{/active}}',
+		  '{{#active}}<li><a class="deactivate" href="#">Deactivate</a></li>{{/active}}',
+		'{{/isList}}',
 	         '<li><a class="edit" href="#">Edit</a></li>',
 	     '<li class="dropdown-submenu"><a class="move" href="#">Move</a>',
 	     '</li>',

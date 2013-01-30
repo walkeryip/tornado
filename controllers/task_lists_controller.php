@@ -13,6 +13,9 @@ class TaskListsController extends AppController {
 	function todo(){
 	}
 
+	function deleted(){
+	}
+
 	function add($id = null){
 		$userId = $_SESSION['Auth']['User']['id'];
 		//echo "<pre><code>";
@@ -73,11 +76,8 @@ class TaskListsController extends AppController {
 				$data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
 				$taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
 			} else {
-			  $tasks = $this->TaskList->query("select Task.id from tasks as Task where Task.deleted = false and id not in (select ListTask.task_id from task_lists_tasks as  ListTask)");
+			  $tasks = $this->TaskList->getTasks($userId, $params);
 			  $taskIds = $this->accId($tasks, "Task", "id");
-			  /* echo "<pre><code>";
-			  print_r($tasks);
-			  echo "</code></pre>";*/
 			}
 
 			$data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
@@ -272,6 +272,46 @@ class TaskListsController extends AppController {
 	  	$this->set("data", $this->getTaskLists(null, true));
 		$this->set('user_id', $userId);
 		$this->render('/general/json', 'ajax');
+	}
+
+	function activate($id) {
+	  $this->setActive($id, true);
+	}
+
+	function deactivate($id) {
+	  $this->setActive($id, false);
+	}
+
+	function setActive($id, $active){
+	  if ($id){
+	    $this->TaskList->id = $id;
+	    $this->data['TaskList']['active'] = $active;
+	    
+	    if ($this->TaskList->save($this->data)){
+	      $this->data = $this->getTaskListById($id, $this->params["url"]);
+	      $this->set('data', $this->data);
+	    } else {
+	      $this->set('data', false);
+	    }
+	    
+	    $this->render("/general/json", "ajax");
+	  }
+	}
+
+	function restore($id){
+	  if ($id){
+	    $this->TaskList->id = $id;
+	    $this->data['TaskList']['deleted'] = false;
+	    
+	    if ($this->TaskList->save($this->data)){
+	      $this->data = $this->getTaskListById($id, $this->params["url"]);
+	      $this->set('data', $this->data);
+	    } else {
+	      $this->set('data', false);
+	    }
+	    
+	    $this->render("/general/json", "ajax");
+	  }
 	}
 }
 

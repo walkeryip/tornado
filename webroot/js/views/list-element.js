@@ -26,5 +26,19 @@ Tornado.ListElement = Class.create(Tornado.Element, {
             drop: Tornado.listDropFunction
         });
 	
+    },
+    
+    activate: function() {
+	var self = this;
+	this.model.setActive(true, function (data){
+	    Tornado.panelManager.dataUpdated(data);
+	});
+    },
+
+    deactivate: function() {
+	var self = this;
+	this.model.setActive(false, function (data){
+	    Tornado.panelManager.dataUpdated(data);
+	});
     }
 });

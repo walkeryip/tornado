@@ -251,6 +251,22 @@ class TasksController extends AppController {
         $this->set('data', $data);
         $this->render('/general/json', 'ajax');
 	}
+
+	function restore($id){
+	  if ($id){
+	    $this->Task->id = $id;
+	    $this->data['Task']['deleted'] = false;
+	    
+	    if ($this->Task->save($this->data)){
+	      $this->data = $this->getTaskById($id, $this->params["url"]);
+	      $this->set('data', $this->data);
+	    } else {
+	      $this->set('data', false);
+	    }
+	    
+	    $this->render("/general/json", "ajax");
+	  }
+	}
 }
 
 ?>
