@@ -5,6 +5,10 @@
 		    type: "context",
 		    context_id: <?php echo $context_id ?>,
 		    //active: true,
+		    breadcrumbs: {
+		      id: <?php echo $context_id ?>,
+		      type: "context"
+		      },
 		    deleted: false,
 		    checked: false,
 		    //children: true,

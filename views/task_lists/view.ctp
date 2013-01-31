@@ -6,7 +6,10 @@
 		    list_id: <?php echo $task_list_id ?>,
 		    parent_id: <?php echo $task_list_id ?>,
 		    deleted: false,
-		    breadcrumbs: true,
+		    breadcrumbs: {
+		      id: <?php echo $task_list_id ?>,
+		      type: "list"
+		      },		      
 		    checked: false,
 		    children: true,
 		    showLists: true,

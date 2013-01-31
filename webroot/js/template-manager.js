@@ -65,13 +65,13 @@ Tornado.TemplateManager.prototype = {
 	       '<button class="save">Save</button><button class="cancel">Cancel</button>',
 	     '</td>'].join(''));
 	this.breadcrumbs = Mustache.compile(
-	    ['<ul class="breadcrumb">',
+	    [/*'<ul class="breadcrumb">',*/
 	       '{{#links}}<li{{#current}} class="active"{{/current}} data-id="{{id}}">{{#link}}',
-	         '<a href=\"/tornado/task_lists/{{#id}}view/{{id}}{{/id}}\">{{name}}</a>',
+	         '<a href=\"/tornado/{{model}}s/{{#id}}view/{{id}}{{/id}}\">{{name}}</a>',
 	         '<span class="divider">/</span>{{/link}}{{#current}}{{name}}{{/current}}</li>',
-	       '{{/links}}',
-	     '</ul>'].join(''));
-	this.error = Mustache.compile('<div id="error">{{{message}}}</div>');
+	       '{{/links}}'/*,
+	     '</ul>'*/].join(''));
+	this.error = Mustache.compile('<div class="modal" id="error"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>Error</h3></div><div class="modal-body">{{{message}}}</div></div>');
 	this.navigationTreeItem = Mustache.compile('<li><a href="/tornado/task_lists/view/{{id}}">{{name}}</a></li>');
 	this.navigationTreeContainer = '<ul id="tree-view" class="dropdown-menu"></ul>';
 	this.panelHeader = Mustache.compile(['<h2>{{title}}</h2><p class="description">{{description}}</p>'].join(''));

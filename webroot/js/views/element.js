@@ -95,13 +95,11 @@ Tornado.Element.prototype = {
 	this.element.draggable(
 	    {revert: "invalid",
 	     distance: 5,
-	     //handle: ".handle",
 	     opacity: 0.7, 
 	     helper: "clone",
 	     create: function(event, ui){ 
 		 this.model = self.model; 
 	     }});
-
 
 	// Prevent events when clicking a link or interacting with an input tag
 	viewElement.find("input").click(function(e) {
@@ -127,7 +125,10 @@ Tornado.Element.prototype = {
 		container.find("tr").tsort({sortFunction: Tornado.tableSortFunction});
 	    }
 
-	    this.element.hide().fadeIn();
+	    if (loaded) {
+		this.element.hide();
+	    	this.element.fadeIn();
+	    }
 	}
 
 	if (this.hasActive) {
@@ -139,7 +140,7 @@ Tornado.Element.prototype = {
 	}
 
 	// Only flash if the element is loaded
-	if (loaded === true) {
+	if (loaded) {
 	    this.flash();
 	}
     },

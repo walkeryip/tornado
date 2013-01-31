@@ -83,12 +83,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">t<i class="icon-check"></i>rnado</a>
+          <a class="brand" href="/tornado/">t<i class="icon-check"></i>rnado</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
 	      <? if (isset($_SESSION['Auth']['User'])) {?>
 	      Logged in as <a href="#" class="navbar-link"><? echo $_SESSION['Auth']['User']['username']; ?></a>
-	      <a href="/tornado/logout">Logout</a>
+	      <a href="/tornado/logout"><i class="icon-signout"></i>Logout</a>
 	      <? } else { ?>
 	      <a href="/tornado/login">Login</a>
 	      <a href="/tornado/register">Register</a>
@@ -101,7 +101,7 @@
               <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
               <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
               <li><?php echo $this->Html->link('Shared', '/shared/'); ?></li>
-              <li><a href="/tornado/task_lists/deleted"><i class="icon-trash"></i></a></li>
+              <li><a href="/tornado/task_lists/deleted" class="deleted"><i class="icon-trash"></i></a></li>
               <!--<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
 		  <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>-->
             </ul>
@@ -109,6 +109,7 @@
         </div>
       </div>
     </div>
+    <ul id="breadcrumbs" class="breadcrumb"></ul>
     <div id="inputbar">
       <span>task</span>
       <input type="text"/>
@@ -138,7 +139,6 @@
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-	<div id="breadcrumbs"></div>
 	<div id="content" class="span5">
           <?php echo $content_for_layout; ?>
 	  

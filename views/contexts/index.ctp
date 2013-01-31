@@ -3,6 +3,9 @@
 		var panel = new Tornado.GeneralPanel("test", "#content", 
 		    {title: "Contexts",
 		    type: "context",
+		    breadcrumbs: {
+		      type: "context"
+		      },
 		    showContexts: true});
 		Tornado.panelManager.addPanel(panel);
 	});

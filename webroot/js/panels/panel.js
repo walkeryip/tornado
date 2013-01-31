@@ -8,13 +8,30 @@ Tornado.Panel.prototype = {
 	if (!this.parameters) {
 	    this.parameters = {};
 	}
+
+	var defaultParams = {
+	    breadcrumbs: false,
+
+	    showTasks: false,
+	    showLists: false,
+	    showContexts: false,
+	    showTags: false,
+	    showUsers: false,
+	    
+	    showInlineContexts: true,
+	    showInlineTags: true,
+	    showInlineUsers: true
+	};
 	
+	this.parameters = jq.extend({}, defaultParams, parameters);
+
 	this.taskElements = new Hash();
 	this.tagElements = new Hash();
         this.contextElements = new Hash();
         this.listElements = new Hash();
         this.userElements = new Hash();
 	
+	this.breadcrumbs = null;
 	this.loaded = false;
 	
 	this.container = jq(containerId);
@@ -43,7 +60,10 @@ Tornado.Panel.prototype = {
 	    sorter.find(".sortByCreated").click(function(e){return self.tableSort(table, this, ".created")});
 	});
 
-
+	if (this.parameters.breadcrumbs && !(this.breadcrumbs && this.breadcrumbs.loaded)) {
+	    this.breadcrumbs = new Tornado.Breadcrumbs(this.parameters.breadcrumbs.id, "#breadcrumbs", this.parameters.breadcrumbs.type);
+	    this.breadcrumbs.loaded = true;
+	}
     },
 
     populateItemElement: function(item, itemElements) {

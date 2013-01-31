@@ -6,10 +6,12 @@
 		    parent_id: null,
 		    list_id: null,
 		    children: true,
+		    breadcrumbs: {
+		      type: "list"
+		      },	
 		    checked: false,
 		    showLists: true,
 		    showTasks: true,
-		    breadcrumbs: true,
 		    deleted: false});
 		Tornado.panelManager.addPanel(panel);
 	});

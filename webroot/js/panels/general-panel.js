@@ -7,20 +7,6 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	this.selectedElements = {};
 	this.currentElement = null;
 
-	var defaultParams = {
-	    breadcrumbs: false,
-
-	    showTasks: false,
-	    showLists: false,
-	    showContexts: false,
-	    showTags: false,
-	    showUsers: false,
-	    
-	    showInlineContexts: true,
-	    showInlineTags: true,
-	    showInlineUsers: true
-	};
-
 	this.container.append(
 	    jq(['<div id="context-menu">',
 		'<ul class="dropdown-menu" role="menu">',
@@ -44,7 +30,6 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	    return false;
 	});
 
-	this.parameters = jq.extend({}, defaultParams, parameters);
 
 	this.container = jq("<div></div>");
 	jq("#content").append(this.container);
@@ -55,10 +40,6 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	this.container.append(table);
         table.prepend(sorter);
         this.itemsContainer = table.find("table.items");
-
-	if (this.parameters.breadcrumbs) {
-	    this.breadcrumbs = new Tornado.Breadcrumbs(this.parameters.list_id, "#breadcrumbs");
-	}
 
 	jq(document).click(function(e) {
 	    var container = jq(e.target).parents("table");
