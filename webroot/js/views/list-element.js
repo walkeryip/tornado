@@ -1,6 +1,6 @@
 Tornado.ListElement = Class.create(Tornado.Element, {
-    initialize: function($super, list){
-	$super(list);
+    initialize: function($super, list, panel){
+	$super(list, panel);
 	
 	this.hasTags = true;
 	this.hasContexts = true;

@@ -258,6 +258,7 @@ class TasksController extends AppController {
 	    $this->data['Task']['deleted'] = false;
 	    
 	    if ($this->Task->save($this->data)){
+	      $this->params["url"]["task_id"] = $id;
 	      $this->data = $this->getTaskById($id, $this->params["url"]);
 	      $this->set('data', $this->data);
 	    } else {

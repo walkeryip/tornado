@@ -1,6 +1,6 @@
 Tornado.TaskElement = Class.create(Tornado.Element, {
-    initialize: function($super, task){
-	$super(task);
+    initialize: function($super, task, panel){
+	$super(task, panel);
 	
 	this.hasTags = true;
 	this.hasUsers = true;

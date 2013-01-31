@@ -165,10 +165,10 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 
 	return true;
     },
-    
-    getAjaxUrl: function() {
-	var argumentString = "";
 
+    getAjaxUrlArguments: function() {
+	var argumentString = "&";
+	
 	if (this.parameters != null) {
 	    var params = this.parameters;
 	    
@@ -187,8 +187,12 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	    if (params.page !== undefined) { argumentString += "page=" + params.page + "&"; }
 	    if (params.shared !== undefined) { argumentString += "shared=" + params.shared + "&"; }
 	}
-
-        return "/tornado/" + this.modelString + "s/view/?" + argumentString;
+	
+	return argumentString;
+    },
+    
+    getAjaxUrl: function() {
+        return "/tornado/" + this.modelString + "s/view/?" + this.getAjaxUrlArguments();
     },
 
     populate: function($super, data) {

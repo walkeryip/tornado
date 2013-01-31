@@ -135,7 +135,7 @@ Tornado.Panel.prototype = {
     
     newItemElement: function(item) {
 	var elementClass = this.getElementClass(item.getModelName());
-	var element = new elementClass(item);
+	var element = new elementClass(item, this);
 	this.setElement(item.getModelName(), item.id, element);
 	
 	return element;
@@ -178,5 +178,6 @@ Tornado.Panel.prototype = {
     // Abstract functions
     addItem: function() { throw new Error("Abstract function not implemented."); },
     updateItem: function() { throw new Error("Abstract function not implemented."); },
-    getAjaxUrl: function() { throw new Error("Abstract function not implemented."); }
+    getAjaxUrl: function() { throw new Error("Abstract function not implemented."); },
+    getAjaxUrlArgs: function() { throw new Error("Abstract function not implemented."); }
 };

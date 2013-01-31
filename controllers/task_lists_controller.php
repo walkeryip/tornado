@@ -72,9 +72,11 @@ class TaskListsController extends AppController {
 		$taskListIds = $this->accId($data["Lists"], "List", "id");
 		if (!empty($taskListIds)) {
 
-		  	if ($id != "null" && $id != null) {
-				$data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
-				$taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
+		  if (($id != "null" && $id != null) || isset($params["list_id"]) && $params["list_id"] == "null") {
+			  
+		          $data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
+			  //print_r($data["ListsTasks"]);
+		          $taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
 			} else {
 			  $tasks = $this->TaskList->getTasks($userId, $params);
 			  $taskIds = $this->accId($tasks, "Task", "id");
@@ -304,6 +306,8 @@ class TaskListsController extends AppController {
 	    $this->data['TaskList']['deleted'] = false;
 	    
 	    if ($this->TaskList->save($this->data)){
+	      unset($this->params["url"]["deleted"]);
+	      $this->params["url"]["list_id"] = $id;
 	      $this->data = $this->getTaskListById($id, $this->params["url"]);
 	      $this->set('data', $this->data);
 	    } else {

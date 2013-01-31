@@ -1,7 +1,8 @@
 Tornado.Element = Class.create();
 Tornado.Element.prototype = {
-    initialize: function(model) {
+    initialize: function(model, panel) {
 	this.visible = false;
+	this.panel = panel;
 	this.model = model;
 	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id}));
 	this.element.disableSelection();
@@ -71,7 +72,9 @@ Tornado.Element.prototype = {
 	});		
 
 	viewElement.find(".restore").click(function() {
-	    self.model.restore();
+	    self.model.restore(function(data) {
+		Tornado.panelManager.dataUpdated(data);
+	    }, self.panel.getAjaxUrlArguments());
 	    return false;
 	});		
 

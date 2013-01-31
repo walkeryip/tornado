@@ -66,9 +66,9 @@ Tornado.Item.prototype = {
 					 post: false});
     },
 
-    restore: function(callback) {
-	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/restore/" + this.id, 
-					 callback: Tornado.panelManager.dataUpdated, 
+    restore: function(callback, argsString) {
+	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/restore/" + this.id + argsString, 
+					 callback: callback, 
 					 post: true});
     },
 
