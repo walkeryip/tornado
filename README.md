@@ -16,21 +16,14 @@ You will be able to switch on/off features so that the same system can be used f
 * Trash can to resurrect deleted tasks and lists
 * Autocompleted navigation for finding lists, tags and contexts
 * Multi-purpose command line for adding tasks and lists
-** Support for adding multiple tags and contexts inline
-** Support for adding sharing the item inline
 * Activating/deactivating lists
 * Parameter based panels for viewing items
-** Example:
-*** Show all lists that are active
-*** Show all lists with tag #project that are not deleted and are active
-*** Show all deleted tasks in list x with tag y and context z
 * Show multiple panels at the same time
 
 ## Planned features
 * Recurring tasks
 * Delegate tasks
-* Stuff 
-** List of thoughts and fast notes that eventually become actions
+* Stuff (list of thoughts and fast notes that might become actions)
 * Posibility to create and save custom parameter based panels
 * iCal support
 * Support for separating todo-lists from ordinary lists (lists like "Movies to watch" or "My life goals" should not take focus from your every day tasks.)
