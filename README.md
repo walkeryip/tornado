@@ -30,3 +30,11 @@ You will be able to switch on/off features so that the same system can be used f
 4. Change to full permissions for tmp/cache
 5. Enable rewrite in your web server
 6. You might have to edit CAKE_CORE_INCLUDE_PATH in webroot/index.php in order for tornado to know where you have installed CakePHP
+
+## Contributing
+
+## Author
+**Rasmus Haglund**
++ http://github.com/rasmushaglund
+
+## Copyright and license
