@@ -317,6 +317,19 @@ class TaskListsController extends AppController {
 	    $this->render("/general/json", "ajax");
 	  }
 	}
+
+	function autocomplete(){
+	  $userId = $_SESSION['Auth']['User']['id'];
+		
+	  //$this->params["url"]["name"] = $name;
+	  $this->data = 
+	    $this->TaskList->query("select List.id, List.active, List.name, List.parent_id from task_lists as List inner join task_lists_users on " .
+				"task_lists_users.task_list_id = List.id and List.deleted = false and task_lists_users.user_id = " . 
+				   $userId . " where name like '%" . $this->params["url"]["query"] . "%' group by List.id limit 8");
+	  $this->set('data', $this->data);
+	    
+	    $this->render("/general/json", "ajax");
+	}
 }
 
 ?>

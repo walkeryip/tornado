@@ -396,6 +396,10 @@ class AppModel extends Model {
 	      }
 	    }
 
+	    if (isset($params["name"])) {
+	      $query .= " and name like '%" . $params["name"] . "%' ";
+	    }
+
 	    if ($listAndParent) {
 	      $query .= ") ";
 	    }

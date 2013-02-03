@@ -42,6 +42,7 @@ Router::connect('/lists/activate/*', array('controller' => 'task_lists', 'action
 Router::connect('/lists/deactivate/*', array('controller' => 'task_lists', 'action' => 'deactivate'));
 Router::connect('/lists/tree/*', array('controller' => 'task_lists', 'action' => 'tree'));
 Router::connect('/lists/shared/*', array('controller' => 'task_lists', 'action' => 'shared'));
+Router::connect('/lists/autocomplete/*', array('controller' => 'task_lists', 'action' => 'autocomplete'));
 Router::connect('/lists/move/*', array('controller' => 'task_lists', 'action' => 'move'));
 Router::connect('/lists/', array('controller' => 'task_lists', 'action' => 'index'));
 Router::connect('/login', array('controller' => 'users', 'action' => 'login'));

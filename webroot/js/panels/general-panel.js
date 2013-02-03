@@ -4,6 +4,8 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 
 	var self = this;
 
+	this.id = parameters.list_id || parameters.context_id || parameters.tag_id;
+
 	this.selectedElements = {};
 	this.currentElement = null;
 
@@ -16,7 +18,7 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 		'<li class="divider"></li>',
 		'<li><a tabindex="-1" href="#">Separated link</a></li>',
 		'</ul>',
-		'</div>'].join("")));
+		'</div>'].join('')));
 	
 	this.container.find("#context-menu .delete").click(function(e){
 	    for (key in self.selectedElements) {
@@ -52,7 +54,7 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	this.container.on("mousedown", "tr", function (e) {
 	    var element = jq(this);
 	    var uniqueId = element.attr("data-model-type") + element.attr("data-model-id");
-
+	    var selected = element.hasClass("selected");
 	    var rightClickOnSelected = e.which === 3 && self.selectedElements[uniqueId] !== undefined;
 
 	    if (!e.ctrlKey && !e.shiftKey && !rightClickOnSelected) {
@@ -85,16 +87,18 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	    if (!rightClickOnSelected) {
 		self.container.find("tr").removeClass("current");
 		
-		if (self.selectedElements[uniqueId]) {
+		if (selected || self.selectedElements[uniqueId]) {
 		    delete self.selectedElements[uniqueId];
+		    element.removeClass("selected");
+		    
 		} else {		
 		    self.selectedElements[uniqueId] = element;
+		    element.addClass("selected");
+		    self.currentElement = element;
+		    self.currentElement.addClass("current");
+
 		}
-		
-		self.currentElement = element;
-		self.currentElement.addClass("current");
-		element.toggleClass("selected");
-	
+			
 	    } else if (!self.selectedElements[uniqueId]) {
 		self.selectedElements[uniqueId] = element;
 		self.currentElement = element;

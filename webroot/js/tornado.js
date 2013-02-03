@@ -43,7 +43,7 @@ Tornado = {
 	    }
 	});
 
-	jq("input").live("keydown", function(e) {
+	jq("input, textarea").live("keydown", function(e) {
 	    if (e.keyCode == 8) {
 		e.stopPropagation();
 	    }
@@ -132,8 +132,57 @@ Tornado = {
     }
 };
 
+var autocomplete = function(container, model) {
+    jq(container + " input").typeahead({
+	minLength: 2,
+	menu: '<ul class="typeahead"></ul>',
+	source: function (typeahead, query) {
+            return jq.getJSON(
+		'/tornado/' + model + 's/autocomplete',
+		{ query: query },
+		function (data) {
+		    var arr = new Array();
+		    data.each(function (item) {
+			arr.push(item[model.charAt(0).toUpperCase() + model.slice(1)]);
+		    });
+                    return typeahead.process(arr);
+		});
+	},
+	container: container,
+	property: "name",
+	onselect: function (obj) {
+	    window.location.href = "/tornado/" + model + "s/view/" + obj.id;
+	}
+    });
+};
+
 jq(document).ready(function() {
     Tornado.populate();
+    
+    autocomplete("#list-autocomplete", "list");
+    autocomplete("#tag-autocomplete", "tag");
+    autocomplete("#context-autocomplete", "context");
+
+    jq(".autocomplete input").click(function(e) {
+	
+	    e.stopPropagation();
+   	    e.stopImmediatePropagation();
+    });
+
+    jq(".navbar .dropdown-toggle").click(function(e){
+	e.preventDefault(); 
+	var item = jq(this).parent()
+	var open = item.hasClass("open");
+	
+	item.parent().find(".dropdown").removeClass("open");
+	
+	if (!open) {
+	    item.addClass("open");
+	    item.find("input").focus();
+	}
+
+	return false;
+    });
 });
 
 /**

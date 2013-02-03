@@ -1,7 +1,7 @@
 BOOTSTRAP = ./docs/assets/css/bootstrap.css
 TORNADO_LESS = ./bootstrap/less/bootstrap.less
 BOOTSTRAP_RESPONSIVE = ./docs/assets/css/bootstrap-responsive.css
-BOOTSTRAP_RESPONSIVE_LESS = ./less/responsive.less
+TORNADO_RESPONSIVE_LESS = ./bootstrap/less/responsive.less
 DATE=$(shell date +%I:%M%p)
 CHECK=\033[32m✔\033[39m
 HR=\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
@@ -71,7 +71,7 @@ tornado:
 	recess --compile ${TORNADO_RESPONSIVE_LESS} > css/tornado-responsive.css
 	recess --compress ${TORNADO_RESPONSIVE_LESS} > css/tornado-responsive.min.css
 	rm js/tornado-combined.js*
-	cat js/lib/mustache.js js/lib/prototype.js js/lib/jquery*.js js/tornado.js js/template-manager.js js/commandbar.js js/state.js js/panel-manager.js js/breadcrumbs.js js/navigationtree.js js/models/item.js js/models/label.js js/models/context.js js/models/tag.js js/models/list.js js/models/task.js js/models/user.js js/views/element.js js/views/tag-element.js js/views/context-element.js js/views/task-element.js js/views/list-element.js js/panels/panel.js js/panels/general-panel.js js/lib/bootstrap.js js/lib/bootstrap-contextmenu.js > js/tornado-combined.js
+	cat js/lib/mustache.js js/lib/prototype.js js/lib/jquery*.js js/tornado.js js/template-manager.js js/commandbar.js js/state.js js/panel-manager.js js/breadcrumbs.js js/navigationtree.js js/models/item.js js/models/label.js js/models/context.js js/models/tag.js js/models/list.js js/models/task.js js/models/user.js js/views/element.js js/views/tag-element.js js/views/context-element.js js/views/task-element.js js/views/list-element.js js/panels/panel.js js/panels/general-panel.js bootstrap/bootstrap/js/bootstrap.min.js js/lib/bootstrap-contextmenu.js > js/tornado-combined.js 
 	uglifyjs js/tornado-combined.js -nc > js/tornado.min.tmp.js
 	#echo "/*!\n* Bootstrap.js by @fat & @mdo\n* Copyright 2012 Twitter, Inc.\n* http://www.apache.org/licenses/LICENSE-2.0.txt\n*/" > bootstrap/js/copyright.js
 	cat js/tornado.min.tmp.js > js/tornado.min.js

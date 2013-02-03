@@ -59,5 +59,10 @@ Tornado.List = Class.create(Tornado.Item, {
 	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/" + activateFunction + "/" + this.id, 
 					 callback: callback, 
 					 post: true});
+    },
+
+    autocomplete: function(a,b) {
+	var t;
+	t = 1;
     }
 });

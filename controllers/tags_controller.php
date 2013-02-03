@@ -140,6 +140,17 @@ class TagsController extends AppController {
 	
 	   	$this->render('/general/json', 'ajax');
 	}	
+
+	function autocomplete(){
+	  $userId = $_SESSION['Auth']['User']['id'];
+	  
+	  //$this->params["url"]["name"] = $name;
+	  $this->data = 
+	    $this->Tag->query("select Tag.* from tags as Tag where Tag.user_id = " . $userId .  " and name like '%" . $this->params["url"]["query"] . "%' limit 8");
+	  $this->set('data', $this->data);
+	  
+	  $this->render("/general/json", "ajax");
+	}
 }
 
 ?>

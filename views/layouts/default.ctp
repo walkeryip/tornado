@@ -23,7 +23,6 @@
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/tornado.less" />
   
-    <link rel="stylesheet" href="/tornado/css/font-awesome.min.css">
 
     <script src="/tornado/js/lib/less.js" type="text/javascript"></script>
 
@@ -62,9 +61,11 @@
 
     <?php } else { ?>
     <link rel="stylesheet" type="text/css" href="/tornado/css/tornado.min.css" />
+    <link rel="stylesheet" type="text/css" href="/tornado/css/tornado-responsive.min.css" />
     <script type="text/javascript" src="/tornado/js/tornado-combined.js"></script>
 
     <?php } ?>
+    <link rel="stylesheet" href="/tornado/css/font-awesome.min.css">
 
 
     <script>	
@@ -87,8 +88,8 @@
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
 	      <? if (isset($_SESSION['Auth']['User'])) {?>
-	      Logged in as <a href="#" class="navbar-link"><? echo $_SESSION['Auth']['User']['username']; ?></a>
-	      <a href="/tornado/logout"><i class="icon-signout"></i>Logout</a>
+	      <a href="#" class="navbar-link"> <i class="icon-user"></i><? echo $_SESSION['Auth']['User']['username']; ?></a>
+	      <a href="/tornado/logout" class="navbar-link"><i class="icon-signout"></i>Logout</a>
 	      <? } else { ?>
 	      <a href="/tornado/login">Login</a>
 	      <a href="/tornado/register">Register</a>
@@ -96,11 +97,37 @@
             </p>
 
             <ul class="nav">
-              <li><?php echo $this->Html->link('Lists', '/task_lists/'); ?></li>
-              <li><?php echo $this->Html->link('Tasks', '/tasks/'); ?></li>
-              <li><?php echo $this->Html->link('Contexts', '/contexts/'); ?></li>
-              <li><?php echo $this->Html->link('Tags', '/tags/'); ?></li>
-              <li><?php echo $this->Html->link('Shared', '/shared/'); ?></li>
+              <li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Lists<b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                  <li><a tabindex="-1" href="/tornado/task_lists">All lists</a></li>
+                  <li class="divider"></li>
+                  <li id="list-autocomplete" class="autocomplete"><input type="text" data-provide="typeahead" source="Tornado.List.autocomplete"/></li>
+                </ul>
+	      </li><li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Contexts<b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                  <li><a tabindex="-1" href="/tornado/contexts">All contexts</a></li>
+                  <li class="divider"></li>
+                  <li id="context-autocomplete" class="autocomplete"><input type="text" data-provide="typeahead" source="Tornado.List.autocomplete"/></li>
+		</ul>
+	      </li><li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Tags<b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                  <li><a tabindex="-1" href="/tornado/tags">All tags</a></li>
+                  <li class="divider"></li>
+                  <li id="tag-autocomplete" class="autocomplete"><input type="text" data-provide="typeahead" source="Tornado.List.autocomplete"/></li>
+                </ul>
+	      </li><li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Shared<b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                  <li><a tabindex="-1" href="/tornado/shared">All shared items</a></li>
+                  <li><a tabindex="-1" href="#anotherAction"></a></li>
+                  <li><a tabindex="-1" href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a tabindex="-1" href="#">Separated link</a></li>
+                </ul>
+	      </li><li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Tasks<b class="caret"></b></a>
+		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                  <li><a tabindex="-1" href="/tornado/tasks">All tasks</a></li>
+                </ul>
+	      </li>
               <li><a href="/tornado/task_lists/deleted" class="deleted"><i class="icon-trash"></i></a></li>
               <!--<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
 		  <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>-->
@@ -110,15 +137,10 @@
       </div>
     </div>
     <ul id="breadcrumbs" class="breadcrumb"></ul>
-    <div id="inputbar">
-      <span>task</span>
-      <input type="text"/>
-      <button>add</button>
-    </div>
-    
+
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
+        <!--<div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Navigation</li>
@@ -137,9 +159,14 @@
               <li><a href="#">Link</a></li>
               <li><a href="#">Link</a></li>
             </ul>
-          </div><!--/.well -->
-        </div><!--/span-->
+          </div>
+        </div>-->
 	<div id="content" class="span5">
+        <div id="inputbar">
+	  <span class="label item">task</span>
+	  <input type="text"/>
+	  <button class="btn">add</button>
+	</div>
           <?php echo $content_for_layout; ?>
 	  
         </div><!--/span-->

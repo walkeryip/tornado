@@ -23,8 +23,8 @@ Tornado.TemplateManager.prototype = {
 	this.elementContainer = Mustache.compile('<tr data-model-type="{{model}}" data-model-id="{{id}}" data-toggle="context" data-target="#context-menu">{{body}}</tr>');
 	this.elementView = Mustache.compile(
 	    [/*'<td class=\"handle\"><p></p></td>',*/
-             '<td class="checkbox">{{#hasCheckbox}}<input type=\"checkbox\" {{#checked}}checked=\"yes\" {{/checked}}/>{{/hasCheckbox}}</td>',
-	     '<td class="{{model}}{{#deleted}} deleted{{/deleted}}">',
+             '{{#hasCheckbox}}<td class="checkbox"><input type=\"checkbox\" {{#checked}}checked=\"yes\" {{/checked}}/></td>{{/hasCheckbox}}',
+	     '<td {{^hasCheckbox}}colspan="2" {{/hasCheckbox}}class="{{model}}{{#deleted}} deleted{{/deleted}}">',
   	       '{{#link}}<a href="/tornado/{{model}}s/view/{{id}}">{{/link}}',
 	       '<span class="item">{{name}}</span>',
 	       '{{#link}}</a>{{/link}}',
