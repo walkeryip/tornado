@@ -1,14 +1,16 @@
+# [Tornado v0.1.0](http://github.com/rasmushaglund/tornado)
+
 The goal with tornado is to create a fully GTD-compatible manager that you can customize in any way you want to. 
 You will be able to switch on/off features so that the same system can be used for basic and advanced users.
 
-Current features are:
+## Features
 * Contexts (for both tasks and lists, support for multiple contexts)
 * Tags
 * Lists
 * Lists in lists (sub projects)
 * One-line-super-command-line for quickly adding tasks and lists
 
-Planned features are:
+## Planned features
 * Sharing of lists/tasks between users
 * Recurring tasks
 * Delegate tasks
@@ -21,7 +23,7 @@ Planned features are:
 * Calendar integration (get tasks based on some criteria in your calendar)
 * Posibility to sort tasks based on current energy, time available (GTD)
 
-Install
+## Install
 1. Install PHP and CakePHP
 2. Import db.sql into your database (for example using phpmyadmin)
 3. Edit config/database.php to point to your database with the corrent username and password
