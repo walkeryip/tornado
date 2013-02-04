@@ -129,6 +129,10 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 	if (itemName === "task") {
 	    if (!this.parameters.showTasks) { return false; }
 	    if (this.parameters.checked !== undefined && item.checked !== this.parameters.checked) { return false; }
+	    if (this.parameters.list_id) {
+		var list = Tornado.lists.get(this.parameters.list_id);
+		return list.tasks.get(item.id) !== undefined; 
+	    }
 	}
 
 	if (itemName === "list") {

@@ -17,7 +17,7 @@
     ?>
 
     <?php
-       if (!$debug) {
+       if ($debug) {
        ?>
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/bootstrap.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />
@@ -30,7 +30,6 @@
     <script type="text/javascript" src="/tornado/js/lib/prototype.js"></script>
   <!--  <script type="text/javascript" src="/tornado/js/lib/scriptaculous.js?load=effects"></script>-->
     <script type="text/javascript" src="/tornado/js/lib/jquery-1.7.2.min.js"></script>
-    <script type="text/javascript" src="/tornado/js/lib/jquery.simplemodal.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/tornado/js/lib/jquery.tinysort.min.js"></script>
     <script src="/tornado/js/lib/bootstrap.js" type="text/javascript"></script>

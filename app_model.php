@@ -97,7 +97,7 @@ class AppModel extends Model {
 				$model->recursive = -1;
 				$label = $model->findByName($_label);
 
-				if (!$label){
+				if (!$label || $label[$modelName]['user_id'] != $userId){
 					$model->create();
 					$label[$modelName]['user_id'] = $userId;
 					$label = $model->save(array('name' => $_label, 'user_id' => $userId));

@@ -103,9 +103,9 @@ class TasksController extends AppController {
 			$data["ListsTasks"] = $this->Task->getTaskListsTasksByTaskIds($taskIds);
 			$listIds = $this->accId($data["ListsTasks"], "ListTask", "list_id");
 
-			if (!empty($listIds)){
-				$data["Lists"] = $this->Task->getTaskListsByTaskListIds($listIds, $userId);
-			}
+			/*if (!empty($listIds)){
+			  $data["Lists"] = $this->Task->getTaskListsByTaskListIds($listIds, $userId);
+			  }*/
 
 			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);

@@ -71,7 +71,16 @@ Tornado.TemplateManager.prototype = {
 	         '<span class="divider">/</span>{{/link}}{{#current}}{{name}}{{/current}}</li>',
 	       '{{/links}}'/*,
 	     '</ul>'*/].join(''));
-	this.error = Mustache.compile('<div class="modal" id="error"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3>Error</h3></div><div class="modal-body">{{{message}}}</div></div>');
+	this.error = Mustache.compile(['<div class="modal" id="error">',
+				         '<div class="modal-header">',
+				           '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>',
+				           '<h3>Error</h3>',
+				         '</div>',
+				         '<div class="modal-body">{{{message}}}</div>',
+				         '<div class="modal-footer">',
+				           '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>',
+				         '</div>',
+				       '</div>'].join(''));
 	this.navigationTreeItem = Mustache.compile('<li><a href="/tornado/task_lists/view/{{id}}">{{name}}</a></li>');
 	this.navigationTreeContainer = '<ul id="tree-view" class="dropdown-menu"></ul>';
 	this.panelHeader = Mustache.compile(['<h2>{{title}}</h2><p class="description">{{description}}</p>'].join(''));

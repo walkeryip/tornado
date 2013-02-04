@@ -30,7 +30,12 @@ Tornado = {
 	    message = data.responseText;
 	}
 
-	jq.modal(this.tpl.error({message: message}));
+	jq("body").append(jq(this.tpl.error({message: message})));
+	jq("#error").modal({
+	    hide: function() {
+		jq(".modal").modal('hide');
+	    }
+	});
     },
 
     populate: function() {

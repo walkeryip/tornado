@@ -81,7 +81,7 @@ Tornado.Breadcrumbs.prototype = {
 	var self = this;
 	var breadcrumbs = jq(Tornado.tpl.breadcrumbs({links: list}));
 
-	breadcrumbs.find("li").not(".active").droppable({
+	breadcrumbs.not(".active").droppable({
 	    activeClass: "ui-state-hover",
 	    hoverClass: "ui-state-active",
 	    greedy: true,
