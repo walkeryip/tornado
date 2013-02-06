@@ -82,6 +82,7 @@ class AppModel extends Model {
 	function createLabels($model, $data, $userId){
 		$labels = explode(',', $data);
 		$modelName = $model->name;
+		$tableName = strtolower($model->name) . "s";
 		$result = array();
 
 		// explode on empty string returns one null element (hurray!), so if empty return an array with an empty element
@@ -95,9 +96,14 @@ class AppModel extends Model {
 
 			if ($_label){
 				$model->recursive = -1;
-				$label = $model->findByName($_label);
-
-				if (!$label || $label[$modelName]['user_id'] != $userId){
+				$labels = $model->query("select * from " . $tableName . " as " . $modelName . " where " . $modelName . ".name = '" . $_label . "' and " . $modelName . ".user_id = " . $userId);
+				$label = null;
+				if (isset($labels) && isset($labels[0])) {
+				    $label = $labels[0];
+				  }
+				//print_r($label);
+				//echo "----" . $_label;
+				if (!$label){
 					$model->create();
 					$label[$modelName]['user_id'] = $userId;
 					$label = $model->save(array('name' => $_label, 'user_id' => $userId));

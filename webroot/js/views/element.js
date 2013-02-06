@@ -55,11 +55,33 @@ Tornado.Element.prototype = {
 	    {model: this.model.getModelName(), deleted: this.model.deleted, id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), 
 	     users: usersArray, hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
 	     link: this.model.getModelName() != "task", hasDeadline: this.hasDeadline && this.model.deadline, 
-	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
+	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, hasTags: tagsArray.length > 0,
+	     hasContexts: contextsArray.length > 0, hasUsers: usersArray.length > 0,
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
 	     time: this.model.time, priority: this.model.priority, isList: this.model.getModelName() === "list", active: this.model.active}));
 
 	viewElement.find(".dropdown-toggle").dropdown();
+
+	viewElement.find(".tags").click(function() { return false }).popover({
+	    html: true,
+	    title: "Tags",
+	    content: Tornado.tpl.tags({tags:tagsArray}),
+	    placement: "bottom"
+	});
+
+	viewElement.find(".contexts").click(function() { return false }).popover({
+	    html: true,
+	    title: "Contexts",
+	    content: Tornado.tpl.contexts({contexts:contextsArray}),
+	    placement: "bottom"
+	});
+
+	viewElement.find(".users").click(function() { return false }).popover({
+	    html: true,
+	    title: "Users",
+	    content: Tornado.tpl.users({users:usersArray}),
+	    placement: "bottom"
+	});
 
 	viewElement.find(".edit").click(function() {
 	    self.edit(container);

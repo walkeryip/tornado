@@ -53,16 +53,23 @@ td.settings {
 }
 
 .label {
-    &.tag, &.context, &.deadline, &.energy, &.time, &.priority, &.user {
+    &.tag, &.context, &.deadline, &.energy, &.time, &.priority, &.user, &.tags, &.contexts, &.users {
 	margin-right: 5px;
 	font-size: @baseFontSize * .846;
     }
 }
 
-.deadline, .energy, .time, .priority {
+.deadline, .energy, .time, .priority{
     float: right;
     opacity: 0.1;
 }
+
+.tags, .users, .contexts  {
+    opacity: 0.2;
+    background-color: #bbb;
+}
+
+
 
 .settings a {
     opacity: 0.1;
@@ -74,6 +81,10 @@ tr:hover {
     }
 
     .settings a {
+	opacity: 1;
+    }
+
+    .users, .tags, .contexts {
 	opacity: 1;
     }
 }
@@ -118,9 +129,9 @@ tr:hover {
 	color: #ccc;
     }
 
-    .label {
+    /*.label {
 	background-color: #ccc;
-    }
+    }*/
 }
 
 .sorter {
