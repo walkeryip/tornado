@@ -17,7 +17,7 @@
     ?>
 
     <?php
-       if (!$debug) {
+       if ($debug) {
        ?>
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/bootstrap.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />
@@ -135,37 +135,23 @@
         </div>
       </div>
     </div>
+	      <? if (isset($_SESSION['Auth']['User'])) {?>
+
     <ul id="breadcrumbs" class="breadcrumb"></ul>
+	      <? } ?>
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <!--<div class="span3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Navigation</li>
-              <li><a href="#">Lists</a></li>
-              <li><a href="#">Tags</a></li>
-              <li><a href="#">Contexts</a></li>
-              <li class="nav-header">Sidebar</li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li class="nav-header">Sidebar</li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div>
-        </div>-->
 	<div id="content" class="span5">
+	      <? if (isset($_SESSION['Auth']['User'])) {?>
+
         <div id="inputbar">
 	  <span class="label item">task</span>
 	  <input type="text"/>
 	  <button class="btn">add</button>
 	</div>
+	      <? } ?>
+
           <?php echo $content_for_layout; ?>
 	  
         </div><!--/span-->

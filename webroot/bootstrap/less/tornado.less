@@ -53,7 +53,7 @@ td.settings {
 }
 
 .label {
-    &.tag, &.context, &.deadline, &.energy, &.time, &.priority, &.user, &.tags, &.contexts, &.users {
+    &.tag, &.context, &.deadline, &.energy, &.time, &.priority, &.user, &.tags, &.contexts, &.users, &.description {
 	margin-right: 5px;
 	font-size: @baseFontSize * .846;
     }
@@ -64,11 +64,18 @@ td.settings {
     opacity: 0.1;
 }
 
-.tags, .users, .contexts  {
-    opacity: 0.2;
-    background-color: #bbb;
+.icon {
+    &.tags, &.users, &.contexts, &.description  {
+	opacity: 0.2;
+    }
 }
 
+tr .icon {
+    margin-left: 5px;
+    &:hover {
+	text-decoration: none;
+    }
+}
 
 
 .settings a {
@@ -84,7 +91,7 @@ tr:hover {
 	opacity: 1;
     }
 
-    .users, .tags, .contexts {
+    .users, .tags, .contexts, .description {
 	opacity: 1;
     }
 }

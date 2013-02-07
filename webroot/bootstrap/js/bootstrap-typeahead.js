@@ -85,7 +85,7 @@
  
 	    if (typeof this.source == "function") {
 		value = this.source(this, this.query)
-		if (value) this.process(value)
+	//	if (value) this.process(value)
 	    } else {
 		this.process(this.source)
 	    }

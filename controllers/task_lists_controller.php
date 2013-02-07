@@ -68,67 +68,67 @@ class TaskListsController extends AppController {
 	function getTaskLists($params = null){
 	  $shared = false;
 		$userId = $_SESSION['Auth']['User']['id'];
-		$id = $params["list_id"];
-
+		//$id = $params["list_id"];
+		//print_r($params);
+		
 		$data["Lists"] = $this->TaskList->getTaskLists($userId, $params);
 		  
 		$taskListIds = $this->accId($data["Lists"], "List", "id");
 		if (!empty($taskListIds)) {
 
-		  if (($id != "null" && $id != null) || isset($params["list_id"]) && $params["list_id"] == "null") {
-			  
-		          $data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($id);
-			  //print_r($data["ListsTasks"]);
-		          $taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
-			} else {
-			  $tasks = $this->TaskList->getTasks($userId, $params);
-			  $taskIds = $this->accId($tasks, "Task", "id");
-			}
-
-			$data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
-			$data["ContextsLists"] = $this->TaskList->getContextsTaskListsByTaskListIds($taskListIds);
-
-			$tagIds = $this->accId($data["TagsLists"], "TagList", "tag_id");
-			$contextIds = $this->accId($data["ContextsLists"], "ContextList", "context_id");
-
-			$data["Tags"] = array();
-			$data["Contexts"] = array();
-
-			$data["ListsUsers"] = $this->TaskList->getTaskListsUsersByTaskListIds($taskListIds);			
-			$userIds = $this->accId($data["ListsUsers"], "ListUser", "user_id");
-
-			$data["Users"] = array(); 
-			if (!empty($taskIds)){
-			  
-			  $params["task_id"] = implode(",", $taskIds);
-			  $data["Tasks"] = $this->TaskList->getTasks($userId, $params);
-				$data["TasksUsers"] = $this->TaskList->getTasksUsersByTaskIds($taskIds);
-				$userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
-
-				if ($id != null) {
-					$data["TagsTasks"] = $this->TaskList->getTagsTasksByTaskIds($taskIds);
-					$data["ContextsTasks"] = $this->TaskList->getContextsTasksByTaskIds($taskIds);
-					$tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
-					$contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
-				}
-			}
-
-			if (!empty($tagIds)){
-			   	$data["Tags"] = $this->TaskList->getTagsByTagIds($tagIds, $userId);
-			}
-
-			if (!empty($contextIds)){
-			  $data["Contexts"] = $this->TaskList->getContexts($userId, array("context_id" => implode(",", $contextIds)));
-			}
-	
-			if (!empty($userIds)){
-			   	$data["Users"] = $this->TaskList->getUsersByUserIds($userIds);
-			}
+		  if (isset($params["list_id"])) {			  
+		    $data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($params["list_id"]);
+		    //print_r($data["ListsTasks"]);
+		    $taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
+		  } else {
+		    $tasks = $this->TaskList->getTasks($userId, $params);
+		    $taskIds = $this->accId($tasks, "Task", "id");
+		  }
+		  
+		  $data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
+		  $data["ContextsLists"] = $this->TaskList->getContextsTaskListsByTaskListIds($taskListIds);
+		  
+		  $tagIds = $this->accId($data["TagsLists"], "TagList", "tag_id");
+		  $contextIds = $this->accId($data["ContextsLists"], "ContextList", "context_id");
+		  
+		  $data["Tags"] = array();
+		  $data["Contexts"] = array();
+		  
+		  $data["ListsUsers"] = $this->TaskList->getTaskListsUsersByTaskListIds($taskListIds);			
+		  $userIds = $this->accId($data["ListsUsers"], "ListUser", "user_id");
+		  
+		  $data["Users"] = array(); 
+		  if (!empty($taskIds)){
+		    
+		    $params["task_id"] = implode(",", $taskIds);
+		    $data["Tasks"] = $this->TaskList->getTasks($userId, $params);
+		    $data["TasksUsers"] = $this->TaskList->getTasksUsersByTaskIds($taskIds);
+		    $userIds += $this->accId($data["TasksUsers"], "TaskUser", "user_id");
+		    
+		    if (isset($params["list_id"]) && $params["list_id"] != null) {
+		      $data["TagsTasks"] = $this->TaskList->getTagsTasksByTaskIds($taskIds);
+		      $data["ContextsTasks"] = $this->TaskList->getContextsTasksByTaskIds($taskIds);
+		      $tagIds += $this->accId($data["TagsTasks"], "TagTask", "tag_id");
+		      $contextIds += $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
+		    }
+		  }
+		  
+		  if (!empty($tagIds)){
+		    $data["Tags"] = $this->TaskList->getTagsByTagIds($tagIds, $userId);
+		  }
+		  
+		  if (!empty($contextIds)){
+		    $data["Contexts"] = $this->TaskList->getContexts($userId, array("context_id" => implode(",", $contextIds)));
+		  }
+		  
+		  if (!empty($userIds)){
+		    $data["Users"] = $this->TaskList->getUsersByUserIds($userIds);
+		  }
 		}
-
+		
 		return $data;
 	}
-
+	
 	function getTaskListById($params = null){
 	  return $this->getTaskLists($params);
 	}

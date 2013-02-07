@@ -126,7 +126,9 @@ Tornado.Panel.prototype = {
 	    options = {};
 	}
 	
-	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc", sortFunction: Tornado.tableSortFunction};
+	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc", sortFunction: function(a,b) {
+	    return Tornado.tableSortFunction(a,b,options); 
+	}};
 	
 	table.find("tr").tsort(column, options); 
 	jq(element).toggleClass("desc"); 

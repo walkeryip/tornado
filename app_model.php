@@ -171,7 +171,7 @@ class AppModel extends Model {
 
 	public function getTaskByTaskId($taskId, $userId){
 		return $this->query("SELECT Task.* FROM tasks as Task inner join tasks_users on tasks_users.task_id = Task.id " .
-								   "and tasks_users.user_id = " . $userId . " where Task.deleted = false and Task.id = " . $taskId . " group by Task.id");
+								   "and tasks_users.user_id = " . $userId . " where Task.id = " . $taskId . " group by Task.id");
 	}
 	
 	public function getTaskListsByTasksIds($taskIds){

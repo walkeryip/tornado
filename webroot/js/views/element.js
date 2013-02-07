@@ -55,32 +55,47 @@ Tornado.Element.prototype = {
 	    {model: this.model.getModelName(), deleted: this.model.deleted, id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), 
 	     users: usersArray, hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
 	     link: this.model.getModelName() != "task", hasDeadline: this.hasDeadline && this.model.deadline, 
-	     hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, hasTags: tagsArray.length > 0,
-	     hasContexts: contextsArray.length > 0, hasUsers: usersArray.length > 0,
+	     hasDescription: this.hasDescription && this.model.description !== "", hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
+	     hasTags: tagsArray.length > 0, hasContexts: contextsArray.length > 0, hasUsers: usersArray.length > 0,
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
 	     time: this.model.time, priority: this.model.priority, isList: this.model.getModelName() === "list", active: this.model.active}));
 
 	viewElement.find(".dropdown-toggle").dropdown();
 
+	// http://stackoverflow.com/questions/8839387/dynamically-change-the-location-of-the-popover-depending-upon-where-it-displays
+	function get_popover_placement(pop, dom_el) {
+	    if (jq(dom_el).position().left < 100) {
+		return 'right';
+	    }
+	    return 'bottom';
+	}
+
 	viewElement.find(".tags").click(function() { return false }).popover({
 	    html: true,
 	    title: "Tags",
 	    content: Tornado.tpl.tags({tags:tagsArray}),
-	    placement: "bottom"
+	    placement: get_popover_placement
 	});
 
 	viewElement.find(".contexts").click(function() { return false }).popover({
 	    html: true,
 	    title: "Contexts",
 	    content: Tornado.tpl.contexts({contexts:contextsArray}),
-	    placement: "bottom"
+	    placement: get_popover_placement
 	});
 
 	viewElement.find(".users").click(function() { return false }).popover({
 	    html: true,
 	    title: "Users",
 	    content: Tornado.tpl.users({users:usersArray}),
-	    placement: "bottom"
+	    placement: get_popover_placement
+	});
+
+	viewElement.find(".description").click(function() { return false }).popover({
+	    html: true,
+	    title: "Description",
+	    content: Tornado.tpl.description({description:self.model.description}),
+	    placement: get_popover_placement
 	});
 
 	viewElement.find(".edit").click(function() {

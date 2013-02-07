@@ -144,7 +144,6 @@ class TasksController extends AppController {
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
 			$data["ContextsTasks"] = $this->Task->getContextsTasksByTaskIds($taskIds);
 			$data["TasksUsers"] = $this->Task->getTasksUsersByTaskIds($taskIds);
-
 			$tagIds = $this->accId($data["TagsTasks"], "TagTask", "tag_id");
 			$contextIds = $this->accId($data["ContextsTasks"], "ContextTask", "context_id");
 			$userIds = $this->accId($data["TasksUsers"], "TaskUser", "user_id");
