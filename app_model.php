@@ -166,6 +166,7 @@ class AppModel extends Model {
 
 	    $query .= $params["limit"];
 	  }
+
 	  return $this->query($query);
 	}
 
