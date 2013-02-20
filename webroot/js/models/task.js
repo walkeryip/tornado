@@ -24,6 +24,9 @@ Tornado.Task = Class.create(Tornado.Item, {
 	this.time = task.time;
 	this.deleted = task.deleted === "1";
 	this.description = Tornado.escapeString(task.description);
+
+	if (this.description) this.description.replace(/\n/g,"<br />");
+
 	this.id = task.id && parseInt(task.id);
 	this.name = Tornado.escapeString(task.name);
 	this.priority = task.priority;

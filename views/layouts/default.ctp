@@ -17,7 +17,7 @@
     ?>
 
     <?php
-       if ($debug) {
+       if (!$debug) {
        ?>
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/bootstrap.less" />
     <link rel="stylesheet/less" type="text/css" href="/tornado/bootstrap/less/responsive.less" />

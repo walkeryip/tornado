@@ -55,7 +55,8 @@ Tornado.Element.prototype = {
 	    {model: this.model.getModelName(), deleted: this.model.deleted, id: this.model.id, name: Tornado.capitalizeFirst(this.model.name), 
 	     users: usersArray, hasCheckbox: this.hasCheckbox, checked: this.model.checked, tags: tagsArray, contexts: contextsArray, 
 	     link: this.model.getModelName() != "task", hasDeadline: this.hasDeadline && this.model.deadline, 
-	     hasDescription: this.hasDescription && this.model.description !== "", hasEnergy: this.hasEnergy && this.model.energy, hasTime: this.hasTime && this.model.time, 
+	     hasDescription: this.hasDescription && this.model.description !== "", hasEnergy: this.hasEnergy && this.model.energy, 
+	     hasTime: this.hasTime && this.model.time, 
 	     hasTags: tagsArray.length > 0, hasContexts: contextsArray.length > 0, hasUsers: usersArray.length > 0,
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
 	     time: this.model.time, priority: this.model.priority, isList: this.model.getModelName() === "list", active: this.model.active}));
@@ -64,7 +65,7 @@ Tornado.Element.prototype = {
 
 	// http://stackoverflow.com/questions/8839387/dynamically-change-the-location-of-the-popover-depending-upon-where-it-displays
 	function get_popover_placement(pop, dom_el) {
-	    if (jq(dom_el).position().left < 100) {
+	    if (jq(dom_el).position().left < 150) {
 		return 'right';
 	    }
 	    return 'bottom';
@@ -129,11 +130,13 @@ Tornado.Element.prototype = {
 	    self.toggle();
 	});
 
+	this.element.draggable('enable');
 	this.element.draggable(
 	    {revert: "invalid",
 	     distance: 5,
 	     opacity: 0.7, 
 	     helper: "clone",
+	     cancel: ".popover, .dropdown-menu",
 	     create: function(event, ui){ 
 		 this.model = self.model; 
 	     }});
@@ -198,7 +201,7 @@ Tornado.Element.prototype = {
 	     active: this.model.active, hasActive: this.hasActive}));
 
 	this.element.html(editElement);
-	
+	this.element.draggable('disable');
 	editElement.find(".save").click(function() {
 	    submit();
 	    return false;
