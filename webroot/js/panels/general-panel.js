@@ -105,12 +105,6 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 		self.currentElement.addClass("current");
 		element.addClass("selected");
 	    }
-/*
-	    e.stopPropagation();
-   	    e.stopImmediatePropagation();
-	    e.preventDefault();
-	  
-	    return false;*/
 	});
     },
 
@@ -133,6 +127,9 @@ Tornado.GeneralPanel = Class.create(Tornado.Panel, {
 		var list = Tornado.lists.get(this.parameters.list_id);
 		return list.tasks.get(item.id) !== undefined; 
 	    }
+
+	    // If the root items are displayed only show items without parents
+	    if (!this.parameters.list_id && item.parent) { return false; }
 	}
 
 	if (itemName === "list") {

@@ -453,9 +453,14 @@ class AppModel extends Model {
 	// TaskListsTasks
 	public function getTaskListsTasksByTaskListId($id) {
 	  if ($id != "null") {
-	    return $this->query("select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_list_id = " . $id);
+	    $query = "select task_id, task_list_id as list_id from task_lists_tasks as ListTask where ListTask.task_list_id = " . $id;
+	    return $this->query($query);
 	  } else {   
-	    return $this->query("select id as task_id from tasks as ListTask where id not in (select task_id from task_lists_tasks where 1)");
+	    $query = "select id as task_id from tasks as ListTask where id not in (select task_id from task_lists_tasks where 1)";
+	    //$query .= " or id in (select id from task_lists where id = ListTask.task_id and deleted = true)";
+	    //	    echo $id;
+	    //print_r($this->query("select id, name, deleted from task_lists where id = task_id and deleted = true"));
+	    return $this->query($query);
 	  }
 	}
 

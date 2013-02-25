@@ -95,6 +95,7 @@
 	      <? } ?>
             </p>
 
+	      <? if (isset($_SESSION['Auth']['User'])) {?>
             <ul class="nav">
               <li class="dropdown"><a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Lists<b class="caret"></b></a>
 		<ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
@@ -131,6 +132,8 @@
               <!--<li><?php echo $this->Html->link('Stuff', '/stuff/'); ?></li>
 		  <li><?php echo $this->Html->link('Settings', '/settings/'); ?></li>-->
             </ul>
+	      <? } ?>
+
           </div><!--/.nav-collapse -->
         </div>
       </div>

@@ -5,7 +5,7 @@ Tornado.Element.prototype = {
 	this.panel = panel;
 	this.model = model;
 	this.element = jq(Tornado.tpl.elementContainer({model: this.model.getModelName(), id: this.model.id}));
-	this.element.disableSelection();
+	//this.element.disableSelection();
 
 	this.hasCheckbox = false;
 	this.hasTags = false;
@@ -61,7 +61,6 @@ Tornado.Element.prototype = {
 	     hasPriority: this.hasPriority && this.model.priority, deadline: this.model.deadline, energy: this.model.energy,
 	     time: this.model.time, priority: this.model.priority, isList: this.model.getModelName() === "list", active: this.model.active}));
 
-	viewElement.find(".dropdown-toggle").dropdown();
 
 	// http://stackoverflow.com/questions/8839387/dynamically-change-the-location-of-the-popover-depending-upon-where-it-displays
 	function get_popover_placement(pop, dom_el) {
@@ -76,6 +75,8 @@ Tornado.Element.prototype = {
 	    title: "Tags",
 	    content: Tornado.tpl.tags({tags:tagsArray}),
 	    placement: get_popover_placement
+	}).parent().mouseleave(function() {
+	    viewElement.find(".tags").popover("hide");
 	});
 
 	viewElement.find(".contexts").click(function() { return false }).popover({
@@ -83,6 +84,8 @@ Tornado.Element.prototype = {
 	    title: "Contexts",
 	    content: Tornado.tpl.contexts({contexts:contextsArray}),
 	    placement: get_popover_placement
+	}).parent().mouseleave(function() {
+	    viewElement.find(".contexts").popover("hide");
 	});
 
 	viewElement.find(".users").click(function() { return false }).popover({
@@ -90,6 +93,8 @@ Tornado.Element.prototype = {
 	    title: "Users",
 	    content: Tornado.tpl.users({users:usersArray}),
 	    placement: get_popover_placement
+	}).parent().mouseleave(function() {
+	    viewElement.find(".users").popover("hide");
 	});
 
 	viewElement.find(".description").click(function() { return false }).popover({
@@ -97,7 +102,17 @@ Tornado.Element.prototype = {
 	    title: "Description",
 	    content: Tornado.tpl.description({description:self.model.description}),
 	    placement: get_popover_placement
+	}).parent().mouseleave(function() {
+	    viewElement.find(".description").popover("hide");
 	});
+
+	var dropdown = viewElement.find(".dropdown-toggle");
+	dropdown.dropdown();
+	dropdown.parent().mouseleave(function() {
+	    dropdown.parent().removeClass("open");
+	    dropdown.blur();
+	});
+
 
 	viewElement.find(".edit").click(function() {
 	    self.edit(container);
@@ -136,7 +151,7 @@ Tornado.Element.prototype = {
 	     distance: 5,
 	     opacity: 0.7, 
 	     helper: "clone",
-	     cancel: ".popover, .dropdown-menu",
+	     cancel: ".popover, .dropdown-menu, .popover, .item",
 	     create: function(event, ui){ 
 		 this.model = self.model; 
 	     }});

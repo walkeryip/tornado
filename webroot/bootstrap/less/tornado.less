@@ -179,6 +179,11 @@ tr:hover {
     background-color: fadeout(@blue, 80%);   
 }
 
+.table tbody tr.ui-draggable-dragging.selected td {
+    background-color: transparent;
+}
+
+
 .dropdown-menu {
     margin: 0px;
 }
@@ -221,4 +226,12 @@ tr:hover {
 .navbar .autocomplete input {
 
     margin: 0 20px 5px 20px;
+}
+
+.modal {
+    left: 0px;
+    top: 0px;
+    margin: 0;
+    width: 100%;
+    height: 100%;
 }

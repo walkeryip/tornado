@@ -8,7 +8,7 @@ class TasksController extends AppController {
 
 	function view(){
 	  $userId = $_SESSION['Auth']['User']['id'];
-	  $this->data["Tasks"] = $this->Task->getTasks($userId, $this->params["url"]);
+	  $this->data = $this->getTasks($this->params["url"]);
 	  $this->set("user_id", $userId);
 	  $this->set('data', $this->data);
 	  $this->render('/general/json', 'ajax');
@@ -138,7 +138,6 @@ class TasksController extends AppController {
 		$data["Tasks"] = $this->Task->getTasks($userId, $params);
 		
 		$taskIds = $this->accId($data["Tasks"], "Task", "id");
-
 		if (!empty($taskIds)) {
 			$data["Lists"] = $this->Task->getTaskListsByTasksIds($taskIds);
 			$data["TagsTasks"] = $this->Task->getTagsTasksByTaskIds($taskIds);
@@ -154,7 +153,11 @@ class TasksController extends AppController {
 		}
 
 		if (!empty($contextIds)){
-			$data["Contexts"] = $this->Task->getContextsByContextIds($contextIds, $userId);
+		  //$data["Contexts"] = $this->Task->getContextsByContextIds($contextIds, $userId);
+		  //$params["context_id"] = $contextIds;
+		  //$data["Contexts"] = $this->Task->getContexts($userId, $params);
+		  $data["Contexts"] = $this->Task->Context->getContexts($userId, array("context_id" => implode(",", $contextIds)));
+			
 		}
 
 		if (!empty($userIds)) {

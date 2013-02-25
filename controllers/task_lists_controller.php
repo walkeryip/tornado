@@ -67,6 +67,7 @@ class TaskListsController extends AppController {
 
 	function getTaskLists($params = null){
 	  $shared = false;
+	  $showTasks = !isset($params["showTasks"]) || $params["showTasks"] == "false";
 		$userId = $_SESSION['Auth']['User']['id'];
 		//$id = $params["list_id"];
 		//print_r($params);
@@ -76,13 +77,15 @@ class TaskListsController extends AppController {
 		$taskListIds = $this->accId($data["Lists"], "List", "id");
 		if (!empty($taskListIds)) {
 
-		  if (isset($params["list_id"])) {			  
-		    $data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($params["list_id"]);
-		    //print_r($data["ListsTasks"]);
-		    $taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
-		  } else {
-		    $tasks = $this->TaskList->getTasks($userId, $params);
-		    $taskIds = $this->accId($tasks, "Task", "id");
+		  if ($showTasks) {
+		    if (isset($params["list_id"])) {			  
+		      $data["ListsTasks"] = $this->TaskList->getTaskListsTasksByTaskListId($params["list_id"]);
+		      //print_r($data["ListsTasks"]);
+		      $taskIds = $this->accId($data["ListsTasks"], "ListTask", "task_id");
+		    } else {
+		      $tasks = $this->TaskList->getTasks($userId, $params);
+		      $taskIds = $this->accId($tasks, "Task", "id");
+		    }
 		  }
 		  
 		  $data["TagsLists"] = $this->TaskList->getTagsTaskListsByTaskListIds($taskListIds);
@@ -98,7 +101,7 @@ class TaskListsController extends AppController {
 		  $userIds = $this->accId($data["ListsUsers"], "ListUser", "user_id");
 		  
 		  $data["Users"] = array(); 
-		  if (!empty($taskIds)){
+		  if (!empty($taskIds) && $showTasks){
 		    
 		    $params["task_id"] = implode(",", $taskIds);
 		    $data["Tasks"] = $this->TaskList->getTasks($userId, $params);
@@ -187,7 +190,7 @@ class TaskListsController extends AppController {
 	function edit($id = null){
 	  $userId = $_SESSION['Auth']['User']['id'];
 	  $params = $this->params["url"];
-
+	  //$params["showTasks"] = false;
 
 		if (isset($this->data["List"]["tags"])){
 			$test = $this->TaskList->addTags($this->data['List']['tags'], $userId); 
