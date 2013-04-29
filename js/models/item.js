@@ -72,14 +72,14 @@ Tornado.Item.prototype = {
 					 post: true});
     },
 
-    create: function(callback) {
+    create: function(callback, argsString) {
 	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/add/", 
 					 callback: callback, 
 					 data: this.getSubmitData(false), 
 					 post: true});
     },
 
-    save: function(callback) {
+    save: function(callback, argsString) {
 	Tornado.panelManager.loadData(	{url: "/tornado/" + this.getModelUrlName() + "/edit/" + this.id, 
 					 callback: callback, 
 					 data: this.getSubmitData(true), 

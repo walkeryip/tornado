@@ -17,6 +17,8 @@ Tornado.Panel.prototype = {
 	    showContexts: false,
 	    showTags: false,
 	    showUsers: false,
+	    showDecription: true,
+	    showTitle: true,
 	    
 	    showInlineContexts: true,
 	    showInlineTags: true,
@@ -107,7 +109,7 @@ Tornado.Panel.prototype = {
 	    this.model = this.getModel();
 	    var title = this.model ? this.model.name : this.getTitle();
 	    var description = this.model ? this.model.description : "";
-	    this.container.prepend(Tornado.tpl.panelHeader({title: title, description: description}));
+	    this.container.prepend(Tornado.tpl.panelHeader({title: title, description: description, showDescription: self.parameters.showDescription, showTitle: self.parameters.showTitle}));
 	    this.container.find("tr").tsort({sortFunction: Tornado.tableSortFunction});
 	    this.container.fadeIn("slow");
 
@@ -126,7 +128,9 @@ Tornado.Panel.prototype = {
 	    options = {};
 	}
 	
-	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc", sortFunction: Tornado.tableSortFunction};
+	var options = {order: jq(element).hasClass("desc") ? "asc" : "desc", sortFunction: function(a,b) {
+	    return Tornado.tableSortFunction(a,b,options); 
+	}};
 	
 	table.find("tr").tsort(column, options); 
 	jq(element).toggleClass("desc"); 

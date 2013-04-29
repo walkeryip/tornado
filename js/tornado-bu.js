@@ -127,13 +127,16 @@ Tornado = {
 	return string.slice(0, 1).toUpperCase() + string.slice(1);
     },
 
-    tableSortFunction: function(a,b){
+    tableSortFunction: function(a,b,options){
 	var jqA = jq(a.e), jqB = jq(b.e);
-
+	var order =  (options && options.order === "desc" ? -1 : 1);
 	var test = jqA.attr("data-model-type");
+	if (a.s === undefined) return -1*order;
+	if (b.s === undefined) return 1*order;
 	if (jqA.attr("data-model-type") === "task" && jqB.attr("data-model-type") === "list") return 1;
 	if (jqA.attr("data-model-type") === "list" && jqB.attr("data-model-type") === "task") return -1;
-	return a.s > b.s ? 1 : ( a.s === b.s ? 0 : -1);
+	var val = (a.s > b.s ? 1 : ( a.s === b.s ? 0 : -1)) * order;
+	return val;
     }
 };
 
@@ -183,7 +186,7 @@ jq(document).ready(function() {
 	
 	if (!open) {
 	    item.addClass("open");
-	    item.find("input").focus();
+	    item.find("input").focus().val('');
 	}
 
 	return false;

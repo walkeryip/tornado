@@ -154,7 +154,7 @@ Tornado.PanelManager.prototype = {
 	    itemsData.each(function(itemData) {
 		var item = Tornado.getItem(modelName, itemData[dataTag].id);
 		
-		if (item && itemData[dataTag].deleted == true) {
+		if (item && itemData[dataTag].deleted == true && itemData[dataTag].name === undefined) {
 		    self.itemDeleted(item);
 		    Tornado.unsetItem(modelName, item.id);
 		} else {

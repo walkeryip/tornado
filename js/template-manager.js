@@ -25,6 +25,7 @@ Tornado.TemplateManager.prototype = {
 	this.tags = Mustache.compile('{{#tags}}<span class="label tag"><a href="/tornado/tags/view/{{id}}">{{name}}</a></span>{{/tags}}');
 	this.contexts = Mustache.compile('{{#contexts}}<span class="label context"><a href="/tornado/contexts/view/{{id}}">{{name}}</a></span>{{/contexts}}');
 	this.users = Mustache.compile('{{#users}}<span class="label user"><a href="/tornado/users/view/{{id}}">{{name}}</a></span>{{/users}}');
+	this.description = Mustache.compile('{{{description}}}');
 	
 	this.elementView = Mustache.compile(
 	    [/*'<td class=\"handle\"><p></p></td>',*/
@@ -36,9 +37,10 @@ Tornado.TemplateManager.prototype = {
 /*	       '{{#tags}}<span class="label tag"><a href="/tornado/tags/view/{{id}}">{{name}}</a></span>{{/tags}}',
 	       '{{#contexts}}<span class="label context"><a href="/tornado/contexts/view/{{id}}">{{name}}</a></span>{{/contexts}}',
 	       '{{#users}}<span class="label user"><a href="/tornado/users/view/{{id}}">{{name}}</a></span>{{/users}}',*/
-		'{{#hasTags}}<a class="label tags" href="#">#</a>{{/hasTags}}',
-	       	'{{#hasContexts}}<a class="label contexts" href="#">@</a>{{/hasContexts}}',
-	       	'{{#hasUsers}}<a class="label users" href="#">~</a>{{/hasUsers}}',
+		'{{#hasTags}}<a class="tags icon" href="#"><i class="icon-tags"></i></a>{{/hasTags}}',
+	       	'{{#hasContexts}}<a class="contexts icon" href="#"><i class="icon-globe"></i></a>{{/hasContexts}}',
+	       	'{{#hasUsers}}<a class="users icon" href="#"><i class="icon-user"></i></a>{{/hasUsers}}',
+	       	'{{#hasDescription}}<a class="description icon" href="#"><i class="icon-comment"></i></a>{{/hasDescription}}',
 	       '{{#hasDeadline}}<span class="badge deadline">{{deadline}}</span>{{/hasDeadline}}',
 	       '{{#hasEnergy}}<span class="badge energy">{{energy}}</span>{{/hasEnergy}}',
 	       '{{#hasTime}}<span class="badge time">{{time}}</span>{{/hasTime}}',
@@ -91,7 +93,7 @@ Tornado.TemplateManager.prototype = {
 				       '</div>'].join(''));
 	this.navigationTreeItem = Mustache.compile('<li><a href="/tornado/task_lists/view/{{id}}">{{name}}</a></li>');
 	this.navigationTreeContainer = '<ul id="tree-view" class="dropdown-menu"></ul>';
-	this.panelHeader = Mustache.compile(['<h2>{{title}}</h2><p class="description">{{{description}}}</p>'].join(''));
+	this.panelHeader = Mustache.compile(['{{#showTitle}}<h2>{{title}}</h2>{{/showTitle}}{{#showDescription}}<p class="description">{{{description}}}</p>{{/showDescription}}'].join(''));
 	this.panelContainer = Mustache.compile('<div class="panel-table"><table class="table table-hover {{model}}s"></table></div>');
 
 	this.logedOutMessage = 'You have been logged out. Click <a href="/tornado/">here</a> to log in.';
